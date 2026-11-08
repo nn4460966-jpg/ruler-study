@@ -300,7 +300,9 @@ function goBack() {
 }
 
 async function logoutUser() {
-  const { error } = await practiceSupabase.auth.signOut();
+  const { error } = await practiceSupabase.auth.signOut({
+    scope: "local"
+  });
 
   if (error) {
     alert("Đăng xuất thất bại: " + error.message);
