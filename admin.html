@@ -177,9 +177,16 @@
     const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
 
     const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
 
     async function checkAdmin() {
       const loading = document.getElementById("loading");
