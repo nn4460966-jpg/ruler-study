@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng ký | RULER STUDY</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font-family:'Be Vietnam Pro',sans-serif;color:#172554;background:linear-gradient(135deg,#edf3ff,#e7eaff)}
+.card{width:min(100%,460px);padding:38px;background:#ffffffed;border:1px solid #dce4ff;border-radius:25px;box-shadow:0 18px 50px #263c7520}
+.brand{text-align:center;margin-bottom:26px}
+.brand-icon{font-size:42px}
+.brand h1{font-size:25px;margin:8px 0;color:#142b59}
+.brand p,.sub{font-size:13px;color:#64748b}
+h2{font-size:22px;margin:0 0 8px}
+label{display:block;font-size:13px;font-weight:700;margin:14px 0 8px}
+input{width:100%;padding:13px 14px;border:1px solid #d7e0f7;border-radius:12px;background:#f9fbff;font:inherit;outline:none}
+input:focus{border-color:#527dff}
+button{width:100%;border:0;border-radius:13px;padding:14px;margin-top:22px;background:linear-gradient(100deg,#3568e8,#8175ee);color:white;font:700 14px 'Be Vietnam Pro';cursor:pointer}
+.message{min-height:20px;margin-top:14px;font-size:13px;color:#2563eb;line-height:1.6}
+.switch,.home{text-align:center;font-size:13px;margin-top:20px}
+a{color:#3568e8;font-weight:700;text-decoration:none}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="brand">
+    <div class="brand-icon">📚⭐</div>
+    <h1>RULER STUDY</h1>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
+
+  <h2>Tạo tài khoản</h2>
+  <p class="sub">Đăng ký tài khoản mới để bắt đầu học tập.</p>
+
+  <form id="registerForm">
+    <label for="name">Họ và tên</label>
+    <input id="name" autocomplete="name" placeholder="Nhập họ và tên" required>
+
+    <label for="email">Gmail</label>
+    <input id="email" type="email" autocomplete="email" placeholder="Nhập Gmail" required>
+
+    <label for="password">Mật khẩu</label>
+    <input id="password" type="password" autocomplete="new-password" minlength="8" placeholder="Ít nhất 8 ký tự" required>
+
+    <label for="confirm">Xác nhận mật khẩu</label>
+    <input id="confirm" type="password" autocomplete="new-password" minlength="8" placeholder="Nhập lại mật khẩu" required>
+
+    <button type="submit" id="submitBtn">Đăng ký</button>
+  </form>
+
+  <div id="message" class="message"></div>
+
+  <div class="switch">
+    Đã có tài khoản? <a href="login.html">Đăng nhập</a>
+  </div>
+
+  <div class="home">
+    <a href="index.html">← Quay về trang chủ</a>
+  </div>
+</main>
+
+<script>
+const client=window.supabase.createClient(
+  "https://svhwozfwuexgiwrdripm.supabase.co",
+  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
+
+document.getElementById("registerForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+
+  const name=document.getElementById("name").value.trim();
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const confirm=document.getElementById("confirm").value;
+  const message=document.getElementById("message");
+
+  if(password.length<8){
+    message.textContent="Mật khẩu cần ít nhất 8 ký tự.";
+    return;
+  }
+
+  if(password!==confirm){
+    message.textContent="Hai mật khẩu không khớp.";
+    return;
+  }
+
+  const btn=document.getElementById("submitBtn");
+  btn.disabled=true;
+  btn.textContent="Đang tạo tài khoản...";
+  message.textContent="";
+
+  const {data,error}=await client.auth.signUp({
+    email,
+    password,
+    options:{data:{full_name:name}}
+  });
+
+  if(error){
+    message.textContent="Đăng ký thất bại: "+error.message;
+    btn.disabled=false;
+    btn.textContent="Đăng ký";
+    return;
+  }
+
+  if(data.session){
+    await client.auth.signOut({scope:"local"});
+  }
+
+  location.href="login.html?registered=1&email="+encodeURIComponent(email);
+});
+</script>
+</body>
+</html>
