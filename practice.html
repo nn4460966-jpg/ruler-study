@@ -297,7 +297,10 @@ let currentIndex=0;
 let score=0;
 let selectedAnswer=null;
 let answered=false;
-
+function selectSubject(subject){
+  document.getElementById("subjectSelect").value=subject;
+  startQuiz();
+}
 function startQuiz(){
   const subject=document.getElementById("subjectSelect").value;
   currentQuestions=questionBank[subject];
