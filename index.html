@@ -485,29 +485,29 @@ footer {
     <span>Chào mừng đến với không gian học tập!</span>
   </div>
 
-  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-    <a href="login.html" style="
-      padding:12px 20px;
-      border:1px solid #3568e8;
-      border-radius:12px;
-      color:#3568e8;
-      background:white;
-      text-decoration:none;
-      font-size:13px;
-      font-weight:700;
-    ">Đăng nhập</a>
+ <div id="authButtons" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+  <a href="login.html" style="
+    padding:12px 20px;
+    border:1px solid #3568e8;
+    border-radius:12px;
+    color:#3568e8;
+    background:white;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+  ">Đăng nhập</a>
 
-    <a href="register.html" style="
-      padding:12px 20px;
-      border-radius:12px;
-      color:white;
-      background:linear-gradient(100deg,#3568e8,#8175ee);
-      text-decoration:none;
-      font-size:13px;
-      font-weight:700;
-      box-shadow:0 4px 12px #3568e830;
-    ">Đăng ký</a>
-  </div>
+  <a href="register.html" style="
+    padding:12px 20px;
+    border-radius:12px;
+    color:white;
+    background:linear-gradient(100deg,#3568e8,#8175ee);
+    text-decoration:none;
+    font-size:13px;
+    font-weight:700;
+    box-shadow:0 4px 12px #3568e830;
+  ">Đăng ký</a>
+</div>
 </header>
   <div class="search">
     🔍
@@ -658,18 +658,39 @@ const homeSupabase = window.supabase.createClient(
   "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
 );
 
-async function logoutUser(){
-  const {error} = await homeSupabase.auth.signOut({
-  scope: "local"
-});
+async function checkHomeLogin(){
+  const {data,error}=await homeSupabase.auth.getUser();
 
-  if(error){
-    alert("Đăng xuất thất bại: " + error.message);
+  const authButtons=document.getElementById("authButtons");
+
+  if(error || !data.user){
+    authButtons.innerHTML=`
+      <a href="login.html">Đăng nhập</a>
+      <a href="register.html">Đăng ký</a>
+    `;
     return;
   }
 
-  location.href = "account.html";
+  authButtons.innerHTML=`
+    <a href="account.html">Hồ sơ cá nhân</a>
+    <button onclick="logoutUser()">Đăng xuất</button>
+  `;
 }
+
+async function logoutUser(){
+  const {error}=await homeSupabase.auth.signOut({
+    scope:"local"
+  });
+
+  if(error){
+    alert("Đăng xuất thất bại: "+error.message);
+    return;
+  }
+
+  location.href="account.html";
+}
+
+checkHomeLogin();
 </script>
 </body>
 </html>
