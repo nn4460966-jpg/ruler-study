@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tiến độ học tập | RULER STUDY</title>
@@ -68,8 +69,37 @@ body{
 
 .nav-icon{width:27px;text-align:center;font-size:21px}
 
-.sidebar-bottom{margin-top:auto;text-align:center}
-.sidebar-art{font-size:70px;padding:20px 0}
+.sidebar-bottom{
+  margin-top:auto;
+  text-align:center;
+  padding:20px 0;
+}
+
+.sidebar-art{
+  font-size:70px;
+  padding:20px 0;
+}
+
+.logout-btn{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:15px 17px;
+  border:1px solid #ffffff35;
+  border-radius:15px;
+  background:#ffffff12;
+  color:white;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  text-align:left;
+  cursor:pointer;
+}
+
+.logout-btn:hover{
+  background:#dc2626;
+}
 
 .main{
   margin-left:265px;
@@ -267,10 +297,14 @@ footer{
     </a>
   </nav>
 
-  <div class="sidebar-bottom">
-    <div class="sidebar-art">🎓📚</div>
-  </div>
-</aside>
+<div class="sidebar-bottom">
+  <div class="sidebar-art">🎓📚</div>
+
+  <button class="logout-btn" onclick="logoutUser()">
+    <span class="nav-icon">⇥</span>
+    <span class="nav-text">Đăng xuất</span>
+  </button>
+</div>
 
 <main class="main">
 
@@ -365,5 +399,32 @@ footer{
   <footer>© 2026 RULER STUDY</footer>
 
 </main>
+  <script>
+const progressSupabase = window.supabase.createClient(
+  "https://svhwozfwuexgiwrdripm.supabase.co",
+  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
+
+function goBack() {
+  const previous = document.referrer;
+
+  if (previous && new URL(previous).origin === location.origin) {
+    history.back();
+  } else {
+    location.href = "index.html";
+  }
+}
+
+async function logoutUser() {
+  const { error } = await progressSupabase.auth.signOut();
+
+  if (error) {
+    alert("Đăng xuất thất bại: " + error.message);
+    return;
+  }
+
+  location.href = "account.html";
+}
+</script>
 </body>
 </html>
