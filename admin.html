@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RULER STUDY - Quản trị</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 22px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    header h1 {
+      font-size: 23px;
+    }
+
+    header button {
+      background: #ef4444;
+      color: white;
+      border: none;
+      padding: 11px 17px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    main {
+      max-width: 1150px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .welcome {
+      margin-bottom: 28px;
+    }
+
+    .welcome h2 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      color: #64748b;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 3px 15px #0000000b;
+      border: 1px solid #e2e8f0;
+    }
+
+    .card .emoji {
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
+    .card h3 {
+      margin-bottom: 9px;
+    }
+
+    .card p {
+      color: #64748b;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .status {
+      margin-top: 25px;
+      padding: 15px;
+      background: white;
+      border-radius: 10px;
+      color: #64748b;
+    }
+
+    #loading {
+      text-align: center;
+      padding: 60px 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>RULER STUDY · ADMIN</h1>
+    <button onclick="logoutAdmin()">Đăng xuất</button>
+  </header>
+
+  <div id="loading">Đang kiểm tra quyền quản trị...</div>
+
+  <main id="adminArea" style="display:none">
+
+    <section class="welcome">
+      <h2>Xin chào, Quản trị viên!</h2>
+      <p>Chào mừng bạn đến với hệ thống quản lý RULER STUDY.</p>
+    </section>
+
+    <section class="grid">
+
+      <div class="card">
+        <div class="emoji">👨‍🎓</div>
+        <h3>Quản lý học sinh</h3>
+        <p>Theo dõi và quản lý tài khoản học sinh.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">📚</div>
+        <h3>Quản lý môn học</h3>
+        <p>Quản lý danh sách và nội dung môn học.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">📝</div>
+        <h3>Ngân hàng câu hỏi</h3>
+        <p>Quản lý câu hỏi và bài tập ôn luyện.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">📊</div>
+        <h3>Kết quả học tập</h3>
+        <p>Theo dõi kết quả và tiến độ học tập.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">📢</div>
+        <h3>Thông báo</h3>
+        <p>Quản lý thông báo dành cho học sinh.</p>
+      </div>
+
+      <div class="card">
+        <div class="emoji">⚙️</div>
+        <h3>Cài đặt hệ thống</h3>
+        <p>Quản lý các thiết lập của website.</p>
+      </div>
+
+    </section>
+
+    <div class="status">
+      Trạng thái: Đã xác thực quyền quản trị.
+    </div>
+
+  </main>
+
+  <script>
+    const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
+
+    // Dán publishable key đang dùng trong account.html vào đây.
+    const SUPABASE_KEY = "DAN_PUBLISHABLE_KEY_CUA_BAN_VAO_DAY";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    async function checkAdmin() {
+      const loading = document.getElementById("loading");
+
+      const { data: userData, error: userError } =
+        await supabaseClient.auth.getUser();
+
+      if (userError || !userData.user) {
+        location.href = "account.html";
+        return;
+      }
+
+      const { data: roleData, error: roleError } =
+        await supabaseClient
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userData.user.id)
+          .maybeSingle();
+
+      if (roleError) {
+        loading.textContent =
+          "Không kiểm tra được quyền: " + roleError.message;
+        return;
+      }
+
+      if (roleData?.role !== "admin") {
+        location.href = "index.html";
+        return;
+      }
+
+      loading.style.display = "none";
+      document.getElementById("adminArea").style.display = "block";
+    }
+
+    async function logoutAdmin() {
+      const { error } = await supabaseClient.auth.signOut();
+
+      if (error) {
+        alert("Đăng xuất chưa thành công: " + error.message);
+        return;
+      }
+
+      location.href = "account.html";
+    }
+
+    checkAdmin();
+  </script>
+
+</body>
+</html>
