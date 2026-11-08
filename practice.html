@@ -98,6 +98,51 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:12px}
 .sidebar-bottom{display:block;padding:10px 0}
 .logout-btn{justify-content:center;padding:15px 5px}.brand-icon{font-size:32px}.nav a{justify-content:center;padding:15px 5px}.main{margin-left:75px;padding:15px}}
 @media(max-width:520px){.intro{padding:23px}.intro h1{font-size:23px}.quiz-card{padding:20px}}
+.subject-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin-top:22px;
+}
+
+.subject-card{
+  padding:22px 15px;
+  border-radius:18px;
+  text-align:center;
+  border:1px solid #dce4ff;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.subject-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 8px 20px #3568e825;
+}
+
+.subject-card .subject-icon{
+  font-size:38px;
+  margin-bottom:10px;
+}
+
+.subject-card h3{
+  margin:8px 0;
+  color:#172554;
+}
+
+.subject-card p{
+  color:#64748b;
+  font-size:13px;
+}
+
+.subject-card button{
+  margin-top:10px;
+}
+
+@media(max-width:900px){
+  .subject-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
 </style>
 </head>
 <body>
