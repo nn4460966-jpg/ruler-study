@@ -659,11 +659,13 @@ const homeSupabase = window.supabase.createClient(
 );
 
 async function checkHomeLogin(){
-  const {data,error}=await homeSupabase.auth.getUser();
+  const {data,error}=await homeSupabase.auth.getSession();
 
   const authButtons=document.getElementById("authButtons");
 
-  if(error || !data.user){
+  if(!authButtons) return;
+
+  if(error || !data.session){
     authButtons.innerHTML=`
       <a href="login.html">Đăng nhập</a>
       <a href="register.html">Đăng ký</a>
