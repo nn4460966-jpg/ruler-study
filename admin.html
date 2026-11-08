@@ -188,38 +188,59 @@
   }
 );
 
-    async function checkAdmin() {
-      const loading = document.getElementById("loading");
+    
+async function checkAdmin() {
+  const loading = document.getElementById("loading");
 
-      const { data: userData, error: userError } =
-        await supabaseClient.auth.getUser();
+  // Kiểm tra phiên đăng nhập đã được lưu chưa
+  const { data: sessionData, error: sessionError } =
+    await supabaseClient.auth.getSession();
 
-      if (userError || !userData.user) {
-        location.href = "account.html";
-        return;
-      }
+  if (sessionError) {
+    loading.textContent =
+      "Lỗi kiểm tra phiên đăng nhập: " + sessionError.message;
+    return;
+  }
 
-      const { data: roleData, error: roleError } =
-        await supabaseClient
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", userData.user.id)
-          .maybeSingle();
+  if (!sessionData.session) {
+    loading.textContent =
+      "Chưa tìm thấy phiên đăng nhập. Hãy đăng nhập lại từ trang Tài khoản.";
+    return;
+  }
 
-      if (roleError) {
-        loading.textContent =
-          "Không kiểm tra được quyền: " + roleError.message;
-        return;
-      }
+  // Xác thực người dùng
+  const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
 
-      if (roleData?.role !== "admin") {
-        location.href = "index.html";
-        return;
-      }
+  if (userError || !userData.user) {
+    loading.textContent =
+      "Không xác thực được tài khoản. Vui lòng tải lại trang.";
+    return;
+  }
 
-      loading.style.display = "none";
-      document.getElementById("adminArea").style.display = "block";
-    }
+  // Kiểm tra quyền quản trị
+  const { data: roleData, error: roleError } =
+    await supabaseClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userData.user.id)
+      .maybeSingle();
+
+  if (roleError) {
+    loading.textContent =
+      "Lỗi kiểm tra quyền quản trị: " + roleError.message;
+    return;
+  }
+
+  if (roleData?.role !== "admin") {
+    location.replace("index.html");
+    return;
+  }
+
+  loading.style.display = "none";
+  document.getElementById("adminArea").style.display = "block";
+}
+
 
     async function logoutAdmin() {
       const { error } = await supabaseClient.auth.signOut();
