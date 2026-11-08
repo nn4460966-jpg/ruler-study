@@ -289,9 +289,28 @@ async function checkAdmin() {
       return;
     }
 
-    students = data || [];
-    renderStudents();
-    showMessage("");
+    const { data: activityData, error: activityError } =
+  await supabaseClient
+    .from("student_activity")
+    .select("user_id, last_login_at, last_logout_at, last_seen_at");
+
+if (activityError) {
+  console.warn("Không tải được lịch sử hoạt động:", activityError.message);
+}
+
+const activityMap = {};
+
+(activityData || []).forEach(item => {
+  activityMap[item.user_id] = item;
+});
+
+students = (data || []).map(student => ({
+  ...student,
+  activity: activityMap[student.user_id] || null
+}));
+
+renderStudents();
+showMessage("");
   }
 
   function renderStudents() {
