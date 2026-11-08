@@ -652,25 +652,41 @@ button{cursor:pointer}
     </div>
 
     <nav class="nav">
-      <button class="active" data-panel="personal" onclick="showPanel('personal',this)">
-        <span class="nav-icon">⌂</span>
-        <span class="nav-text">Hồ sơ cá nhân</span>
-      </button>
+  <button onclick="location.href='index.html'">
+    <span class="nav-icon">⌂</span>
+    <span class="nav-text">Trang chủ</span>
+  </button>
 
-      <button data-panel="editProfile" onclick="showPanel('editProfile',this)">
-        <span class="nav-icon">✎</span>
-        <span class="nav-text">Chỉnh sửa hồ sơ</span>
-      </button>
+  <button onclick="location.href='subjects.html'">
+    <span class="nav-icon">📖</span>
+    <span class="nav-text">Bài học</span>
+  </button>
 
-      <button data-panel="learning" onclick="showPanel('learning',this)">
-        <span class="nav-icon">▥</span>
-        <span class="nav-text">Tiến độ học tập</span>
-      </button>
+  <button data-panel="learning" onclick="showPanel('learning',this)">
+    <span class="nav-icon">▥</span>
+    <span class="nav-text">Tiến độ học tập</span>
+  </button>
 
-      <button data-panel="achievements" onclick="showPanel('achievements',this)">
-        <span class="nav-icon">🏆</span>
-        <span class="nav-text">Thành tích</span>
-      </button>
+  <button onclick="location.href='practice.html'">
+    <span class="nav-icon">✍️</span>
+    <span class="nav-text">Ôn luyện</span>
+  </button>
+
+  <button data-panel="vocabulary" onclick="showPanel('vocabulary',this)">
+    <span class="nav-icon">🔤</span>
+    <span class="nav-text">Từ vựng</span>
+  </button>
+
+  <button class="active" data-panel="personal" onclick="showPanel('personal',this)">
+    <span class="nav-icon">👤</span>
+    <span class="nav-text">Hồ sơ cá nhân</span>
+  </button>
+
+  <button data-panel="achievements" onclick="showPanel('achievements',this)">
+    <span class="nav-icon">🏆</span>
+    <span class="nav-text">Thành tích</span>
+  </button>
+</nav>
     </nav>
 
     <div class="sidebar-bottom">
@@ -915,6 +931,17 @@ button{cursor:pointer}
 
     </section>
 
+   <!-- TỪ VỰNG -->
+<section id="vocabulary" class="profile-panel hidden">
+  <div class="card">
+    <h2 class="section-title">🔤 Từ vựng</h2>
+
+    <div class="empty-chart">
+      <strong>Khu vực từ vựng</strong>
+      <span>Phần học và ôn tập từ vựng sẽ được phát triển tại đây.</span>
+    </div>
+  </div>
+</section>
     <!-- THÀNH TÍCH -->
     <section id="achievements" class="profile-panel hidden">
 
