@@ -112,14 +112,33 @@ document.getElementById("loginForm").addEventListener("submit",async e=>{
   btn.textContent="Đang đăng nhập...";
   message.textContent="";
 
-  const {error}=await client.auth.signInWithPassword({email,password});
+  const {data,error}=await client.auth.signInWithPassword({email,password});
 
-  if(error){
-    message.textContent="Đăng nhập thất bại: "+error.message;
-    btn.disabled=false;
-    btn.textContent="Đăng nhập";
-    return;
-  }
+if(error){
+  message.textContent="Đăng nhập thất bại: "+error.message;
+  btn.disabled=false;
+  btn.textContent="Đăng nhập";
+  return;
+}
+
+const {data:roleData,error:roleError}=await client
+  .from("user_roles")
+  .select("role")
+  .eq("user_id",data.user.id)
+  .maybeSingle();
+
+if(roleError){
+  message.textContent="Không kiểm tra được quyền: "+roleError.message;
+  btn.disabled=false;
+  btn.textContent="Đăng nhập";
+  return;
+}
+
+if(roleData?.role==="admin"){
+  window.location.replace("admin.html");
+}else{
+  window.location.replace("index.html");
+}
 
   window.location.replace("https://nn4460966-jpg.github.io/ruler-study/index.html?login=success");
 });
