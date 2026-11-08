@@ -631,7 +631,9 @@ const homeSupabase = window.supabase.createClient(
 );
 
 async function logoutUser(){
-  const {error} = await homeSupabase.auth.signOut();
+  const {error} = await homeSupabase.auth.signOut({
+  scope: "local"
+});
 
   if(error){
     alert("Đăng xuất thất bại: " + error.message);
