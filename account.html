@@ -1021,11 +1021,13 @@ function showPanel(panel,button){
     el.classList.remove("active");
   });
 
-  if(button){
+  const activePanel = panel==="editProfile" ? "personal" : panel;
+
+  if(button && button.hasAttribute("data-panel")){
     button.classList.add("active");
   }else{
     const navButton=document.querySelector(
-      '.nav button[data-panel="'+panel+'"]'
+      '.nav button[data-panel="'+activePanel+'"]'
     );
     if(navButton) navButton.classList.add("active");
   }
