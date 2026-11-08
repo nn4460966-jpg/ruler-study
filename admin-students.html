@@ -314,61 +314,81 @@ showMessage("");
   }
 
   function renderStudents() {
-    const keyword = document
-      .getElementById("searchInput")
-      .value.trim()
-      .toLowerCase();
+  const keyword = document
+    .getElementById("searchInput")
+    .value.trim()
+    .toLowerCase();
 
-    const filtered = students.filter(student => {
-      const name = student.full_name || "";
-      const email = student.email || "";
+  const filtered = students.filter(student => {
+    const name = student.full_name || "";
+    const email = student.email || "";
 
-      return (
-        name.toLowerCase().includes(keyword) ||
-        email.toLowerCase().includes(keyword)
-      );
-    });
+    return (
+      name.toLowerCase().includes(keyword) ||
+      email.toLowerCase().includes(keyword)
+    );
+  });
 
-    document.getElementById("studentCount").textContent =
-      "Tổng số hồ sơ: " + students.length +
-      " · Đang hiển thị: " + filtered.length;
+  document.getElementById("studentCount").textContent =
+    "Tổng số hồ sơ: " + students.length +
+    " · Đang hiển thị: " + filtered.length;
 
-    const tbody = document.getElementById("studentList");
+  const tbody = document.getElementById("studentList");
 
-    if (filtered.length === 0) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="4" class="status">
-            Không tìm thấy học sinh.
-          </td>
-        </tr>
-      `;
-      return;
-    }
-
-    tbody.innerHTML = "";
-
-    filtered.forEach((student, index) => {
-      const tr = document.createElement("tr");
-
-      const values = [
-        index + 1,
-        student.full_name || "Chưa cập nhật",
-        student.email || "Chưa có email",
-        student.created_at
-          ? new Date(student.created_at).toLocaleDateString("vi-VN")
-          : "Chưa rõ"
-      ];
-
-      values.forEach(value => {
-        const td = document.createElement("td");
-        td.textContent = value;
-        tr.appendChild(td);
-      });
-
-      tbody.appendChild(tr);
-    });
+  if (filtered.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="status">
+          Không tìm thấy học sinh.
+        </td>
+      </tr>
+    `;
+    return;
   }
+
+  tbody.innerHTML = "";
+
+  filtered.forEach((student, index) => {
+    const tr = document.createElement("tr");
+    const activity = student.activity;
+
+    const loginTime = activity?.last_login_at
+      ? new Date(activity.last_login_at).getTime()
+      : 0;
+
+    const logoutTime = activity?.last_logout_at
+      ? new Date(activity.last_logout_at).getTime()
+      : 0;
+
+    const lastSeen = activity?.last_seen_at
+      ? new Date(activity.last_seen_at).getTime()
+      : 0;
+
+    const isOnline =
+      loginTime > logoutTime &&
+      Date.now() - lastSeen < 90000;
+
+    const formatTime = value =>
+      value ? new Date(value).toLocaleString("vi-VN") : "Chưa ghi nhận";
+
+    const values = [
+      index + 1,
+      student.full_name || "Chưa cập nhật",
+      student.email || "Chưa có email",
+      isOnline ? "🟢 Đang hoạt động" : "⚪ Không hoạt động",
+      formatTime(activity?.last_login_at),
+      formatTime(activity?.last_logout_at)
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
 
   loadStudents();
 </script>
