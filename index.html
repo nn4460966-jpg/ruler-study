@@ -41,6 +41,7 @@ footer{text-align:center;padding:25px;color:#91a8c4;background:#101f38}
 <a href="#subjects">Môn học</a>
 <a href="#tools">Công cụ</a>
 <a href="#quiz">Trắc nghiệm</a>
+<a href="#progress">Tiến độ</a>
 </nav>
 </header>
 
@@ -99,7 +100,45 @@ footer{text-align:center;padding:25px;color:#91a8c4;background:#101f38}
 </div>
 </div>
 </section>
+<section id="progress">
+  <h2>📊 Quản lý tiến độ học tập</h2>
+  <p>Theo dõi thời gian và kết quả học tập của bạn.</p>
 
+  <div class="card">
+    <h3>Thêm nội dung học tập</h3>
+
+    <input id="progressSubject" type="text" placeholder="Môn học">
+    <input id="progressLesson" type="text" placeholder="Tên bài học">
+    <input id="progressMinutes" type="number" min="0" placeholder="Thời gian học (phút)">
+
+    <select id="progressStatus">
+      <option value="planned">Dự định học</option>
+      <option value="in_progress">Đang học</option>
+      <option value="completed">Đã hoàn thành</option>
+    </select>
+
+    <input id="progressDate" type="date">
+    <textarea id="progressNotes" placeholder="Ghi chú"></textarea>
+
+    <button class="btn" onclick="saveStudyProgress()">Lưu tiến độ</button>
+    <p id="progressMessage"></p>
+  </div>
+
+  <div class="card">
+    <h3>Thống kê học tập</h3>
+    <div id="progressStats">Đang tải...</div>
+  </div>
+
+  <div class="card">
+    <h3>Lịch sử học tập</h3>
+    <div id="progressList">Đang tải...</div>
+  </div>
+
+  <div class="card">
+    <h3>Lịch sử trắc nghiệm</h3>
+    <div id="quizHistory">Đang tải...</div>
+  </div>
+</section>
 <footer>
 <h3>RULER STUDY</h3>
 <p>Nền tảng học tập trực tuyến</p>
@@ -294,6 +333,7 @@ async function loginUser() {
     showAdminDashboard();
   } else {
     message.textContent = "Đăng nhập thành công! Chào mừng học sinh.";
+    loadStudyProgress();
   }
 }
 function showAdminDashboard() {
@@ -380,6 +420,7 @@ function showAdminDashboard() {
   } else {
     document.getElementById("accountMessage").textContent =
       "Đã tự động đăng nhập học sinh!";
+    loadStudyProgress();
   }
 }
 
@@ -551,7 +592,143 @@ async function loadResults() {
     Điểm: ${r.score}/${r.total}</p>
   `).join("") || "Chưa có kết quả.";
 }
- async function logoutUser() {
+async function loadStudyProgress() {
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  const user = sessionData.session?.user;
+
+  const list = document.getElementById("progressList");
+  const stats = document.getElementById("progressStats");
+  const history = document.getElementById("quizHistory");
+
+  if (!user) {
+    list.textContent = stats.textContent = history.textContent =
+      "Vui lòng đăng nhập để xem dữ liệu.";
+    return;
+  }
+
+  const { data, error } = await supabaseClient
+    .from("study_progress")
+    .select("*")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    list.textContent = "Lỗi tải tiến độ: " + error.message;
+    return;
+  }
+
+  const rows = data || [];
+  const minutes = rows.reduce(
+    (sum, item) => sum + Number(item.study_minutes || 0), 0
+  );
+  const completed = rows.filter(
+    item => item.status === "completed"
+  ).length;
+
+  stats.innerHTML = `
+    <p>📚 Nội dung đã ghi: <b>${rows.length}</b></p>
+    <p>⏱️ Tổng thời gian: <b>${minutes}</b> phút</p>
+    <p>✅ Bài hoàn thành: <b>${completed}</b></p>
+  `;
+
+  list.innerHTML = rows.length ? rows.map(item => `
+    <div class="card" style="margin:10px 0">
+      <b>${safeText(item.subject)} — ${safeText(item.lesson_title)}</b>
+      <p>${Number(item.study_minutes)} phút · ${
+        item.status === "completed" ? "Đã hoàn thành" :
+        item.status === "in_progress" ? "Đang học" : "Dự định học"
+      }</p>
+      <p>Ngày: ${safeText(item.target_date || "Chưa đặt")}</p>
+      <p>${safeText(item.notes || "")}</p>
+      <button class="btn" onclick="deleteStudyProgress('${item.id}')">Xóa</button>
+    </div>
+  `).join("") : "Chưa có nội dung học nào.";
+
+  const { data: attempts, error: quizError } = await supabaseClient
+    .from("quiz_attempts")
+    .select("score,total,created_at")
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
+  if (quizError) {
+    history.textContent = "Lỗi tải lịch sử: " + quizError.message;
+    return;
+  }
+
+  history.innerHTML = attempts?.length ? attempts.map(a => `
+    <p>Điểm: <b>${a.score}/${a.total}</b> ·
+    ${new Date(a.created_at).toLocaleString("vi-VN")}</p>
+  `).join("") : "Bạn chưa có kết quả trắc nghiệm nào.";
+}
+
+async function saveStudyProgress() {
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  const user = sessionData.session?.user;
+  const message = document.getElementById("progressMessage");
+
+  if (!user) {
+    message.textContent = "Bạn cần đăng nhập trước.";
+    return;
+  }
+
+  const subject = document.getElementById("progressSubject").value.trim();
+  const lesson_title = document.getElementById("progressLesson").value.trim();
+  const study_minutes = Number(
+    document.getElementById("progressMinutes").value || 0
+  );
+
+  if (!subject || !lesson_title ||
+      !Number.isFinite(study_minutes) || study_minutes < 0 ||
+      !Number.isInteger(study_minutes)) {
+    message.textContent = "Hãy nhập môn học, tên bài và số phút hợp lệ.";
+    return;
+  }
+
+  const { error } = await supabaseClient.from("study_progress").insert({
+    user_id: user.id,
+    subject,
+    lesson_title,
+    study_minutes,
+    status: document.getElementById("progressStatus").value,
+    target_date: document.getElementById("progressDate").value || null,
+    notes: document.getElementById("progressNotes").value.trim() || null
+  });
+
+  if (error) {
+    message.textContent = "Không lưu được: " + error.message;
+    return;
+  }
+
+  message.textContent = "Đã lưu tiến độ!";
+
+  ["progressSubject", "progressLesson", "progressMinutes",
+   "progressDate", "progressNotes"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+
+  await loadStudyProgress();
+}
+
+async function deleteStudyProgress(id) {
+  if (!confirm("Bạn có chắc muốn xóa mục tiến độ này?")) return;
+
+  const { data: sessionData } = await supabaseClient.auth.getSession();
+  const user = sessionData.session?.user;
+  if (!user) return;
+
+  const { error } = await supabaseClient
+    .from("study_progress")
+    .delete()
+    .eq("id", id)
+    .eq("user_id", user.id);
+
+  if (error) {
+    alert("Không xóa được: " + error.message);
+  } else {
+    await loadStudyProgress();
+  }
+}
+  async function logoutUser() {
   const { error } = await supabaseClient.auth.signOut();
 
   const dashboard = document.getElementById("adminDashboard");
