@@ -1293,7 +1293,15 @@ async function logoutUser(){
   location.reload();
 }
 
-loadProfile();
+async function openRequestedPanel(){
+  await loadProfile();
+
+  if(location.hash === "#vocabulary"){
+    showPanel("vocabulary");
+  }
+}
+
+openRequestedPanel();
 </script>
 
 </body>
