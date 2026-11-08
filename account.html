@@ -1,361 +1,965 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tài khoản | RULER STUDY</title>
+<title>Hồ sơ học sinh | RULER STUDY</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3f6fc;color:#172554}
-header{background:white;padding:20px 7%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px;box-shadow:0 2px 12px #00000010}
-.logo{font-size:23px;font-weight:bold;color:#2563eb}
-nav{display:flex;gap:15px;flex-wrap:wrap}
-nav a{text-decoration:none;color:#334155;font-weight:600}
-nav a:hover{color:#2563eb}
-main{max-width:850px;margin:40px auto;padding:0 20px}
-.intro{background:linear-gradient(120deg,#2563eb,#60a5fa);color:white;padding:35px;border-radius:18px;margin-bottom:30px}
-.intro h1{font-size:30px;margin-bottom:12px}
-.card{background:white;padding:28px;border-radius:16px;box-shadow:0 4px 15px #0000000c;margin-bottom:22px}
-.card h2{margin-bottom:20px;font-size:21px}
-label{display:block;font-weight:bold;margin-bottom:8px}
-input{width:100%;padding:13px;border:1px solid #cbd5e1;border-radius:8px;font-size:15px;margin-bottom:17px}
-button{padding:12px 19px;border:0;border-radius:8px;background:#2563eb;color:white;cursor:pointer;font-weight:bold;margin:4px 4px 4px 0}
-button:hover{background:#1d4ed8}
-.secondary{background:#e2e8f0;color:#1e293b}
-.logout{background:#dc2626}
-.message{margin-top:12px;line-height:1.5;color:#2563eb;overflow-wrap:anywhere}
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap');
+
+:root{
+  --navy:#142b59;
+  --blue:#3568e8;
+  --purple:#8878f5;
+  --text:#172554;
+  --muted:#64748b;
+  --bg:#edf2ff;
+  --white:#fff;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Be Vietnam Pro',sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg,#edf3ff,#e7eaff);
+}
+
+button,input{font-family:inherit}
+button{cursor:pointer}
 .hidden{display:none!important}
-.avatar{width:85px;height:85px;border-radius:50%;background:#dbeafe;display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:18px}
-footer{text-align:center;padding:25px;color:#64748b}
-@media(max-width:600px){header{flex-direction:column}.card{padding:20px}}
 
-/* ===== GIAO DIỆN HỒ SƠ RULER STUDY ===== */
-
-.profile-layout {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
-  gap: 25px;
-  max-width: 1200px;
-  margin: 0 auto;
+.app{
+  display:flex;
+  min-height:100vh;
 }
 
-.profile-sidebar {
-  background: #172554;
-  color: white;
-  padding: 25px 18px;
-  border-radius: 18px;
-  height: fit-content;
-  position: sticky;
-  top: 20px;
+/* SIDEBAR */
+
+.sidebar{
+  width:265px;
+  min-width:265px;
+  background:linear-gradient(180deg,#10275a,#19366f);
+  color:white;
+  padding:28px 15px;
+  display:flex;
+  flex-direction:column;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  z-index:10;
 }
 
-.profile-sidebar h3 {
-  margin-bottom: 8px;
-  text-align: center;
+.brand{
+  text-align:center;
+  padding:5px 0 35px;
 }
 
-.profile-sidebar > p {
-  color: #cbd5e1;
-  font-size: 13px;
-  text-align: center;
-  overflow-wrap: anywhere;
-  margin-bottom: 25px;
+.brand-icon{
+  font-size:48px;
+  margin-bottom:8px;
 }
 
-.profile-sidebar .avatar {
-  margin: 0 auto 15px;
-  border: 3px solid #a5b4fc;
+.brand h2{
+  margin:0;
+  font-size:25px;
+  font-weight:800;
+  letter-spacing:.5px;
 }
 
-.profile-menu {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  margin: 20px 0;
+.brand p{
+  margin:7px 0 0;
+  font-size:12px;
+  opacity:.85;
 }
 
-.profile-menu a {
-  color: #e2e8f0;
-  text-decoration: none;
-  padding: 13px;
-  border-radius: 10px;
-  transition: .2s;
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
 
-.profile-menu a:hover {
-  background: #334780;
-  color: white;
+.nav button{
+  width:100%;
+  border:0;
+  color:white;
+  background:transparent;
+  padding:16px 17px;
+  border-radius:15px;
+  text-align:left;
+  font-size:15px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  transition:.2s;
 }
 
-.profile-sidebar .logout {
-  width: 100%;
+.nav button:hover,
+.nav button.active{
+  background:linear-gradient(100deg,#3975e9,#3156a8);
+  box-shadow:0 6px 18px #071b493d;
 }
 
-.profile-content {
-  min-width: 0;
+.nav-icon{
+  font-size:21px;
+  width:27px;
+  text-align:center;
 }
 
-.profile-content .card {
-  border: 1px solid #e2e8f0;
-  border-radius: 17px;
-  padding: 28px;
-  scroll-margin-top: 20px;
+.sidebar-bottom{
+  margin-top:auto;
+  padding-top:30px;
 }
 
-.profile-content .card h2 {
-  color: #1e3a8a;
+.sidebar-art{
+  text-align:center;
+  font-size:75px;
+  padding:15px 0 30px;
+  opacity:.9;
 }
 
-.profile-content .avatar {
-  width: 105px;
-  height: 105px;
-  overflow: hidden;
-  border: 3px solid #dbeafe;
+.logout-btn{
+  color:#fff!important;
 }
 
-.profile-info {
-  margin-top: 22px;
-  display: grid;
-  gap: 15px;
+/* MAIN */
+
+.main{
+  margin-left:265px;
+  width:calc(100% - 265px);
+  padding:22px 30px 40px;
 }
 
-.profile-info p {
-  padding: 13px;
-  background: #f1f5ff;
-  border-radius: 9px;
-  overflow-wrap: anywhere;
+.topbar{
+  height:55px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:17px;
 }
 
-.progress-placeholder {
-  margin-top: 20px;
-  padding: 25px;
-  background: #eff6ff;
-  border-radius: 12px;
-  color: #64748b;
-  text-align: center;
+.search{
+  width:min(590px,70%);
+  height:49px;
+  border-radius:30px;
+  background:#ffffffc9;
+  border:1px solid #d7e0ff;
+  box-shadow:0 3px 12px #253c7710;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:0 20px;
+  color:var(--muted);
 }
 
-.profile-content input {
-  margin-top: 8px;
+.search input{
+  border:0;
+  outline:none;
+  background:transparent;
+  width:100%;
+  font-size:14px;
+  color:var(--text);
 }
 
-@media(max-width:750px) {
-  .profile-layout {
-    grid-template-columns: 1fr;
+.top-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:#dce7ff;
+  display:grid;
+  place-items:center;
+  font-size:24px;
+  overflow:hidden;
+}
+
+.top-avatar img,
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+/* CARDS */
+
+.card{
+  background:#ffffffd9;
+  border:1px solid #dce4ff;
+  border-radius:21px;
+  box-shadow:0 5px 17px #263c7510;
+  padding:23px;
+}
+
+.section-title{
+  font-size:21px;
+  font-weight:800;
+  margin:0 0 20px;
+}
+
+.hero{
+  min-height:240px;
+  border-radius:22px;
+  padding:28px;
+  display:flex;
+  align-items:center;
+  gap:28px;
+  background:linear-gradient(110deg,#9bd0ff 0%,#d9e8ff 48%,#a99aff 100%);
+  box-shadow:0 6px 18px #5578db26;
+  margin-bottom:22px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"✦";
+  position:absolute;
+  right:40px;
+  top:20px;
+  font-size:100px;
+  color:#ffffff50;
+}
+
+.avatar-wrap{
+  position:relative;
+  flex-shrink:0;
+}
+
+.avatar{
+  width:175px;
+  height:175px;
+  border:5px solid white;
+  border-radius:50%;
+  background:#e4edff;
+  display:grid;
+  place-items:center;
+  font-size:75px;
+  overflow:hidden;
+  box-shadow:0 5px 15px #243c7030;
+}
+
+.camera{
+  position:absolute;
+  right:0;
+  bottom:7px;
+  border:0;
+  background:var(--navy);
+  color:white;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+.hero-info{
+  z-index:1;
+  min-width:230px;
+}
+
+.hero-info h1{
+  font-size:27px;
+  margin:0 0 12px;
+  font-weight:800;
+}
+
+.hero-info p{
+  margin:9px 0;
+  font-size:14px;
+  font-weight:500;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.hero-info .info-icon{
+  width:20px;
+  font-size:17px;
+}
+
+.hero-slogan{
+  margin-left:auto;
+  padding:20px;
+  text-align:center;
+  color:#fff;
+  font-size:27px;
+  font-weight:700;
+  font-style:italic;
+  z-index:1;
+  max-width:330px;
+}
+
+/* STATISTICS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:20px;
+}
+
+.stat{
+  min-height:105px;
+  display:flex;
+  align-items:center;
+  gap:17px;
+  padding:18px;
+}
+
+.stat-icon{
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:29px;
+  background:#e5efff;
+}
+
+.stat strong{
+  font-size:25px;
+  display:block;
+}
+
+.stat span{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* DASHBOARD GRID */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1fr 1.08fr;
+  gap:16px;
+  margin-bottom:20px;
+}
+
+.panel-heading{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.panel-heading h3{
+  margin:0;
+  font-size:19px;
+}
+
+.empty-chart{
+  min-height:155px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  color:var(--muted);
+  background:#f5f7ff;
+  border:1px dashed #cbd6f5;
+  border-radius:16px;
+  padding:20px;
+}
+
+.empty-chart strong{
+  color:var(--text);
+  margin-bottom:7px;
+}
+
+.achievement-empty{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:12px;
+  min-height:155px;
+}
+
+.achievement-item{
+  flex:1;
+  min-width:100px;
+  text-align:center;
+  padding:15px 5px;
+  border-radius:15px;
+  background:#f5f7ff;
+}
+
+.achievement-item div{
+  font-size:35px;
+  margin-bottom:8px;
+}
+
+.achievement-item span{
+  font-size:12px;
+  font-weight:600;
+}
+
+/* BOTTOM PANELS */
+
+.bottom-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.panel-description{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:-12px;
+  margin-bottom:18px;
+}
+
+.info-line{
+  display:grid;
+  grid-template-columns:100px 1fr;
+  gap:10px;
+  margin:12px 0;
+  font-size:13px;
+}
+
+.info-line span:first-child{
+  color:var(--muted);
+}
+
+.outline-btn{
+  border:1px solid #527dff;
+  background:#eef3ff;
+  color:#2455d6;
+  border-radius:14px;
+  padding:11px 17px;
+  font-weight:700;
+}
+
+.outline-btn:hover{
+  background:#dce7ff;
+}
+
+/* FORMS */
+
+.form-card{
+  max-width:850px;
+  margin:auto;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.field label{
+  font-size:13px;
+  font-weight:700;
+}
+
+.field input{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid #d7e0f7;
+  border-radius:12px;
+  outline:none;
+  background:#f9fbff;
+  color:var(--text);
+}
+
+.field input:focus{
+  border-color:#527dff;
+  box-shadow:0 0 0 3px #527dff18;
+}
+
+.full-width{
+  grid-column:1/-1;
+}
+
+.primary-btn{
+  border:0;
+  border-radius:13px;
+  padding:13px 22px;
+  background:linear-gradient(100deg,#3568e8,#8175ee);
+  color:white;
+  font-weight:700;
+  font-size:14px;
+}
+
+.primary-btn:hover{opacity:.9}
+
+.message{
+  font-size:13px;
+  margin-top:12px;
+  color:#2563eb;
+  min-height:18px;
+}
+
+/* LOGIN */
+
+.auth-page{
+  max-width:440px;
+  margin:60px auto;
+  padding:35px;
+}
+
+.auth-page h1{
+  text-align:center;
+  font-size:25px;
+}
+
+.auth-page .field{
+  margin:15px 0;
+}
+
+.auth-switch{
+  text-align:center;
+  font-size:13px;
+  margin-top:18px;
+}
+
+.auth-switch button{
+  border:0;
+  background:none;
+  color:#3568e8;
+  font-weight:700;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+  .sidebar{width:220px;min-width:220px}
+  .main{margin-left:220px;width:calc(100% - 220px);padding:20px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .hero-slogan{display:none}
+}
+
+@media(max-width:760px){
+  .sidebar{
+    width:75px;
+    min-width:75px;
+    padding:15px 8px;
   }
-
-  .profile-sidebar {
-    position: static;
+  .brand h2,.brand p,.nav-text,.sidebar-art{display:none}
+  .brand-icon{font-size:35px}
+  .nav button{justify-content:center;padding:15px 5px}
+  .nav-icon{font-size:22px}
+  .main{
+    margin-left:75px;
+    width:calc(100% - 75px);
+    padding:13px;
   }
-
-  .profile-menu {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .profile-content .card {
-    padding: 20px;
-  }
+  .dashboard-grid,.bottom-grid{grid-template-columns:1fr}
+  .hero{padding:18px;gap:15px;min-height:180px}
+  .avatar{width:110px;height:110px;font-size:48px}
+  .hero-info h1{font-size:19px}
+  .hero-info p{font-size:11px}
+  .stats{gap:9px}
+  .stat{padding:12px;gap:8px}
+  .stat-icon{width:38px;height:38px;font-size:21px}
+  .stat strong{font-size:19px}
+  .stat span{font-size:10px}
+  .form-grid{grid-template-columns:1fr}
+  .full-width{grid-column:auto}
 }
 
+@media(max-width:420px){
+  .hero{align-items:flex-start;flex-direction:column}
+  .avatar{width:90px;height:90px}
+  .stats{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
+
 <body>
 
-<header>
-<div class="logo">RULER STUDY</div>
-<nav>
-<a href="index.html">Trang chủ</a>
-<a href="subjects.html">Môn học</a>
-<a href="tools.html">Công cụ</a>
-<a href="practice.html">Ôn luyện</a>
-<a href="progress.html">Tiến độ</a>
-<a href="achievements.html">Thành tích</a>
-<a href="account.html">Tài khoản</a>
-</nav>
-</header>
-
-<main>
-<section class="intro">
-<h1>Tài khoản của tôi 👤</h1>
-<p>Chào mừng bạn đến với RULER STUDY!</p>
-</section>
-
 <!-- ĐĂNG NHẬP -->
-<section class="card" id="loginArea">
-<h2>Đăng nhập</h2>
-<label>Gmail</label>
-<input id="loginEmail" type="email" placeholder="Nhập Gmail">
+<section id="loginArea" class="auth-page card hidden">
+  <h1>🔐 Đăng nhập RULER STUDY</h1>
 
-<label>Mật khẩu</label>
-<input id="loginPassword" type="password" placeholder="Nhập mật khẩu">
+  <div class="field">
+    <label>Gmail</label>
+    <input id="loginEmail" type="email" placeholder="Nhập Gmail">
+  </div>
 
-<button onclick="loginUser()">Đăng nhập</button>
-<button class="secondary" onclick="showRegister()">Tạo tài khoản mới</button>
-<p class="message" id="loginMessage"></p>
+  <div class="field">
+    <label>Mật khẩu</label>
+    <input id="loginPassword" type="password" placeholder="Nhập mật khẩu">
+  </div>
+
+  <button class="primary-btn" style="width:100%" onclick="loginUser()">
+    Đăng nhập
+  </button>
+
+  <div id="loginMessage" class="message"></div>
+
+  <div class="auth-switch">
+    Chưa có tài khoản?
+    <button onclick="showRegister()">Đăng ký</button>
+  </div>
 </section>
 
 <!-- ĐĂNG KÝ -->
-<section class="card hidden" id="registerArea">
-<h2>Đăng ký tài khoản</h2>
+<section id="registerArea" class="auth-page card hidden">
+  <h1>✨ Tạo tài khoản</h1>
 
-<label>Họ và tên</label>
-<input id="registerName" type="text" placeholder="Nhập họ và tên">
-
-<label>Gmail</label>
-<input id="registerEmail" type="email" placeholder="Nhập Gmail">
-
-<label>Mật khẩu</label>
-<input id="registerPassword" type="password" placeholder="Ít nhất 8 ký tự">
-
-<label>Xác nhận mật khẩu</label>
-<input id="registerConfirm" type="password" placeholder="Nhập lại mật khẩu">
-
-<button onclick="registerUser()">Đăng ký</button>
-<button class="secondary" onclick="showLogin()">Quay lại đăng nhập</button>
-<p class="message" id="registerMessage"></p>
-</section>
-
-
-<!-- HỒ SƠ HỌC SINH -->
-<div id="accountArea" class="hidden">
-
-  <div class="profile-layout">
-
-    <aside class="profile-sidebar">
-      <div class="avatar" id="avatarPreview">👤</div>
-      <h3 id="sidebarName">Học sinh</h3>
-      <p id="sidebarEmail">Email</p>
-
-      <nav class="profile-menu">
-        <a href="#personal">👤 Hồ sơ cá nhân</a>
-        <a href="#editProfile">✏️ Chỉnh sửa hồ sơ</a>
-        <a href="#learning">📊 Tiến độ học tập</a>
-        <a href="#courses">📚 Khóa học</a>
-        <a href="#achievements">🏆 Thành tích</a>
-      </nav>
-
-      <button class="logout" onclick="logoutUser()">Đăng xuất</button>
-    </aside>
-
-    <div class="profile-content">
-
-      <section class="card" id="personal">
-        <h2>Hồ sơ cá nhân</h2>
-        <div class="avatar" id="mainAvatar">👤</div>
-        <h3 id="displayName">Học sinh</h3>
-        <p id="displayEmail"></p>
-
-        <div class="profile-info">
-          <p><strong>Ngày sinh:</strong> <span id="displayBirth">Chưa cập nhật</span></p>
-          <p><strong>Lớp:</strong> <span id="displayClass">Chưa cập nhật</span></p>
-          <p><strong>Trường:</strong> <span id="displaySchool">Chưa cập nhật</span></p>
-        </div>
-      </section>
-
-      <section class="card" id="editProfile">
-        <h2>Chỉnh sửa hồ sơ</h2>
-
-        <label>Họ và tên</label>
-        <input id="fullName" type="text">
-
-        <label>Gmail</label>
-        <input id="email" type="email" disabled>
-
-        <label>Ngày sinh</label>
-        <input id="birthDate" type="date">
-
-        <label>Lớp</label>
-        <input id="className" type="text" placeholder="Ví dụ: 10A1">
-
-        <label>Trường học</label>
-        <input id="schoolName" type="text" placeholder="Tên trường">
-
-        <label>Đường dẫn ảnh đại diện</label>
-        <input id="avatarUrl" type="url" placeholder="https://...">
-
-        <button onclick="saveProfile()">Lưu hồ sơ</button>
-        <p class="message" id="profileMessage"></p>
-      </section>
-
-      <section class="card" id="learning">
-        <h2>📊 Tiến độ học tập</h2>
-        <p>Tiến độ học tập sẽ được kết nối với dữ liệu kết quả học tập.</p>
-        <div class="progress-placeholder">
-          <span>Chưa có dữ liệu thống kê</span>
-        </div>
-      </section>
-
-      <section class="card" id="courses">
-        <h2>📚 Khóa học của tôi</h2>
-        <p>Các khóa học đã tham gia sẽ hiển thị tại đây.</p>
-      </section>
-
-      <section class="card" id="achievements">
-        <h2>🏆 Thành tích</h2>
-        <p>Huy hiệu và thành tích học tập sẽ hiển thị tại đây.</p>
-      </section>
-
-      <section class="card">
-        <h2>🔐 Đổi mật khẩu</h2>
-
-        <label>Mật khẩu mới</label>
-        <input id="newPassword" type="password">
-
-        <label>Xác nhận mật khẩu</label>
-        <input id="confirmPassword" type="password">
-
-        <button onclick="changePassword()">Cập nhật mật khẩu</button>
-        <p class="message" id="passwordMessage"></p>
-      </section>
-
-    </div>
+  <div class="field">
+    <label>Họ và tên</label>
+    <input id="registerName" placeholder="Nhập họ tên">
   </div>
+
+  <div class="field">
+    <label>Gmail</label>
+    <input id="registerEmail" type="email" placeholder="Nhập Gmail">
+  </div>
+
+  <div class="field">
+    <label>Mật khẩu</label>
+    <input id="registerPassword" type="password" placeholder="Ít nhất 8 ký tự">
+  </div>
+
+  <div class="field">
+    <label>Xác nhận mật khẩu</label>
+    <input id="registerConfirm" type="password" placeholder="Nhập lại mật khẩu">
+  </div>
+
+  <button class="primary-btn" style="width:100%" onclick="registerUser()">
+    Đăng ký tài khoản
+  </button>
+
+  <div id="registerMessage" class="message"></div>
+
+  <div class="auth-switch">
+    Đã có tài khoản?
+    <button onclick="showLogin()">Đăng nhập</button>
+  </div>
+</section>
+
+<!-- GIAO DIỆN HỒ SƠ -->
+<div id="accountArea" class="app hidden">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="brand-icon">📚⭐</div>
+      <h2>RULER STUDY</h2>
+      <p>Học tốt hơn - Thành công hơn</p>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-panel="personal" onclick="showPanel('personal',this)">
+        <span class="nav-icon">⌂</span>
+        <span class="nav-text">Hồ sơ cá nhân</span>
+      </button>
+
+      <button data-panel="editProfile" onclick="showPanel('editProfile',this)">
+        <span class="nav-icon">✎</span>
+        <span class="nav-text">Chỉnh sửa hồ sơ</span>
+      </button>
+
+      <button data-panel="learning" onclick="showPanel('learning',this)">
+        <span class="nav-icon">▥</span>
+        <span class="nav-text">Tiến độ học tập</span>
+      </button>
+
+      <button data-panel="achievements" onclick="showPanel('achievements',this)">
+        <span class="nav-icon">🏆</span>
+        <span class="nav-text">Thành tích</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <div class="sidebar-art">🎓📚</div>
+      <button class="nav logout-btn" onclick="logoutUser()">
+        <span class="nav-icon">⇥</span>
+        <span class="nav-text">Đăng xuất</span>
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="search">
+        <span>🔍</span>
+        <input placeholder="Tìm kiếm..." disabled>
+      </div>
+      <div class="top-avatar" id="topAvatar">👤</div>
+    </header>
+
+    <!-- HỒ SƠ CÁ NHÂN -->
+    <section id="personal" class="profile-panel">
+
+      <div class="hero">
+
+        <div class="avatar-wrap">
+          <div class="avatar" id="mainAvatar">👤</div>
+          <button class="camera" onclick="showPanel('editProfile')">📷</button>
+        </div>
+
+        <div class="hero-info">
+          <h1 id="displayName">Học sinh</h1>
+          <p><span class="info-icon">✉</span><span id="displayEmail"></span></p>
+          <p><span class="info-icon">▦</span>Ngày sinh: <span id="displayBirth">Chưa cập nhật</span></p>
+          <p><span class="info-icon">♟</span>Lớp: <span id="displayClass">Chưa cập nhật</span></p>
+          <p><span class="info-icon">⌂</span>Trường: <span id="displaySchool">Chưa cập nhật</span></p>
+        </div>
+
+        <div class="hero-slogan">
+          Cùng RULER STUDY<br>
+          vươn tới tri thức!
+        </div>
+
+      </div>
+
+      <div class="stats">
+
+        <div class="card stat">
+          <div class="stat-icon">🎓</div>
+          <div>
+            <strong>—</strong>
+            <span>Môn học đã học</span>
+          </div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-icon">📈</div>
+          <div>
+            <strong>—</strong>
+            <span>Tiến độ học tập</span>
+          </div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-icon">🏆</div>
+          <div>
+            <strong>—</strong>
+            <span>Thành tích đạt được</span>
+          </div>
+        </div>
+
+        <div class="card stat">
+          <div class="stat-icon">⭐</div>
+          <div>
+            <strong>—</strong>
+            <span>Điểm tích lũy</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="dashboard-grid">
+
+        <div class="card">
+          <div class="panel-heading">
+            <h3>📊 Tiến độ học tập</h3>
+          </div>
+
+          <div class="empty-chart">
+            <strong>Chưa có dữ liệu tiến độ</strong>
+            <span>Dữ liệu sẽ hiển thị khi hệ thống ghi nhận quá trình học tập của bạn.</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="panel-heading">
+            <h3>🏆 Thành tích nổi bật</h3>
+            <button class="outline-btn" onclick="showPanel('achievements')">
+              Xem tất cả →
+            </button>
+          </div>
+
+          <div class="achievement-empty">
+            <div class="achievement-item">
+              <div>🥇</div>
+              <span>Thành tích</span>
+            </div>
+            <div class="achievement-item">
+              <div>🏆</div>
+              <span>Học tập</span>
+            </div>
+            <div class="achievement-item">
+              <div>🚀</div>
+              <span>Tiến bộ</span>
+            </div>
+            <div class="achievement-item">
+              <div>👑</div>
+              <span>Nỗ lực</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="bottom-grid">
+
+        <div class="card">
+          <div class="panel-heading">
+            <h3>⚙ Chỉnh sửa thông tin</h3>
+            <button class="outline-btn" onclick="showPanel('editProfile')">
+              ✎ Chỉnh sửa
+            </button>
+          </div>
+
+          <p class="panel-description">Cập nhật thông tin cá nhân của bạn</p>
+
+          <div class="info-line">
+            <span>Họ và tên:</span>
+            <strong id="summaryName">Chưa cập nhật</strong>
+          </div>
+
+          <div class="info-line">
+            <span>Email:</span>
+            <strong id="summaryEmail">—</strong>
+          </div>
+
+          <div class="info-line">
+            <span>Ngày sinh:</span>
+            <strong id="summaryBirth">Chưa cập nhật</strong>
+          </div>
+
+          <div class="info-line">
+            <span>Lớp:</span>
+            <strong id="summaryClass">Chưa cập nhật</strong>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="panel-heading">
+            <h3>🔒 Đổi mật khẩu</h3>
+            <button class="outline-btn" onclick="showPanel('passwordPanel')">
+              🔐 Đổi mật khẩu
+            </button>
+          </div>
+          <p class="panel-description">Bảo mật tài khoản của bạn</p>
+          <p>Hãy thường xuyên cập nhật mật khẩu để bảo vệ tài khoản.</p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- CHỈNH SỬA HỒ SƠ -->
+    <section id="editProfile" class="profile-panel hidden">
+
+      <div class="card form-card">
+        <h2 class="section-title">✏️ Chỉnh sửa hồ sơ cá nhân</h2>
+        <p class="panel-description">Cập nhật thông tin học sinh của bạn.</p>
+
+        <div class="form-grid">
+
+          <div class="field">
+            <label>Họ và tên</label>
+            <input id="fullName" placeholder="Nhập họ và tên">
+          </div>
+
+          <div class="field">
+            <label>Gmail</label>
+            <input id="email" type="email" disabled>
+          </div>
+
+          <div class="field">
+            <label>Ngày sinh</label>
+            <input id="birthDate" type="date">
+          </div>
+
+          <div class="field">
+            <label>Lớp</label>
+            <input id="className" placeholder="Ví dụ: 10A1">
+          </div>
+
+          <div class="field full-width">
+            <label>Trường học</label>
+            <input id="schoolName" placeholder="Nhập tên trường">
+          </div>
+
+          <div class="field full-width">
+            <label>Đường dẫn ảnh đại diện</label>
+            <input id="avatarUrl" placeholder="https://...">
+          </div>
+
+          <div class="field full-width">
+            <label>Xem trước ảnh đại diện</label>
+            <div class="avatar" id="avatarPreview">👤</div>
+          </div>
+
+          <div class="full-width">
+            <button class="primary-btn" onclick="saveProfile()">
+              💾 Lưu hồ sơ
+            </button>
+            <div id="profileMessage" class="message"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TIẾN ĐỘ HỌC TẬP -->
+    <section id="learning" class="profile-panel hidden">
+
+      <div class="card">
+        <h2 class="section-title">📊 Tiến độ học tập</h2>
+
+        <div class="empty-chart">
+          <strong>Chưa có dữ liệu học tập</strong>
+          <span>Phần này sẽ được kết nối với dữ liệu học tập thực tế trong các bước phát triển tiếp theo.</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- THÀNH TÍCH -->
+    <section id="achievements" class="profile-panel hidden">
+
+      <div class="card">
+        <h2 class="section-title">🏆 Thành tích của tôi</h2>
+
+        <div class="empty-chart">
+          <strong>Chưa có thành tích nào</strong>
+          <span>Khi hệ thống ghi nhận thành tích, chúng sẽ xuất hiện tại đây.</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ĐỔI MẬT KHẨU -->
+    <section id="passwordPanel" class="profile-panel hidden">
+
+      <div class="card form-card">
+        <h2 class="section-title">🔒 Đổi mật khẩu</h2>
+        <p class="panel-description">Mật khẩu mới cần có ít nhất 8 ký tự.</p>
+
+        <div class="field">
+          <label>Mật khẩu mới</label>
+          <input id="newPassword" type="password" placeholder="Nhập mật khẩu mới">
+        </div>
+
+        <div class="field" style="margin-top:16px">
+          <label>Xác nhận mật khẩu mới</label>
+          <input id="confirmPassword" type="password" placeholder="Nhập lại mật khẩu mới">
+        </div>
+
+        <button class="primary-btn" style="margin-top:20px" onclick="changePassword()">
+          Cập nhật mật khẩu
+        </button>
+
+        <div id="passwordMessage" class="message"></div>
+      </div>
+
+    </section>
+
+  </main>
 </div>
 
-
-<section class="card">
-<h2>Thông tin cá nhân</h2>
-<div class="avatar">👤</div>
-
-<label>Họ và tên</label>
-<input id="fullName" type="text" placeholder="Họ và tên">
-
-<label>Email tài khoản</label>
-<input id="email" type="email" disabled>
-
-<button onclick="saveProfile()">Lưu thông tin</button>
-<p class="message" id="profileMessage"></p>
-</section>
-
-<section class="card">
-<h2>Đổi mật khẩu</h2>
-
-<label>Mật khẩu mới</label>
-<input id="newPassword" type="password" placeholder="Mật khẩu mới">
-
-<label>Xác nhận mật khẩu</label>
-<input id="confirmPassword" type="password" placeholder="Nhập lại mật khẩu">
-
-<button onclick="changePassword()">Cập nhật mật khẩu</button>
-<p class="message" id="passwordMessage"></p>
-</section>
-
-<section class="card">
-<h2>Đăng xuất</h2>
-<button class="logout" onclick="logoutUser()">Đăng xuất</button>
-</section>
-
-</div>
-</main>
-
-<footer>© 2026 RULER STUDY</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
 
 const supabaseClient = window.supabase.createClient(
@@ -364,7 +968,8 @@ const supabaseClient = window.supabase.createClient(
 );
 
 function message(id,text){
-  document.getElementById(id).textContent=text;
+  const el=document.getElementById(id);
+  if(el) el.textContent=text;
 }
 
 function showLogin(){
@@ -375,6 +980,28 @@ function showLogin(){
 function showRegister(){
   document.getElementById("loginArea").classList.add("hidden");
   document.getElementById("registerArea").classList.remove("hidden");
+}
+
+function showPanel(panel,button){
+  document.querySelectorAll(".profile-panel").forEach(el=>{
+    el.classList.add("hidden");
+  });
+
+  const target=document.getElementById(panel);
+  if(target) target.classList.remove("hidden");
+
+  document.querySelectorAll(".nav button[data-panel]").forEach(el=>{
+    el.classList.remove("active");
+  });
+
+  if(button){
+    button.classList.add("active");
+  }else{
+    const navButton=document.querySelector(
+      '.nav button[data-panel="'+panel+'"]'
+    );
+    if(navButton) navButton.classList.add("active");
+  }
 }
 
 async function loginUser(){
@@ -439,26 +1066,26 @@ async function registerUser(){
   if(data.session){
     await loadProfile();
   }else{
-    message("registerMessage",
+    message(
+      "registerMessage",
       "Đăng ký thành công! Hãy kiểm tra Gmail để xác nhận tài khoản nếu Supabase yêu cầu."
     );
   }
 }
 
-
 async function loadProfile(){
-  const {data,error} = await supabaseClient.auth.getUser();
+  const {data,error}=await supabaseClient.auth.getUser();
 
-  if(error || !data.user){
+  if(error||!data.user){
     document.getElementById("accountArea").classList.add("hidden");
-    document.getElementById("loginArea").classList.remove("hidden");
     document.getElementById("registerArea").classList.add("hidden");
+    document.getElementById("loginArea").classList.remove("hidden");
     return;
   }
 
-  const user = data.user;
+  const user=data.user;
 
-  const {data:roleData,error:roleError} = await supabaseClient
+  const {data:roleData,error:roleError}=await supabaseClient
     .from("user_roles")
     .select("role")
     .eq("user_id",user.id)
@@ -469,8 +1096,8 @@ async function loadProfile(){
     return;
   }
 
-  if(roleData?.role === "admin"){
-    location.href = "admin.html";
+  if(roleData?.role==="admin"){
+    location.href="admin.html";
     return;
   }
 
@@ -478,9 +1105,9 @@ async function loadProfile(){
   document.getElementById("registerArea").classList.add("hidden");
   document.getElementById("accountArea").classList.remove("hidden");
 
-  document.getElementById("email").value = user.email || "";
+  document.getElementById("email").value=user.email||"";
 
-  const {data:profile,error:profileError} = await supabaseClient
+  const {data:profile,error:profileError}=await supabaseClient
     .from("profiles")
     .select("full_name,email,birth_date,class_name,school_name,avatar_url")
     .eq("user_id",user.id)
@@ -491,67 +1118,81 @@ async function loadProfile(){
     return;
   }
 
-  const name = profile?.full_name || user.user_metadata?.full_name || "";
+  const name=profile?.full_name||user.user_metadata?.full_name||"";
 
-  document.getElementById("fullName").value = name;
-  document.getElementById("birthDate").value = profile?.birth_date || "";
-  document.getElementById("className").value = profile?.class_name || "";
-  document.getElementById("schoolName").value = profile?.school_name || "";
-  document.getElementById("avatarUrl").value = profile?.avatar_url || "";
+  document.getElementById("fullName").value=name;
+  document.getElementById("birthDate").value=profile?.birth_date||"";
+  document.getElementById("className").value=profile?.class_name||"";
+  document.getElementById("schoolName").value=profile?.school_name||"";
+  document.getElementById("avatarUrl").value=profile?.avatar_url||"";
 
-  document.getElementById("sidebarName").textContent = name || "Học sinh";
-  document.getElementById("sidebarEmail").textContent = user.email || "";
-  document.getElementById("displayName").textContent = name || "Chưa cập nhật";
-  document.getElementById("displayEmail").textContent = user.email || "";
-  document.getElementById("displayBirth").textContent = profile?.birth_date || "Chưa cập nhật";
-  document.getElementById("displayClass").textContent = profile?.class_name || "Chưa cập nhật";
-  document.getElementById("displaySchool").textContent = profile?.school_name || "Chưa cập nhật";
+  document.getElementById("displayName").textContent=name||"Học sinh";
+  document.getElementById("displayEmail").textContent=user.email||"";
+  document.getElementById("displayBirth").textContent=profile?.birth_date||"Chưa cập nhật";
+  document.getElementById("displayClass").textContent=profile?.class_name||"Chưa cập nhật";
+  document.getElementById("displaySchool").textContent=profile?.school_name||"Chưa cập nhật";
+
+  document.getElementById("summaryName").textContent=name||"Chưa cập nhật";
+  document.getElementById("summaryEmail").textContent=user.email||"";
+  document.getElementById("summaryBirth").textContent=profile?.birth_date||"Chưa cập nhật";
+  document.getElementById("summaryClass").textContent=profile?.class_name||"Chưa cập nhật";
 
   updateAvatar(profile?.avatar_url);
+
+  showPanel("personal");
 }
 
 function updateAvatar(url){
-  ["avatarPreview","mainAvatar"].forEach(id => {
-    const el = document.getElementById(id);
+  const ids=["avatarPreview","mainAvatar","topAvatar"];
+
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+
+    el.innerHTML="";
 
     if(url){
-      el.innerHTML = "";
-      const img = document.createElement("img");
-      img.src = url;
-      img.alt = "Ảnh đại diện";
-      img.style.cssText = "width:100%;height:100%;object-fit:cover;border-radius:50%";
-      img.onerror = () => {
-        el.textContent = "👤";
+      const img=document.createElement("img");
+      img.src=url;
+      img.alt="Ảnh đại diện";
+
+      img.onerror=()=>{
+        el.textContent="👤";
       };
+
       el.appendChild(img);
     }else{
-      el.textContent = "👤";
+      el.textContent="👤";
     }
   });
 }
 
-async function saveProfile(){
-  const {data,error} = await supabaseClient.auth.getUser();
+document.getElementById("avatarUrl").addEventListener("input",function(){
+  updateAvatar(this.value.trim());
+});
 
-  if(error || !data.user){
+async function saveProfile(){
+  const {data,error}=await supabaseClient.auth.getUser();
+
+  if(error||!data.user){
     message("profileMessage","Bạn cần đăng nhập trước!");
     return;
   }
 
-  const user = data.user;
+  const user=data.user;
 
-  const fullName = document.getElementById("fullName").value.trim();
-  const birthDate = document.getElementById("birthDate").value || null;
-  const className = document.getElementById("className").value.trim();
-  const schoolName = document.getElementById("schoolName").value.trim();
-  const avatarUrl = document.getElementById("avatarUrl").value.trim();
+  const fullName=document.getElementById("fullName").value.trim();
+  const birthDate=document.getElementById("birthDate").value||null;
+  const className=document.getElementById("className").value.trim();
+  const schoolName=document.getElementById("schoolName").value.trim();
+  const avatarUrl=document.getElementById("avatarUrl").value.trim();
 
   if(!fullName){
     message("profileMessage","Hãy nhập họ và tên!");
     return;
   }
 
-  const {error:saveError} = await supabaseClient
+  const {error:saveError}=await supabaseClient
     .from("profiles")
     .upsert({
       id:user.id,
@@ -561,7 +1202,7 @@ async function saveProfile(){
       birth_date:birthDate,
       class_name:className,
       school_name:schoolName,
-      avatar_url:avatarUrl || null
+      avatar_url:avatarUrl||null
     },{onConflict:"user_id"});
 
   if(saveError){
@@ -569,17 +1210,21 @@ async function saveProfile(){
     return;
   }
 
-  document.getElementById("sidebarName").textContent = fullName;
-  document.getElementById("displayName").textContent = fullName;
-  document.getElementById("displayBirth").textContent = birthDate || "Chưa cập nhật";
-  document.getElementById("displayClass").textContent = className || "Chưa cập nhật";
-  document.getElementById("displaySchool").textContent = schoolName || "Chưa cập nhật";
+  document.getElementById("displayName").textContent=fullName;
+  document.getElementById("displayEmail").textContent=user.email||"";
+  document.getElementById("displayBirth").textContent=birthDate||"Chưa cập nhật";
+  document.getElementById("displayClass").textContent=className||"Chưa cập nhật";
+  document.getElementById("displaySchool").textContent=schoolName||"Chưa cập nhật";
+
+  document.getElementById("summaryName").textContent=fullName;
+  document.getElementById("summaryEmail").textContent=user.email||"";
+  document.getElementById("summaryBirth").textContent=birthDate||"Chưa cập nhật";
+  document.getElementById("summaryClass").textContent=className||"Chưa cập nhật";
 
   updateAvatar(avatarUrl);
 
   message("profileMessage","Đã lưu hồ sơ thành công!");
 }
-
 
 async function changePassword(){
   const password=document.getElementById("newPassword").value;
@@ -597,7 +1242,8 @@ async function changePassword(){
 
   const {error}=await supabaseClient.auth.updateUser({password});
 
-  message("passwordMessage",
+  message(
+    "passwordMessage",
     error?"Lỗi: "+error.message:"Đổi mật khẩu thành công!"
   );
 
@@ -613,13 +1259,13 @@ async function logoutUser(){
   if(error){
     alert("Đăng xuất thất bại: "+error.message);
     return;
- 
-   }
+  }
 
   location.reload();
 }
 
 loadProfile();
 </script>
+
 </body>
 </html>
