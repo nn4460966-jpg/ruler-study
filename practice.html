@@ -184,19 +184,65 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:12px}
     <p>Luyện tập kiến thức, kiểm tra khả năng ghi nhớ và đánh giá kết quả học tập của bạn.</p>
   </section>
 
-  <section class="quiz-card" id="setup">
-    <h2>📚 Chọn bài luyện tập</h2>
-    <p style="color:#64748b">Chọn môn học để bắt đầu bài luyện tập.</p>
-    <select id="subjectSelect">
-      <option value="Toán học">Toán học</option>
-      <option value="Ngữ văn">Ngữ văn</option>
-      <option value="Tiếng Anh">Tiếng Anh</option>
-      <option value="Vật lý">Vật lý</option>
-      <option value="Hóa học">Hóa học</option>
-      <option value="Sinh học">Sinh học</option>
-    </select>
-    <button onclick="startQuiz()">Bắt đầu luyện tập</button>
-  </section>
+ <section class="quiz-card" id="setup">
+  <h2>📚 Chọn môn học yêu thích</h2>
+  <p style="color:#64748b">
+    Chọn một môn học để bắt đầu thử sức nhé!
+  </p>
+
+  <select id="subjectSelect" style="display:none">
+    <option value="Toán học">Toán học</option>
+    <option value="Ngữ văn">Ngữ văn</option>
+    <option value="Tiếng Anh">Tiếng Anh</option>
+    <option value="Vật lý">Vật lý</option>
+    <option value="Hóa học">Hóa học</option>
+    <option value="Sinh học">Sinh học</option>
+  </select>
+
+  <div class="subject-grid">
+    <div class="subject-card" style="background:#eff6ff">
+      <div class="subject-icon">📐</div>
+      <h3>Toán học</h3>
+      <p>Tư duy và tính toán</p>
+      <button onclick="selectSubject('Toán học')">Bắt đầu</button>
+    </div>
+
+    <div class="subject-card" style="background:#fff1f2">
+      <div class="subject-icon">📖</div>
+      <h3>Ngữ văn</h3>
+      <p>Khám phá ngôn từ</p>
+      <button onclick="selectSubject('Ngữ văn')">Bắt đầu</button>
+    </div>
+
+    <div class="subject-card" style="background:#ecfdf5">
+      <div class="subject-icon">🌍</div>
+      <h3>Tiếng Anh</h3>
+      <p>Rèn luyện ngoại ngữ</p>
+      <button onclick="selectSubject('Tiếng Anh')">Bắt đầu</button>
+    </div>
+
+    <div class="subject-card" style="background:#f5f3ff">
+      <div class="subject-icon">⚡</div>
+      <h3>Vật lý</h3>
+      <p>Khám phá thế giới tự nhiên</p>
+      <button onclick="selectSubject('Vật lý')">Bắt đầu</button>
+    </div>
+
+    <div class="subject-card" style="background:#fff7ed">
+      <div class="subject-icon">🧪</div>
+      <h3>Hóa học</h3>
+      <p>Khám phá các phản ứng</p>
+      <button onclick="selectSubject('Hóa học')">Bắt đầu</button>
+    </div>
+
+    <div class="subject-card" style="background:#f0fdfa">
+      <div class="subject-icon">🧬</div>
+      <h3>Sinh học</h3>
+      <p>Khám phá sự sống</p>
+      <button onclick="selectSubject('Sinh học')">Bắt đầu</button>
+    </div>
+  </div>
+</section>
 
   <section class="quiz-card" id="quiz" style="display:none">
     <p class="question-info" id="questionInfo"></p>
