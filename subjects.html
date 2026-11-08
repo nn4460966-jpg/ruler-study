@@ -2,227 +2,109 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Môn học | RULER STUDY</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bài học | RULER STUDY</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f6fc;
-      color: #172554;
-    }
-
-    header {
-      background: #ffffff;
-      padding: 20px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 12px #00000010;
-    }
-
-    .logo {
-      font-size: 23px;
-      font-weight: bold;
-      color: #2563eb;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #334155;
-      margin-left: 22px;
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      color: #2563eb;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 45px auto;
-      padding: 0 20px;
-    }
-
-    .intro {
-      background: linear-gradient(120deg, #2563eb, #60a5fa);
-      color: white;
-      padding: 35px;
-      border-radius: 18px;
-      margin-bottom: 30px;
-    }
-
-    .intro h1 {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-
-    .intro p {
-      line-height: 1.6;
-    }
-
-    .subject-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .subject-card {
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px #0000000c;
-      transition: 0.2s;
-    }
-
-    .subject-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 22px #00000015;
-    }
-
-    .subject-card .icon {
-      font-size: 35px;
-      margin-bottom: 15px;
-    }
-
-    .subject-card h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .subject-card p {
-      color: #64748b;
-      line-height: 1.5;
-    }
-
-    .subject-card button {
-      margin-top: 18px;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .subject-card button:hover {
-      background: #1d4ed8;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      nav a {
-        margin: 0 7px;
-      }
-
-      .intro h1 {
-        font-size: 25px;
-      }
-    }
-  </style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',sans-serif;background:linear-gradient(135deg,#edf3ff,#e7eaff);color:#172554}
+.sidebar{position:fixed;inset:0 auto 0 0;width:265px;background:linear-gradient(180deg,#10275a,#19366f);color:white;padding:28px 15px;display:flex;flex-direction:column;z-index:5}
+.brand{text-align:center;padding-bottom:35px}
+.brand-icon{font-size:45px}
+.brand h2{font-size:24px;margin:8px 0}
+.brand p{font-size:12px}
+.nav{display:flex;flex-direction:column;gap:10px}
+.nav a{padding:15px;color:white;text-decoration:none;border-radius:14px;display:flex;gap:14px;align-items:center;font-size:14px;font-weight:600}
+.nav a:hover,.nav a.active{background:linear-gradient(100deg,#3975e9,#3156a8)}
+.nav-icon{width:27px;text-align:center;font-size:20px}
+.sidebar-bottom{margin-top:auto;text-align:center;font-size:65px;padding:20px}
+.main{margin-left:265px;padding:25px 30px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.search{background:white;border:1px solid #dce4ff;border-radius:30px;padding:15px 20px;color:#64748b;width:min(600px,80%)}
+.avatar{background:#dce7ff;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;font-size:22px}
+.intro{padding:35px;border-radius:22px;background:linear-gradient(110deg,#9bd0ff,#d9e8ff 48%,#a99aff);margin-bottom:25px;box-shadow:0 6px 18px #5578db26}
+.intro h1{margin:0 0 12px;font-size:30px}
+.intro p{line-height:1.8;margin:0}
+.subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.subject-card{background:white;border:1px solid #dce4ff;border-radius:20px;padding:25px;box-shadow:0 5px 17px #263c7510;transition:.2s}
+.subject-card:hover{transform:translateY(-4px);box-shadow:0 9px 24px #263c7520}
+.subject-card .icon{font-size:38px;margin-bottom:15px}
+.subject-card h2{font-size:19px;margin:0 0 10px}
+.subject-card p{font-size:13px;color:#64748b;line-height:1.7;min-height:45px}
+button{margin-top:15px;border:0;border-radius:11px;padding:12px 18px;background:linear-gradient(100deg,#3568e8,#8175ee);color:white;font-family:inherit;font-weight:700;cursor:pointer}
+button:hover{filter:brightness(.95)}
+footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
+@media(max-width:1050px){.subject-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.sidebar{width:75px;padding:15px 8px}.brand h2,.brand p,.nav-text,.sidebar-bottom{display:none}.brand-icon{font-size:32px}.nav a{justify-content:center;padding:15px 5px}.main{margin-left:75px;padding:15px}}
+@media(max-width:520px){.subject-grid{grid-template-columns:1fr}.intro{padding:23px}.intro h1{font-size:23px}}
+</style>
 </head>
 
 <body>
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">📚⭐</div>
+    <h2>RULER STUDY</h2>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
+  <nav class="nav">
+    <a href="index.html"><span class="nav-icon">⌂</span><span class="nav-text">Trang chủ</span></a>
+    <a href="subjects.html" class="active"><span class="nav-icon">📖</span><span class="nav-text">Bài học</span></a>
+    <a href="progress.html"><span class="nav-icon">▥</span><span class="nav-text">Tiến độ học tập</span></a>
+    <a href="practice.html"><span class="nav-icon">✍️</span><span class="nav-text">Ôn luyện</span></a>
+    <a href="account.html#vocabulary"><span class="nav-icon">🔤</span><span class="nav-text">Từ vựng</span></a>
+    <a href="account.html"><span class="nav-icon">👤</span><span class="nav-text">Hồ sơ cá nhân</span></a>
+    <a href="achievements.html"><span class="nav-icon">🏆</span><span class="nav-text">Thành tích</span></a>
+  </nav>
+  <div class="sidebar-bottom">🎓📚</div>
+</aside>
 
-  <header>
-    <div class="logo">RULER STUDY</div>
-
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="subjects.html">Môn học</a>
-      <a href="tools.html">Công cụ</a>
-      <a href="practice.html">Ôn luyện</a>
-    </nav>
+<main class="main">
+  <header class="topbar">
+    <div class="search">🔍 Không gian học tập RULER STUDY</div>
+    <div class="avatar">👤</div>
   </header>
 
-  <main>
-    <section class="intro">
-      <h1>Kho môn học 📚</h1>
-      <p>
-        Khám phá kiến thức, tài liệu và nội dung học tập
-        được sắp xếp theo từng môn học.
-      </p>
-    </section>
+  <section class="intro">
+    <h1>Kho bài học 📚</h1>
+    <p>Khám phá kiến thức và nội dung học tập được sắp xếp theo từng môn học.</p>
+  </section>
 
-    <section class="subject-grid">
-
-      <div class="subject-card">
-        <div class="icon">📐</div>
-        <h2>Toán học</h2>
-        <p>Học tập và củng cố kiến thức Toán học.</p>
-        <button onclick="alert('Phần nội dung Toán học sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-      <div class="subject-card">
-        <div class="icon">📖</div>
-        <h2>Ngữ văn</h2>
-        <p>Khám phá tác phẩm và kiến thức Ngữ văn.</p>
-        <button onclick="alert('Phần nội dung Ngữ văn sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-      <div class="subject-card">
-        <div class="icon">🌍</div>
-        <h2>Tiếng Anh</h2>
-        <p>Rèn luyện từ vựng và kiến thức tiếng Anh.</p>
-        <button onclick="alert('Phần nội dung Tiếng Anh sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-      <div class="subject-card">
-        <div class="icon">⚛️</div>
-        <h2>Vật lý</h2>
-        <p>Tìm hiểu các quy luật và hiện tượng vật lý.</p>
-        <button onclick="alert('Phần nội dung Vật lý sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-      <div class="subject-card">
-        <div class="icon">🧪</div>
-        <h2>Hóa học</h2>
-        <p>Học các kiến thức và phản ứng hóa học.</p>
-        <button onclick="alert('Phần nội dung Hóa học sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-      <div class="subject-card">
-        <div class="icon">🌱</div>
-        <h2>Sinh học</h2>
-        <p>Khám phá thế giới sinh vật và tự nhiên.</p>
-        <button onclick="alert('Phần nội dung Sinh học sẽ được phát triển tiếp.')">
-          Khám phá
-        </button>
-      </div>
-
-    </section>
-  </main>
-
-  <footer>
-    © 2026 RULER STUDY
-  </footer>
-
+  <section class="subject-grid">
+    <div class="subject-card">
+      <div class="icon">📐</div><h2>Toán học</h2>
+      <p>Học tập và củng cố kiến thức Toán học.</p>
+      <button onclick="alert('Phần nội dung Toán học sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+    <div class="subject-card">
+      <div class="icon">📖</div><h2>Ngữ văn</h2>
+      <p>Khám phá tác phẩm và kiến thức Ngữ văn.</p>
+      <button onclick="alert('Phần nội dung Ngữ văn sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+    <div class="subject-card">
+      <div class="icon">🌍</div><h2>Tiếng Anh</h2>
+      <p>Rèn luyện từ vựng và kiến thức tiếng Anh.</p>
+      <button onclick="alert('Phần nội dung Tiếng Anh sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+    <div class="subject-card">
+      <div class="icon">⚛️</div><h2>Vật lý</h2>
+      <p>Tìm hiểu các quy luật và hiện tượng vật lý.</p>
+      <button onclick="alert('Phần nội dung Vật lý sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+    <div class="subject-card">
+      <div class="icon">🧪</div><h2>Hóa học</h2>
+      <p>Học các kiến thức và phản ứng hóa học.</p>
+      <button onclick="alert('Phần nội dung Hóa học sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+    <div class="subject-card">
+      <div class="icon">🌱</div><h2>Sinh học</h2>
+      <p>Khám phá thế giới sinh vật và tự nhiên.</p>
+      <button onclick="alert('Phần nội dung Sinh học sẽ được phát triển tiếp.')">Khám phá</button>
+    </div>
+  </section>
+  <footer>© 2026 RULER STUDY</footer>
+</main>
 </body>
 </html>
