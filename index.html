@@ -692,7 +692,30 @@ async function logoutUser(){
   await checkHomeLogin();
 }
 
+async function startStudentHeartbeat() {
+  const { data: { session } } = await homeSupabase.auth.getSession();
+
+  if (!session) return;
+
+  const { data: roleData } = await homeSupabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+
+  if (roleData?.role === "admin") return;
+
+  await homeSupabase.rpc("record_student_heartbeat");
+
+  setInterval(async () => {
+    if (!document.hidden) {
+      await homeSupabase.rpc("record_student_heartbeat");
+    }
+  }, 30000);
+}
+
 checkHomeLogin();
+startStudentHeartbeat();
 </script>
 </body>
 </html>
