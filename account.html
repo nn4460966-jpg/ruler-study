@@ -229,6 +229,21 @@ async function loadProfile(){
     document.getElementById("registerArea").classList.add("hidden");
     return;
   }
+    const {data: roleData, error: roleError} = await supabaseClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", data.user.id)
+    .maybeSingle();
+
+  if (roleError) {
+    message("loginMessage", "Không kiểm tra được quyền: " + roleError.message);
+    return;
+  }
+
+  if (roleData?.role === "admin") {
+    location.href = "admin.html";
+    return;
+  }
 
   document.getElementById("loginArea").classList.add("hidden");
   document.getElementById("registerArea").classList.add("hidden");
