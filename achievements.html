@@ -295,7 +295,9 @@ function goBack(){
 }
 
 async function logoutUser(){
-  const {error} = await achievementsSupabase.auth.signOut();
+  const {error} = await achievementsSupabase.auth.signOut({
+    scope: "local"
+  });
 
   if(error){
     alert("Đăng xuất thất bại: " + error.message);
