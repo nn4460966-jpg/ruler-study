@@ -16,7 +16,16 @@ body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;font
 .brand p,.sub{font-size:13px;color:#64748b}
 h2{font-size:22px;margin:0 0 8px}
 label{display:block;font-size:13px;font-weight:700;margin:14px 0 8px}
-input{width:100%;padding:13px 14px;border:1px solid #d7e0f7;border-radius:12px;background:#f9fbff;font:inherit;outline:none}
+input,select{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid #d7e0f7;
+  border-radius:12px;
+  background:#f9fbff;
+  font:inherit;
+  outline:none;
+  color:#172554;
+}
 input:focus{border-color:#527dff}
 button{width:100%;border:0;border-radius:13px;padding:14px;margin-top:22px;background:linear-gradient(100deg,#3568e8,#8175ee);color:white;font:700 14px 'Be Vietnam Pro';cursor:pointer}
 .message{min-height:20px;margin-top:14px;font-size:13px;color:#2563eb;line-height:1.6}
@@ -62,8 +71,25 @@ a{color:#3568e8;font-weight:700;text-decoration:none}
   <p class="sub">Đăng ký tài khoản mới để bắt đầu học tập.</p>
 
   <form id="registerForm">
-    <label for="name">Họ và tên</label>
-    <input id="name" autocomplete="name" placeholder="Nhập họ và tên" required>
+   <label for="name">Họ và tên</label>
+<input id="name" autocomplete="name" placeholder="Nhập họ và tên" required>
+
+<label for="className">Bạn hiện đang học lớp</label>
+<select id="className" required>
+  <option value="">-- Chọn lớp của bạn --</option>
+  <option value="1">Lớp 1</option>
+  <option value="2">Lớp 2</option>
+  <option value="3">Lớp 3</option>
+  <option value="4">Lớp 4</option>
+  <option value="5">Lớp 5</option>
+  <option value="6">Lớp 6</option>
+  <option value="7">Lớp 7</option>
+  <option value="8">Lớp 8</option>
+  <option value="9">Lớp 9</option>
+  <option value="10">Lớp 10</option>
+  <option value="11">Lớp 11</option>
+  <option value="12">Lớp 12</option>
+</select>
 
     <label for="email">Gmail</label>
     <input id="email" type="email" autocomplete="email" placeholder="Nhập Gmail" required>
@@ -98,7 +124,8 @@ document.getElementById("registerForm").addEventListener("submit",async e=>{
   e.preventDefault();
 
   const name=document.getElementById("name").value.trim();
-  const email=document.getElementById("email").value.trim();
+const className=document.getElementById("className").value;
+const email=document.getElementById("email").value.trim();
   const password=document.getElementById("password").value;
   const confirm=document.getElementById("confirm").value;
   const message=document.getElementById("message");
@@ -121,7 +148,12 @@ document.getElementById("registerForm").addEventListener("submit",async e=>{
   const {data,error}=await client.auth.signUp({
     email,
     password,
-    options:{data:{full_name:name}}
+    options:{
+  data:{
+    full_name:name,
+    class_name:className
+  }
+}
   });
 
   if(error){
