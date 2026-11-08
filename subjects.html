@@ -196,12 +196,9 @@ async function selectClass(classNumber){
   renderSubjects();
 
   if(currentUser){
-    const {error}=await client.from("profiles").upsert({
-      id:currentUser.id,
-      user_id:currentUser.id,
-      email:currentUser.email,
-      class_name:String(classNumber)
-    },{onConflict:"user_id"});
+    const {error}=await client.auth.updateUser({
+      data:{class_name:String(classNumber)}
+    });
 
     if(error){
       alert("Không lưu được lớp học: "+error.message);
@@ -219,31 +216,16 @@ async function loadStudentClass(){
 
   currentUser=data.user;
 
-  const {data:profile,error:profileError}=await client
-    .from("profiles")
-    .select("class_name")
-    .eq("user_id",currentUser.id)
-    .maybeSingle();
+  const metadataClass=parseInt(
+    currentUser.user_metadata?.class_name,
+    10
+  );
 
-  if(profileError){
-    alert("Không tải được lớp học: "+profileError.message);
-    return;
-  }
-
-  const savedClass=profile?.class_name;
-  const parsedClass=parseInt(savedClass,10);
-
-  if(parsedClass>=1&&parsedClass<=12){
-    currentClass=parsedClass;
+  if(metadataClass>=1&&metadataClass<=12){
+    currentClass=metadataClass;
   }else{
-    const metadataClass=parseInt(currentUser.user_metadata?.class_name,10);
-    if(metadataClass>=1&&metadataClass<=12){
-      currentClass=metadataClass;
-      await selectClass(currentClass);
-    }else{
-      alert("Tài khoản chưa có thông tin lớp học. Hãy cập nhật lớp trong hồ sơ.");
-      currentClass=1;
-    }
+    currentClass=1;
+    alert("Tài khoản chưa có lớp học. Hãy chọn lớp của bạn.");
   }
 
   renderClasses();
