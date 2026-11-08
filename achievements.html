@@ -2,341 +2,225 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thành tích | RULER STUDY</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f6fc;
-      color: #172554;
-    }
-
-    header {
-      background: white;
-      padding: 20px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 12px #00000010;
-    }
-
-    .logo {
-      font-size: 23px;
-      font-weight: bold;
-      color: #2563eb;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: #334155;
-      margin-left: 18px;
-      font-weight: 600;
-    }
-
-    nav a:hover {
-      color: #2563eb;
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-
-    .intro {
-      background: linear-gradient(120deg, #2563eb, #60a5fa);
-      color: white;
-      padding: 35px;
-      border-radius: 18px;
-      margin-bottom: 30px;
-    }
-
-    .intro h1 {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-
-    .intro p {
-      line-height: 1.6;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
-    }
-
-    .stat-card {
-      background: white;
-      padding: 24px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 15px #0000000c;
-    }
-
-    .stat-card .icon {
-      font-size: 35px;
-      margin-bottom: 12px;
-    }
-
-    .stat-card p {
-      color: #64748b;
-      margin-bottom: 10px;
-    }
-
-    .stat-card h2 {
-      font-size: 27px;
-      color: #2563eb;
-    }
-
-    .section-card {
-      background: white;
-      padding: 28px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px #0000000c;
-      margin-bottom: 25px;
-    }
-
-    .section-card h2 {
-      margin-bottom: 22px;
-    }
-
-    .badge-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 18px;
-    }
-
-    .badge-card {
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 23px 15px;
-      text-align: center;
-      background: #ffffff;
-    }
-
-    .badge-icon {
-      font-size: 42px;
-      margin-bottom: 12px;
-    }
-
-    .badge-card h3 {
-      margin-bottom: 9px;
-      font-size: 17px;
-    }
-
-    .badge-card p {
-      color: #64748b;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .locked {
-      opacity: 0.5;
-      background: #f8fafc;
-    }
-
-    .milestone {
-      padding: 17px 0;
-      border-bottom: 1px solid #e2e8f0;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-    }
-
-    .milestone:last-child {
-      border-bottom: none;
-    }
-
-    .milestone-icon {
-      font-size: 28px;
-    }
-
-    .milestone p {
-      color: #64748b;
-      font-size: 14px;
-      margin-top: 5px;
-    }
-
-    .notice {
-      background: #eff6ff;
-      color: #1e40af;
-      padding: 17px;
-      border-radius: 10px;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-    }
-
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      nav a {
-        margin: 0 6px;
-      }
-
-      .intro h1 {
-        font-size: 25px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thành tích | RULER STUDY</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',sans-serif;background:linear-gradient(135deg,#edf3ff,#e9eaff);color:#172554}
+.sidebar{position:fixed;inset:0 auto 0 0;width:265px;background:linear-gradient(180deg,#10275a,#19366f);color:white;padding:28px 15px;display:flex;flex-direction:column;z-index:5}
+.brand{text-align:center;padding-bottom:35px}
+.brand-icon{font-size:45px}
+.brand h2{font-size:24px;margin:8px 0}
+.brand p{font-size:12px}
+.nav{display:flex;flex-direction:column;gap:10px}
+.nav a{padding:15px;color:white;text-decoration:none;border-radius:14px;display:flex;gap:14px;align-items:center;font-size:14px;font-weight:600}
+.nav a:hover,.nav a.active{background:linear-gradient(100deg,#3975e9,#3156a8)}
+.nav-icon{width:27px;text-align:center;font-size:20px}
+.sidebar-bottom{margin-top:auto;text-align:center;font-size:65px;padding:20px}
+.main{margin-left:265px;padding:25px 30px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}
+.search{background:white;border:1px solid #dce4ff;border-radius:30px;padding:15px 20px;color:#64748b;width:min(600px,80%)}
+.avatar{background:#dce7ff;border-radius:50%;width:44px;height:44px;display:grid;place-items:center;font-size:22px}
+.hero{padding:35px;border-radius:22px;background:linear-gradient(110deg,#9bd0ff,#d9e8ff 48%,#a99aff);margin-bottom:25px;box-shadow:0 6px 18px #5578db26}
+.hero h1{margin:0 0 12px;font-size:30px}
+.hero p{line-height:1.8;margin:0}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:25px}
+.stat,.panel{background:white;border:1px solid #dce4ff;border-radius:20px;padding:23px;box-shadow:0 5px 17px #263c7510}
+.stat-icon{font-size:28px}
+.stat strong{display:block;font-size:28px;color:#3568e8;margin:10px 0 5px}
+.stat span{font-size:13px;color:#64748b}
+.panel{margin-bottom:22px}
+.panel h2{margin:0 0 20px;font-size:20px}
+.badges{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.badge-card{border:1px solid #e1e8fa;background:#f8faff;border-radius:16px;padding:20px;text-align:center}
+.badge-card .emoji{font-size:42px;margin-bottom:10px}
+.badge-card h3{font-size:15px;margin:5px 0}
+.badge-card p{font-size:12px;color:#64748b;line-height:1.6;margin:7px 0}
+.badge-card.locked{opacity:.55;filter:grayscale(.75)}
+.progress-row{margin:20px 0}
+.progress-label{display:flex;justify-content:space-between;gap:10px;font-size:14px;margin-bottom:9px}
+.bar{height:11px;border-radius:20px;background:#e8edfa;overflow:hidden}
+.fill{height:100%;border-radius:20px;background:linear-gradient(90deg,#3676ed,#9879f2)}
+footer{text-align:center;padding:25px;color:#64748b;font-size:12px}
+@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.badges{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:760px){.sidebar{width:75px;padding:15px 8px}.brand h2,.brand p,.nav-text,.sidebar-bottom{display:none}.brand-icon{font-size:32px}.nav a{justify-content:center;padding:15px 5px}.main{margin-left:75px;padding:15px}}
+@media(max-width:520px){.stats,.badges{grid-template-columns:1fr}.hero{padding:23px}.hero h1{font-size:23px}.panel{padding:18px}}
+</style>
 </head>
-
 <body>
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">📚⭐</div>
+    <h2>RULER STUDY</h2>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
+  <nav class="nav">
+    <a href="index.html"><span class="nav-icon">⌂</span><span class="nav-text">Trang chủ</span></a>
+    <a href="subjects.html"><span class="nav-icon">📖</span><span class="nav-text">Bài học</span></a>
+    <a href="progress.html"><span class="nav-icon">▥</span><span class="nav-text">Tiến độ học tập</span></a>
+    <a href="practice.html"><span class="nav-icon">✍️</span><span class="nav-text">Ôn luyện</span></a>
+    <a href="account.html#vocabulary"><span class="nav-icon">🔤</span><span class="nav-text">Từ vựng</span></a>
+    <a href="account.html"><span class="nav-icon">👤</span><span class="nav-text">Hồ sơ cá nhân</span></a>
+    <a href="achievements.html" class="active"><span class="nav-icon">🏆</span><span class="nav-text">Thành tích</span></a>
+  </nav>
+  <div class="sidebar-bottom">🎓📚</div>
+</aside>
 
-  <header>
-    <div class="logo">RULER STUDY</div>
-
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="subjects.html">Môn học</a>
-      <a href="tools.html">Công cụ</a>
-      <a href="practice.html">Ôn luyện</a>
-      <a href="progress.html">Tiến độ</a>
-      <a href="achievements.html">Thành tích</a>
-    </nav>
+<main class="main">
+  <header class="topbar">
+    <div class="search">🔍 Không gian học tập RULER STUDY</div>
+    <div class="avatar">👤</div>
   </header>
 
-  <main>
+  <section class="hero">
+    <h1>Thành tích của bạn 🏆</h1>
+    <p>Mỗi bước tiến nhỏ đều đáng tự hào. Hãy tiếp tục học tập và chinh phục những cột mốc mới!</p>
+  </section>
 
-    <section class="intro">
-      <h1>Thành tích học tập 🏆</h1>
-      <p>
-        Ghi nhận những nỗ lực, cột mốc và kết quả
-        mà bạn đạt được trong quá trình học tập.
-      </p>
-    </section>
-
-    <div class="notice">
-      📌 Đây là giao diện thành tích mẫu. Hệ thống huy hiệu
-      và điểm thưởng thật sẽ được kết nối ở bước tiếp theo.
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-icon">🏅</div>
+      <strong id="badgeCount">0</strong>
+      <span>Huy hiệu đã đạt</span>
     </div>
+    <div class="stat">
+      <div class="stat-icon">🎯</div>
+      <strong id="milestoneCount">0</strong>
+      <span>Cột mốc hoàn thành</span>
+    </div>
+    <div class="stat">
+      <div class="stat-icon">⭐</div>
+      <strong id="pointCount">0</strong>
+      <span>Điểm thành tích</span>
+    </div>
+  </section>
 
-    <section class="stats">
-
-      <div class="stat-card">
-        <div class="icon">⭐</div>
-        <p>Tổng điểm thưởng</p>
-        <h2>0 XP</h2>
+  <section class="panel">
+    <h2>🌟 Bộ sưu tập huy hiệu</h2>
+    <div class="badges">
+      <div class="badge-card" id="badge-first">
+        <div class="emoji">🌱</div>
+        <h3>Khởi đầu mới</h3>
+        <p>Bắt đầu hành trình học tập</p>
       </div>
-
-      <div class="stat-card">
-        <div class="icon">🏅</div>
-        <p>Huy hiệu đạt được</p>
-        <h2>0</h2>
+      <div class="badge-card locked" id="badge-practice">
+        <div class="emoji">✍️</div>
+        <h3>Chăm chỉ luyện tập</h3>
+        <p>Hoàn thành bài ôn luyện đầu tiên</p>
       </div>
-
-      <div class="stat-card">
-        <div class="icon">🎯</div>
-        <p>Cột mốc hoàn thành</p>
-        <h2>0</h2>
+      <div class="badge-card locked" id="badge-perfect">
+        <div class="emoji">💯</div>
+        <h3>Điểm số xuất sắc</h3>
+        <p>Đạt kết quả tuyệt đối trong bài luyện tập</p>
       </div>
-
-    </section>
-
-    <section class="section-card">
-      <h2>🎖️ Bộ sưu tập huy hiệu</h2>
-
-      <div class="badge-grid">
-
-        <div class="badge-card locked">
-          <div class="badge-icon">📚</div>
-          <h3>Người mới bắt đầu</h3>
-          <p>Hoàn thành nhiệm vụ học tập đầu tiên.</p>
-        </div>
-
-        <div class="badge-card locked">
-          <div class="badge-icon">🔥</div>
-          <h3>Chăm chỉ</h3>
-          <p>Duy trì hoạt động học tập đều đặn.</p>
-        </div>
-
-        <div class="badge-card locked">
-          <div class="badge-icon">🧠</div>
-          <h3>Trí tuệ</h3>
-          <p>Hoàn thành nhiều bài luyện tập.</p>
-        </div>
-
-        <div class="badge-card locked">
-          <div class="badge-icon">🏆</div>
-          <h3>Xuất sắc</h3>
-          <p>Đạt kết quả nổi bật trong học tập.</p>
-        </div>
-
-        <div class="badge-card locked">
-          <div class="badge-icon">⚡</div>
-          <h3>Bứt phá</h3>
-          <p>Hoàn thành mục tiêu học tập đã đặt ra.</p>
-        </div>
-
-        <div class="badge-card locked">
-          <div class="badge-icon">🌟</div>
-          <h3>Ngôi sao</h3>
-          <p>Đạt nhiều cột mốc học tập quan trọng.</p>
-        </div>
-
+      <div class="badge-card locked" id="badge-subject">
+        <div class="emoji">📚</div>
+        <h3>Nhà khám phá</h3>
+        <p>Khám phá các môn học</p>
       </div>
-    </section>
-
-    <section class="section-card">
-      <h2>🚩 Các cột mốc học tập</h2>
-
-      <div class="milestone">
-        <div class="milestone-icon">📖</div>
-        <div>
-          <strong>Nhiệm vụ đầu tiên</strong>
-          <p>Hoàn thành bài học đầu tiên của bạn.</p>
-        </div>
+      <div class="badge-card locked" id="badge-streak">
+        <div class="emoji">🔥</div>
+        <h3>Bền bỉ mỗi ngày</h3>
+        <p>Duy trì thói quen học tập</p>
       </div>
-
-      <div class="milestone">
-        <div class="milestone-icon">⏱️</div>
-        <div>
-          <strong>10 giờ học tập</strong>
-          <p>Tích lũy tổng cộng 10 giờ học.</p>
-        </div>
+      <div class="badge-card locked" id="badge-master">
+        <div class="emoji">👑</div>
+        <h3>Bậc thầy tri thức</h3>
+        <p>Chinh phục các thử thách học tập</p>
       </div>
+    </div>
+  </section>
 
-      <div class="milestone">
-        <div class="milestone-icon">🎯</div>
-        <div>
-          <strong>Chinh phục 5 môn học</strong>
-          <p>Hoàn thành nhiệm vụ ở 5 môn học khác nhau.</p>
-        </div>
-      </div>
+  <section class="panel">
+    <h2>🚀 Các cột mốc học tập</h2>
+    <div class="progress-row">
+      <div class="progress-label"><span>🌱 Bắt đầu hành trình</span><strong>Hoàn thành</strong></div>
+      <div class="bar"><div class="fill" style="width:100%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>✍️ Hoàn thành bài ôn luyện đầu tiên</span><strong id="practiceStatus">Chưa hoàn thành</strong></div>
+      <div class="bar"><div class="fill" id="practiceBar" style="width:0%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>💯 Đạt 100% trong một bài luyện tập</span><strong id="perfectStatus">Chưa hoàn thành</strong></div>
+      <div class="bar"><div class="fill" id="perfectBar" style="width:0%"></div></div>
+    </div>
+    <div class="progress-row">
+      <div class="progress-label"><span>🏆 Chinh phục 5 bài luyện tập</span><strong id="fiveStatus">0 / 5</strong></div>
+      <div class="bar"><div class="fill" id="fiveBar" style="width:0%"></div></div>
+    </div>
+  </section>
 
-      <div class="milestone">
-        <div class="milestone-icon">🏅</div>
-        <div>
-          <strong>100 câu hỏi</strong>
-          <p>Hoàn thành 100 câu hỏi luyện tập.</p>
-        </div>
-      </div>
+  <footer>© 2026 RULER STUDY</footer>
+</main>
 
-    </section>
+<script>
+/*
+  Trang thành tích hiện sử dụng dữ liệu lưu trên trình duyệt.
+  Chưa kết nối đồng bộ thành tích giữa nhiều thiết bị.
+*/
+function readNumber(key){
+  const value=Number(localStorage.getItem(key)||0);
+  return Number.isFinite(value)?value:0;
+}
 
-  </main>
+function unlock(id){
+  const item=document.getElementById(id);
+  if(item)item.classList.remove("locked");
+}
 
-  <footer>
-    © 2026 RULER STUDY
-  </footer>
+function updateAchievements(){
+  const practiceCount=readNumber("rulerPracticeCount");
+  const perfectCount=readNumber("rulerPerfectCount");
+  const subjectCount=readNumber("rulerSubjectCount");
 
+  unlock("badge-first");
+
+  let badges=1;
+  let milestones=1;
+
+  if(practiceCount>=1){
+    unlock("badge-practice");
+    badges++;
+    milestones++;
+    document.getElementById("practiceStatus").textContent="Hoàn thành";
+    document.getElementById("practiceBar").style.width="100%";
+  }
+
+  if(perfectCount>=1){
+    unlock("badge-perfect");
+    badges++;
+    milestones++;
+    document.getElementById("perfectStatus").textContent="Hoàn thành";
+    document.getElementById("perfectBar").style.width="100%";
+  }
+
+  if(subjectCount>=6){
+    unlock("badge-subject");
+    badges++;
+  }
+
+  if(practiceCount>=5){
+    unlock("badge-streak");
+    badges++;
+    milestones++;
+  }
+
+  if(practiceCount>=10 && perfectCount>=3){
+    unlock("badge-master");
+    badges++;
+  }
+
+  document.getElementById("badgeCount").textContent=badges;
+  document.getElementById("milestoneCount").textContent=milestones;
+  document.getElementById("pointCount").textContent=badges*100+milestones*50;
+  document.getElementById("fiveStatus").textContent=Math.min(practiceCount,5)+" / 5";
+  document.getElementById("fiveBar").style.width=Math.min(practiceCount/5*100,100)+"%";
+}
+
+updateAchievements();
+</script>
 </body>
 </html>
