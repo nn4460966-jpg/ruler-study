@@ -21,11 +21,37 @@ input:focus{border-color:#527dff}
 button{width:100%;border:0;border-radius:13px;padding:14px;margin-top:22px;background:linear-gradient(100deg,#3568e8,#8175ee);color:white;font:700 14px 'Be Vietnam Pro';cursor:pointer}
 .message{min-height:20px;margin-top:14px;font-size:13px;color:#2563eb;line-height:1.6}
 .switch,.home{text-align:center;font-size:13px;margin-top:20px}
-a{color:#3568e8;font-weight:700;text-decoration:none}
+.card{position:relative}
+
+.close-btn{
+  position:absolute;
+  top:16px;
+  right:16px;
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ef4444;
+  color:white;
+  font-size:27px;
+  font-weight:700;
+  text-decoration:none;
+  box-shadow:0 5px 15px #ef444455;
+  transition:.2s;
+}
+
+.close-btn:hover{
+  background:#dc2626;
+  transform:scale(1.08);
+}
+  a{color:#3568e8;font-weight:700;text-decoration:none}
 </style>
 </head>
 <body>
 <main class="card">
+  <a href="index.html" class="close-btn" title="Thoát">×</a>
   <div class="brand">
     <div class="brand-icon">📚⭐</div>
     <h1>RULER STUDY</h1>
