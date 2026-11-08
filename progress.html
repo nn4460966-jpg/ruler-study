@@ -26,8 +26,6 @@
       justify-content: space-between;
       align-items: center;
       box-shadow: 0 2px 12px #00000010;
-      flex-wrap: wrap;
-      gap: 15px;
     }
 
     .logo {
@@ -36,15 +34,10 @@
       color: #2563eb;
     }
 
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
-    }
-
     nav a {
       text-decoration: none;
       color: #334155;
+      margin-left: 22px;
       font-weight: 600;
     }
 
@@ -59,15 +52,15 @@
     }
 
     .intro {
-      background: linear-gradient(120deg, #1d4ed8, #60a5fa);
+      background: linear-gradient(120deg, #2563eb, #60a5fa);
       color: white;
       padding: 35px;
       border-radius: 18px;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
 
     .intro h1 {
-      font-size: 30px;
+      font-size: 32px;
       margin-bottom: 12px;
     }
 
@@ -75,116 +68,104 @@
       line-height: 1.6;
     }
 
-    .section-title {
-      margin: 30px 0 16px;
-      font-size: 22px;
-    }
-
     .stats {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 18px;
+      margin-bottom: 30px;
     }
 
-    .stat-card, .panel {
+    .stat-card {
       background: white;
-      padding: 23px;
+      padding: 24px;
       border-radius: 15px;
       box-shadow: 0 4px 15px #0000000c;
     }
 
-    .stat-card p {
-      color: #64748b;
+    .stat-card .icon {
+      font-size: 30px;
       margin-bottom: 12px;
     }
 
+    .stat-card p {
+      color: #64748b;
+      margin-bottom: 10px;
+    }
+
     .stat-card h2 {
+      font-size: 28px;
       color: #2563eb;
-      font-size: 30px;
     }
 
-    .panel {
-      margin-bottom: 20px;
+    .section-card {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px #0000000c;
+      margin-bottom: 25px;
     }
 
-    .panel h2 {
-      margin-bottom: 18px;
-      font-size: 21px;
+    .section-card h2 {
+      margin-bottom: 22px;
+      font-size: 22px;
     }
 
-    input, select, textarea {
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 13px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 15px;
-      font-family: Arial, sans-serif;
+    .subject-progress {
+      margin-bottom: 22px;
     }
 
-    textarea {
-      min-height: 90px;
-      resize: vertical;
+    .subject-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 9px;
+      font-weight: 600;
     }
 
-    button {
-      padding: 11px 18px;
-      border: none;
-      border-radius: 8px;
-      background: #2563eb;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+    .progress-track {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 20px;
+      overflow: hidden;
     }
 
-    button:hover {
-      background: #1d4ed8;
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #60a5fa);
+      border-radius: 20px;
     }
 
-    .delete-btn {
-      background: #dc2626;
-      margin-top: 10px;
-    }
-
-    .delete-btn:hover {
-      background: #b91c1c;
-    }
-
-    .record {
-      padding: 17px 0;
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      padding: 16px 0;
       border-bottom: 1px solid #e2e8f0;
-      line-height: 1.7;
     }
 
-    .record:last-child {
+    .history-item:last-child {
       border-bottom: none;
     }
 
-    .record strong {
+    .history-item p {
+      color: #64748b;
+      margin-top: 6px;
+      font-size: 14px;
+    }
+
+    .history-time {
+      color: #2563eb;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .notice {
+      background: #eff6ff;
       color: #1e40af;
-    }
-
-    .muted {
-      color: #64748b;
-    }
-
-    .message {
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    .loading {
-      color: #64748b;
-      padding: 12px 0;
-    }
-
-    .logout {
-      background: #e2e8f0;
-      color: #334155;
-    }
-
-    .logout:hover {
-      background: #cbd5e1;
+      padding: 17px;
+      border-radius: 10px;
+      line-height: 1.6;
+      margin-bottom: 25px;
     }
 
     footer {
@@ -196,10 +177,19 @@
     @media (max-width: 600px) {
       header {
         flex-direction: column;
+        gap: 15px;
+      }
+
+      nav a {
+        margin: 0 7px;
       }
 
       .intro h1 {
         font-size: 25px;
+      }
+
+      .section-card {
+        padding: 20px;
       }
     }
   </style>
@@ -217,8 +207,6 @@
       <a href="practice.html">Ôn luyện</a>
       <a href="progress.html">Tiến độ</a>
     </nav>
-
-    <button class="logout" onclick="logoutUser()">Đăng xuất</button>
   </header>
 
   <main>
@@ -226,96 +214,116 @@
     <section class="intro">
       <h1>Tiến độ học tập 📊</h1>
       <p>
-        Theo dõi quá trình học tập, quản lý mục tiêu
-        và xem lại kết quả luyện tập của bạn.
+        Theo dõi quá trình học tập, đánh giá kết quả
+        và nhìn lại những nỗ lực của bạn.
       </p>
-      <p id="userEmail" style="margin-top:12px;"></p>
     </section>
 
-    <h2 class="section-title">Tổng quan học tập</h2>
+    <div class="notice">
+      📌 Đây là giao diện tổng quan mẫu. Dữ liệu thật sẽ được
+      kết nối với tài khoản và cơ sở dữ liệu Supabase ở bước tiếp theo.
+    </div>
 
     <section class="stats">
-      <div class="stat-card">
-        <p>📚 Nội dung đã ghi</p>
-        <h2 id="totalRecords">--</h2>
-      </div>
 
       <div class="stat-card">
-        <p>⏱️ Tổng thời gian học</p>
-        <h2 id="totalMinutes">--</h2>
-        <p>Phút</p>
+        <div class="icon">⏱️</div>
+        <p>Tổng thời gian học</p>
+        <h2 id="totalTime">--</h2>
       </div>
 
       <div class="stat-card">
-        <p>✅ Bài đã hoàn thành</p>
-        <h2 id="completedRecords">--</h2>
+        <div class="icon">📚</div>
+        <p>Nhiệm vụ hoàn thành</p>
+        <h2 id="completedTasks">--</h2>
       </div>
-    </section>
 
-    <h2 class="section-title">Ghi nhận quá trình học</h2>
-
-    <section class="panel">
-      <h2>➕ Thêm nội dung học tập</h2>
-
-      <form id="progressForm">
-
-        <input
-          id="subject"
-          type="text"
-          placeholder="Tên môn học..."
-          required
-        >
-
-        <input
-          id="lessonTitle"
-          type="text"
-          placeholder="Tên bài học hoặc nội dung..."
-          required
-        >
-
-        <input
-          id="studyMinutes"
-          type="number"
-          min="1"
-          placeholder="Thời gian học (phút)..."
-          required
-        >
-
-        <select id="progressStatus">
-          <option value="planned">Dự định học</option>
-          <option value="in_progress">Đang học</option>
-          <option value="completed">Đã hoàn thành</option>
-        </select>
-
-        <label for="targetDate">Ngày dự kiến:</label>
-        <input id="targetDate" type="date">
-
-        <textarea
-          id="progressNotes"
-          placeholder="Ghi chú thêm..."
-        ></textarea>
-
-        <button type="submit" id="saveButton">
-          Lưu tiến độ
-        </button>
-
-        <p class="message" id="progressMessage"></p>
-      </form>
-    </section>
-
-    <h2 class="section-title">Lịch sử học tập</h2>
-
-    <section class="panel">
-      <div id="progressList" class="loading">
-        Đang tải dữ liệu...
+      <div class="stat-card">
+        <div class="icon">🎯</div>
+        <p>Số môn đã học</p>
+        <h2 id="studiedSubjects">--</h2>
       </div>
+
+      <div class="stat-card">
+        <div class="icon">🏆</div>
+        <p>Kết quả luyện tập</p>
+        <h2 id="quizResult">--</h2>
+      </div>
+
     </section>
 
-    <h2 class="section-title">Lịch sử kiểm tra</h2>
+    <section class="section-card">
+      <h2>📈 Tiến độ theo môn học</h2>
 
-    <section class="panel">
-      <div id="quizHistory" class="loading">
-        Đang tải kết quả...
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Toán học</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Ngữ văn</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Tiếng Anh</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Vật lý</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Hóa học</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-info">
+          <span>Sinh học</span>
+          <span>--</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="section-card">
+      <h2>🕒 Lịch sử học tập</h2>
+
+      <div id="studyHistory">
+        <p style="color:#64748b;">
+          Dữ liệu lịch sử học tập sẽ hiển thị sau khi kết nối hệ thống.
+        </p>
       </div>
     </section>
 
@@ -324,300 +332,6 @@
   <footer>
     © 2026 RULER STUDY
   </footer>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    const SUPABASE_URL =
-      "https://svhwozfwuexgiwrdripm.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true
-        }
-      }
-    );
-
-    let currentUser = null;
-
-    function createTextElement(tag, text, className) {
-      const element = document.createElement(tag);
-      element.textContent = text;
-
-      if (className) {
-        element.className = className;
-      }
-
-      return element;
-    }
-
-    async function checkLogin() {
-      const { data, error } =
-        await supabaseClient.auth.getSession();
-
-      if (error || !data.session) {
-        alert("Bạn cần đăng nhập để xem tiến độ học tập!");
-        window.location.href = "index.html";
-        return;
-      }
-
-      currentUser = data.session.user;
-
-      document.getElementById("userEmail").textContent =
-        "Tài khoản: " + currentUser.email;
-
-      await loadStudyProgress();
-    }
-
-    async function loadStudyProgress() {
-      const list = document.getElementById("progressList");
-      const history = document.getElementById("quizHistory");
-
-      list.textContent = "Đang tải dữ liệu...";
-      history.textContent = "Đang tải kết quả...";
-
-      const { data, error } = await supabaseClient
-        .from("study_progress")
-        .select("*")
-        .eq("user_id", currentUser.id)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        list.textContent = "Lỗi tải tiến độ: " + error.message;
-        return;
-      }
-
-      const rows = data || [];
-
-      const minutes = rows.reduce(
-        (sum, item) =>
-          sum + Number(item.study_minutes || 0),
-        0
-      );
-
-      const completed = rows.filter(
-        item => item.status === "completed"
-      ).length;
-
-      document.getElementById("totalRecords").textContent =
-        rows.length;
-
-      document.getElementById("totalMinutes").textContent =
-        minutes;
-
-      document.getElementById("completedRecords").textContent =
-        completed;
-
-      list.innerHTML = "";
-
-      if (rows.length === 0) {
-        list.textContent = "Bạn chưa có nội dung học nào.";
-      }
-
-      rows.forEach(function(item) {
-        const record = document.createElement("div");
-        record.className = "record";
-
-        const title = createTextElement(
-          "strong",
-          item.subject + " — " + item.lesson_title
-        );
-
-        const time = createTextElement(
-          "p",
-          "⏱️ " + Number(item.study_minutes) + " phút"
-        );
-
-        let statusText = "Dự định học";
-
-        if (item.status === "completed") {
-          statusText = "Đã hoàn thành";
-        } else if (item.status === "in_progress") {
-          statusText = "Đang học";
-        }
-
-        const status = createTextElement(
-          "p",
-          "Trạng thái: " + statusText
-        );
-
-        const date = createTextElement(
-          "p",
-          "Ngày: " + (item.target_date || "Chưa đặt")
-        );
-
-        const notes = createTextElement(
-          "p",
-          "Ghi chú: " + (item.notes || "Không có")
-        );
-
-        const remove = document.createElement("button");
-        remove.className = "delete-btn";
-        remove.textContent = "Xóa nội dung";
-
-        remove.onclick = function() {
-          deleteStudyProgress(item.id);
-        };
-
-        record.append(
-          title,
-          time,
-          status,
-          date,
-          notes,
-          remove
-        );
-
-        list.appendChild(record);
-      });
-
-      await loadQuizHistory();
-    }
-
-    async function saveStudyProgress(event) {
-      event.preventDefault();
-
-      const message = document.getElementById("progressMessage");
-      const saveButton = document.getElementById("saveButton");
-
-      const subject =
-        document.getElementById("subject").value.trim();
-
-      const lesson_title =
-        document.getElementById("lessonTitle").value.trim();
-
-      const study_minutes =
-        Number(document.getElementById("studyMinutes").value);
-
-      if (!subject || !lesson_title || study_minutes < 1) {
-        message.textContent = "Vui lòng kiểm tra lại thông tin.";
-        return;
-      }
-
-      saveButton.disabled = true;
-      saveButton.textContent = "Đang lưu...";
-      message.textContent = "";
-
-      const { error } = await supabaseClient
-        .from("study_progress")
-        .insert({
-          user_id: currentUser.id,
-          subject,
-          lesson_title,
-          study_minutes,
-          status: document.getElementById("progressStatus").value,
-          target_date:
-            document.getElementById("targetDate").value || null,
-          notes:
-            document.getElementById("progressNotes").value.trim() || null
-        });
-
-      saveButton.disabled = false;
-      saveButton.textContent = "Lưu tiến độ";
-
-      if (error) {
-        message.textContent = "Không lưu được: " + error.message;
-        return;
-      }
-
-      message.textContent = "Đã lưu tiến độ thành công!";
-
-      document.getElementById("progressForm").reset();
-
-      await loadStudyProgress();
-    }
-
-    async function deleteStudyProgress(id) {
-      const confirmed = confirm(
-        "Bạn có chắc muốn xóa nội dung học tập này không?"
-      );
-
-      if (!confirmed) return;
-
-      const { error } = await supabaseClient
-        .from("study_progress")
-        .delete()
-        .eq("id", id)
-        .eq("user_id", currentUser.id);
-
-      if (error) {
-        alert("Không xóa được: " + error.message);
-        return;
-      }
-
-      await loadStudyProgress();
-    }
-
-    async function loadQuizHistory() {
-      const history = document.getElementById("quizHistory");
-
-      const { data, error } = await supabaseClient
-        .from("quiz_attempts")
-        .select("score,total,created_at")
-        .eq("user_id", currentUser.id)
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        history.textContent =
-          "Lỗi tải lịch sử kiểm tra: " + error.message;
-        return;
-      }
-
-      history.innerHTML = "";
-
-      if (!data || data.length === 0) {
-        history.textContent =
-          "Bạn chưa có kết quả trắc nghiệm nào.";
-        return;
-      }
-
-      data.forEach(function(item) {
-        const record = document.createElement("div");
-        record.className = "record";
-
-        const score = createTextElement(
-          "strong",
-          "Điểm: " + item.score + "/" + item.total
-        );
-
-        const date = createTextElement(
-          "p",
-          new Date(item.created_at).toLocaleString("vi-VN")
-        );
-
-        record.append(score, date);
-        history.appendChild(record);
-      });
-    }
-
-    async function logoutUser() {
-      const confirmed = confirm("Bạn muốn đăng xuất?");
-
-      if (!confirmed) return;
-
-      const { error } = await supabaseClient.auth.signOut();
-
-      if (error) {
-        alert("Đăng xuất không thành công: " + error.message);
-        return;
-      }
-
-      window.location.href = "index.html";
-    }
-
-    document.getElementById("progressForm")
-      .addEventListener("submit", saveStudyProgress);
-
-    checkLogin();
-  </script>
 
 </body>
 </html>
