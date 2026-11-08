@@ -106,7 +106,23 @@ body{
   padding:25px 30px 40px;
 }
 
-.topbar{
+.back-btn{
+  padding:10px 16px;
+  border:0;
+  border-radius:12px;
+  background:white;
+  color:#263b70;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 3px 10px #00000010;
+}
+
+.back-btn:hover{
+  background:#e8edff;
+}
+  .topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -236,6 +252,8 @@ footer{
 @media(max-width:760px){
   .sidebar{width:75px;padding:15px 8px}
   .brand h2,.brand p,.nav-text,.sidebar-art{display:none}
+  .sidebar-bottom{display:block;padding:10px 0}
+  .logout-btn{justify-content:center;padding:15px 5px}
   .brand-icon{font-size:35px}
   .nav a{justify-content:center;padding:15px 5px}
   .main{margin-left:75px;padding:15px}
@@ -309,6 +327,9 @@ footer{
 <main class="main">
 
   <header class="topbar">
+    <button class="back-btn" onclick="goBack()">
+  ← Quay lại
+</button>
     <div class="search">
       🔍
       <span>Không gian học tập RULER STUDY</span>
