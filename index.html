@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang chủ | RULER STUDY</title>
@@ -94,7 +96,26 @@ body {
   text-align:center;
   font-size:21px;
 }
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px 17px;
+  border: 1px solid #ffffff35;
+  border-radius: 15px;
+  background: #ffffff12;
+  color: white;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
 
+.logout-btn:hover {
+  background: #dc2626;
+}
 .sidebar-bottom {
   margin-top:auto;
   text-align:center;
@@ -109,7 +130,22 @@ body {
   margin-left:265px;
   padding:25px 30px 40px;
 }
+.back-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 12px;
+  background: white;
+  color: #263b70;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 10px #00000010;
+}
 
+.back-btn:hover {
+  background: #e8edff;
+}
 .topbar {
   display:flex;
   align-items:center;
@@ -431,21 +467,30 @@ footer {
   </nav>
 
   <div class="sidebar-bottom">
-    <div class="sidebar-art">🎓📚</div>
-  </div>
+  <div class="sidebar-art">🎓📚</div>
+
+  <button class="logout-btn" onclick="logoutUser()">
+    <span class="nav-icon">⇥</span>
+    <span class="nav-text">Đăng xuất</span>
+  </button>
+</div>
 
 </aside>
 
 <main class="main">
 
   <header class="topbar">
-    <div class="search">
-      🔍
-      <span>Chào mừng đến với không gian học tập!</span>
-    </div>
+  <button class="back-btn" onclick="goBack()">
+    ← Quay lại
+  </button>
 
-    <div class="top-avatar">👤</div>
-  </header>
+  <div class="search">
+    🔍
+    <span>Chào mừng đến với không gian học tập!</span>
+  </div>
+
+  <div class="top-avatar">👤</div>
+</header>
 
   <section class="hero">
 
@@ -574,6 +619,22 @@ footer {
 </main>
 
 </div>
+<script>
+const homeSupabase = window.supabase.createClient(
+  "https://svhwozfwuexgiwrdripm.supabase.co",
+  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
 
+async function logoutUser(){
+  const {error} = await homeSupabase.auth.signOut();
+
+  if(error){
+    alert("Đăng xuất thất bại: " + error.message);
+    return;
+  }
+
+  location.href = "account.html";
+}
+</script>
 </body>
 </html>
