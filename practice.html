@@ -1,0 +1,512 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ôn luyện | RULER STUDY</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f6fc;
+      color: #172554;
+    }
+
+    header {
+      background: white;
+      padding: 20px 7%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px #00000010;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: bold;
+      color: #2563eb;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #334155;
+      margin-left: 22px;
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: #2563eb;
+    }
+
+    main {
+      max-width: 950px;
+      margin: 45px auto;
+      padding: 0 20px;
+    }
+
+    .intro {
+      background: linear-gradient(120deg, #2563eb, #60a5fa);
+      color: white;
+      padding: 35px;
+      border-radius: 18px;
+      margin-bottom: 30px;
+    }
+
+    .intro h1 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .intro p {
+      line-height: 1.6;
+    }
+
+    .quiz-card {
+      background: white;
+      padding: 28px;
+      border-radius: 16px;
+      box-shadow: 0 4px 15px #0000000c;
+      margin-bottom: 20px;
+    }
+
+    .quiz-card h2 {
+      margin-bottom: 18px;
+    }
+
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      background: white;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .question-info {
+      color: #64748b;
+      margin-bottom: 15px;
+    }
+
+    .question {
+      font-size: 20px;
+      font-weight: bold;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .answers {
+      display: grid;
+      gap: 12px;
+    }
+
+    .answer {
+      padding: 15px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .answer:hover {
+      background: #eff6ff;
+      border-color: #2563eb;
+    }
+
+    .answer.selected {
+      background: #dbeafe;
+      border-color: #2563eb;
+    }
+
+    .answer.correct {
+      background: #dcfce7;
+      border-color: #16a34a;
+    }
+
+    .answer.wrong {
+      background: #fee2e2;
+      border-color: #dc2626;
+    }
+
+    .quiz-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+    }
+
+    #feedback {
+      margin-top: 18px;
+      font-weight: bold;
+    }
+
+    #result {
+      text-align: center;
+      display: none;
+    }
+
+    #result h2 {
+      color: #2563eb;
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+
+    #result p {
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      color: #64748b;
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav a {
+        margin: 0 7px;
+      }
+
+      .intro h1 {
+        font-size: 25px;
+      }
+
+      .quiz-card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">RULER STUDY</div>
+
+    <nav>
+      <a href="index.html">Trang chủ</a>
+      <a href="subjects.html">Môn học</a>
+      <a href="tools.html">Công cụ</a>
+      <a href="practice.html">Ôn luyện</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="intro">
+      <h1>Trung tâm ôn luyện 🎯</h1>
+      <p>
+        Luyện tập kiến thức, kiểm tra khả năng ghi nhớ
+        và đánh giá kết quả học tập của bạn.
+      </p>
+    </section>
+
+    <section class="quiz-card" id="setup">
+      <h2>Chọn bài luyện tập</h2>
+
+      <select id="subjectSelect">
+        <option value="Toán học">Toán học</option>
+        <option value="Ngữ văn">Ngữ văn</option>
+        <option value="Tiếng Anh">Tiếng Anh</option>
+        <option value="Vật lý">Vật lý</option>
+        <option value="Hóa học">Hóa học</option>
+        <option value="Sinh học">Sinh học</option>
+      </select>
+
+      <p style="color:#64748b; margin-bottom:18px;">
+        Bài luyện tập mẫu gồm các câu hỏi cơ bản.
+      </p>
+
+      <button onclick="startQuiz()">Bắt đầu luyện tập</button>
+    </section>
+
+    <section class="quiz-card" id="quiz" style="display:none;">
+
+      <p class="question-info" id="questionInfo"></p>
+
+      <div class="question" id="questionText"></div>
+
+      <div class="answers" id="answers"></div>
+
+      <p id="feedback"></p>
+
+      <div class="quiz-actions">
+        <button onclick="checkAnswer()" id="checkButton">
+          Kiểm tra đáp án
+        </button>
+
+        <button onclick="nextQuestion()" id="nextButton" disabled>
+          Câu tiếp theo
+        </button>
+      </div>
+
+    </section>
+
+    <section class="quiz-card" id="result">
+      <h2>Hoàn thành bài luyện tập!</h2>
+      <p id="resultText"></p>
+      <button onclick="restartQuiz()">Làm bài khác</button>
+    </section>
+
+  </main>
+
+  <footer>
+    © 2026 RULER STUDY
+  </footer>
+
+  <script>
+    const questionBank = {
+      "Toán học": [
+        {
+          question: "Kết quả của 5 × 6 là bao nhiêu?",
+          answers: ["25", "30", "35", "40"],
+          correct: 1
+        },
+        {
+          question: "Tổng ba góc trong một tam giác bằng bao nhiêu?",
+          answers: ["90°", "120°", "180°", "360°"],
+          correct: 2
+        }
+      ],
+
+      "Ngữ văn": [
+        {
+          question: "Tác giả Truyện Kiều là ai?",
+          answers: [
+            "Nguyễn Du",
+            "Nguyễn Trãi",
+            "Hồ Xuân Hương",
+            "Nam Cao"
+          ],
+          correct: 0
+        },
+        {
+          question: "Truyện Kiều được viết bằng thể thơ nào?",
+          answers: [
+            "Thất ngôn bát cú",
+            "Lục bát",
+            "Song thất lục bát",
+            "Tự do"
+          ],
+          correct: 1
+        }
+      ],
+
+      "Tiếng Anh": [
+        {
+          question: "Từ nào có nghĩa là 'quyển sách'?",
+          answers: ["Pen", "Book", "Table", "Chair"],
+          correct: 1
+        },
+        {
+          question: "Chọn dạng đúng: She _____ a student.",
+          answers: ["am", "are", "is", "be"],
+          correct: 2
+        }
+      ],
+
+      "Vật lý": [
+        {
+          question: "Đơn vị đo lực trong hệ SI là gì?",
+          answers: ["Mét", "Niutơn", "Kilôgam", "Giây"],
+          correct: 1
+        },
+        {
+          question: "Dụng cụ dùng để đo nhiệt độ là gì?",
+          answers: ["Nhiệt kế", "Lực kế", "Thước", "Cân"],
+          correct: 0
+        }
+      ],
+
+      "Hóa học": [
+        {
+          question: "Kí hiệu hóa học của Oxi là gì?",
+          answers: ["Ox", "O", "Oi", "X"],
+          correct: 1
+        },
+        {
+          question: "Công thức hóa học của nước là gì?",
+          answers: ["CO2", "O2", "H2O", "NaCl"],
+          correct: 2
+        }
+      ],
+
+      "Sinh học": [
+        {
+          question: "Bộ phận nào thường được gọi là trung tâm điều khiển của tế bào?",
+          answers: ["Màng tế bào", "Nhân tế bào", "Tế bào chất", "Thành tế bào"],
+          correct: 1
+        },
+        {
+          question: "Quá trình cây xanh tạo chất hữu cơ nhờ ánh sáng gọi là gì?",
+          answers: ["Hô hấp", "Tiêu hóa", "Quang hợp", "Thoát hơi nước"],
+          correct: 2
+        }
+      ]
+    };
+
+    let currentQuestions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let selectedAnswer = null;
+    let answered = false;
+
+    function startQuiz() {
+      const subject = document.getElementById("subjectSelect").value;
+
+      currentQuestions = questionBank[subject];
+      currentIndex = 0;
+      score = 0;
+
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("result").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const question = currentQuestions[currentIndex];
+
+      selectedAnswer = null;
+      answered = false;
+
+      document.getElementById("questionInfo").textContent =
+        "Câu " + (currentIndex + 1) +
+        " / " + currentQuestions.length;
+
+      document.getElementById("questionText").textContent =
+        question.question;
+
+      document.getElementById("feedback").textContent = "";
+
+      document.getElementById("checkButton").disabled = false;
+      document.getElementById("nextButton").disabled = true;
+
+      const answersBox = document.getElementById("answers");
+      answersBox.innerHTML = "";
+
+      question.answers.forEach(function(answer, index) {
+        const item = document.createElement("div");
+
+        item.className = "answer";
+        item.textContent =
+          String.fromCharCode(65 + index) + ". " + answer;
+
+        item.onclick = function() {
+          if (answered) return;
+
+          selectedAnswer = index;
+
+          document.querySelectorAll(".answer").forEach(function(element) {
+            element.classList.remove("selected");
+          });
+
+          item.classList.add("selected");
+        };
+
+        answersBox.appendChild(item);
+      });
+    }
+
+    function checkAnswer() {
+      if (answered) return;
+
+      if (selectedAnswer === null) {
+        alert("Bạn hãy chọn một đáp án!");
+        return;
+      }
+
+      answered = true;
+
+      const question = currentQuestions[currentIndex];
+      const answerItems = document.querySelectorAll(".answer");
+
+      if (selectedAnswer === question.correct) {
+        score++;
+
+        document.getElementById("feedback").textContent =
+          "Chính xác! Bạn đã trả lời đúng.";
+        document.getElementById("feedback").style.color = "#16a34a";
+      } else {
+        document.getElementById("feedback").textContent =
+          "Chưa chính xác! Đáp án đúng là " +
+          String.fromCharCode(65 + question.correct) + ".";
+        document.getElementById("feedback").style.color = "#dc2626";
+      }
+
+      answerItems[question.correct].classList.add("correct");
+
+      if (selectedAnswer !== question.correct) {
+        answerItems[selectedAnswer].classList.add("wrong");
+      }
+
+      document.getElementById("checkButton").disabled = true;
+      document.getElementById("nextButton").disabled = false;
+    }
+
+    function nextQuestion() {
+      if (!answered) return;
+
+      currentIndex++;
+
+      if (currentIndex < currentQuestions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById("quiz").style.display = "none";
+      document.getElementById("result").style.display = "block";
+
+      const total = currentQuestions.length;
+      const percentage = Math.round(score / total * 100);
+
+      document.getElementById("resultText").textContent =
+        "Số câu đúng: " + score + "/" + total +
+        ". Kết quả: " + percentage + "%.";
+    }
+
+    function restartQuiz() {
+      document.getElementById("result").style.display = "none";
+      document.getElementById("setup").style.display = "block";
+    }
+  </script>
+
+</body>
+</html>
