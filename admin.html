@@ -2,264 +2,400 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>RULER STUDY - Quản trị</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RULER STUDY - Admin Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #f1f5f9;
-      color: #172033;
-    }
-
-    header {
-      background: #111827;
-      color: white;
-      padding: 22px 6%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    header h1 {
-      font-size: 23px;
-    }
-
-    header button {
-      background: #ef4444;
-      color: white;
-      border: none;
-      padding: 11px 17px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-
-    main {
-      max-width: 1150px;
-      margin: 35px auto;
-      padding: 0 20px;
-    }
-
-    .welcome {
-      margin-bottom: 28px;
-    }
-
-    .welcome h2 {
-      font-size: 27px;
-      margin-bottom: 8px;
-    }
-
-    .welcome p {
-      color: #64748b;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 20px;
-    }
-
-    a.card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+:root{
+  --navy:#10245d;
+  --blue:#2869e8;
+  --purple:#7951ed;
+  --bg:#f3f5ff;
+  --text:#14245a;
+  --muted:#7180a8;
 }
-    .card {
-      background: white;
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 3px 15px #0000000b;
-      border: 1px solid #e2e8f0;
-    }
+body{background:var(--bg);color:var(--text);min-height:100vh}
+button{font:inherit;cursor:pointer}
+#loading{padding:70px 20px;text-align:center;color:var(--navy);font-weight:bold}
+#adminArea{display:none;min-height:100vh}
+.layout{display:flex;min-height:100vh}
 
-    .card .emoji {
-      font-size: 30px;
-      margin-bottom: 15px;
-    }
+/* SIDEBAR */
+.sidebar{
+  width:252px;flex-shrink:0;background:linear-gradient(180deg,#10245d,#172e70);
+  color:white;padding:24px 16px;display:flex;flex-direction:column;
+}
+.brand{text-align:center;padding:8px 0 32px}
+.brand-logo{font-size:55px;margin-bottom:8px}
+.brand h2{font-size:23px;letter-spacing:.5px}
+.brand p{font-size:12px;margin-top:8px;color:#d5defe}
+.nav{display:flex;flex-direction:column;gap:8px}
+.nav-item{
+  display:flex;align-items:center;gap:13px;padding:14px 13px;
+  border-radius:13px;color:#edf2ff;text-decoration:none;font-size:15px;
+  transition:.2s;
+}
+.nav-item:hover,.nav-item.active{background:linear-gradient(100deg,#3479f4,#4162d9)}
+.nav-icon{font-size:21px;width:25px;text-align:center}
+.sidebar-bottom{margin-top:auto;padding-top:24px}
+.admin-profile{
+  display:flex;align-items:center;gap:12px;background:#ffffff17;
+  padding:13px;border-radius:13px;margin-bottom:14px;
+}
+.avatar{width:43px;height:43px;border-radius:50%;background:#dce7ff;
+display:grid;place-items:center;font-size:25px}
+.admin-profile strong{font-size:14px}
+.admin-profile small{display:block;color:#d6e0ff;margin-top:4px}
+.logout{
+  width:100%;border:0;border-radius:12px;padding:14px;color:white;
+  font-weight:bold;background:linear-gradient(100deg,#5946c9,#7951ed);
+}
+.logout:hover{filter:brightness(1.12)}
 
-    .card h3 {
-      margin-bottom: 9px;
-    }
+/* MAIN */
+.main{flex:1;min-width:0;padding:0 25px 30px}
+.topbar{
+  min-height:78px;display:flex;align-items:center;justify-content:space-between;
+  gap:15px;border-bottom:1px solid #e1e6fa;margin-bottom:20px;
+}
+.topbar h1{font-size:23px}
+.topbar p{font-size:13px;color:var(--muted);margin-top:5px}
+.top-right{display:flex;align-items:center;gap:18px}
+.admin-tag{background:#e7eaff;color:#5146c9;padding:11px 17px;border-radius:25px;font-size:13px;font-weight:bold}
+.menu-btn{display:none;border:0;background:none;font-size:25px;color:var(--navy)}
+.welcome{
+  min-height:145px;border-radius:19px;padding:28px 30px;color:white;
+  background:linear-gradient(105deg,#1767e9,#374bd9 65%,#8956ed);
+  display:flex;align-items:center;justify-content:space-between;overflow:hidden;
+  position:relative;box-shadow:0 8px 22px #4566df26;margin-bottom:20px;
+}
+.welcome h2{font-size:30px;margin-bottom:10px}
+.welcome p{font-size:15px;line-height:1.6;color:#edf2ff}
+.welcome-art{font-size:75px;padding:0 25px}
 
-    .card p {
-      color: #64748b;
-      line-height: 1.5;
-      font-size: 14px;
-    }
+/* SUMMARY */
+.summary{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;margin-bottom:20px;
+}
+.stat{
+  background:white;border:1px solid #e3e8ff;border-radius:17px;
+  padding:20px;box-shadow:0 4px 15px #253f8b0b;min-width:0;
+}
+.stat-top{display:flex;align-items:center;gap:13px}
+.stat-icon{
+  width:52px;height:52px;flex-shrink:0;border-radius:50%;
+  display:grid;place-items:center;font-size:24px;color:white;
+}
+.blue{background:linear-gradient(135deg,#2584ff,#2460dc)}
+.purple{background:linear-gradient(135deg,#a36aff,#7041e8)}
+.green{background:linear-gradient(135deg,#37d5ad,#12a987)}
+.orange{background:linear-gradient(135deg,#ffc05c,#ff9823)}
+.stat h3{font-size:14px;color:#63729b;font-weight:normal}
+.stat strong{display:block;font-size:23px;margin-top:6px}
+.stat small{display:block;color:#17ad80;margin-top:9px}
 
-    .status {
-      margin-top: 25px;
-      padding: 15px;
-      background: white;
-      border-radius: 10px;
-      color: #64748b;
-    }
+/* CONTENT */
+.content-grid{
+  display:grid;grid-template-columns:minmax(0,1.65fr) minmax(280px,1fr);
+  gap:17px;margin-bottom:20px;
+}
+.panel{
+  background:white;border:1px solid #e2e8ff;border-radius:18px;
+  padding:20px;box-shadow:0 4px 16px #253f8b0b;min-width:0;
+}
+.panel-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
+.panel-title h3{font-size:18px}
+.panel-title span{font-size:20px}
+.chart-note{color:var(--muted);font-size:13px;margin-bottom:15px}
+.chart{
+  height:190px;border-left:1px solid #dce3fa;border-bottom:1px solid #dce3fa;
+  position:relative;display:flex;align-items:center;justify-content:center;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 45px,#edf0fb 46px);
+}
+.chart-message{text-align:center;color:#8190b6;font-size:14px;line-height:1.7;padding:15px}
+.quick-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.quick{
+  display:flex;align-items:center;gap:10px;padding:15px 12px;
+  border-radius:13px;background:#edf3ff;color:#2454bc;text-decoration:none;
+  font-weight:bold;font-size:13px;min-height:75px;
+}
+.quick:nth-child(2){background:#f2edff;color:#7046d7}
+.quick:nth-child(3){background:#e7f8f3;color:#159b7c}
+.quick:nth-child(4){background:#fff3e4;color:#dc8b21}
+.quick .q-icon{font-size:24px}
+.quick.disabled{opacity:.55;cursor:not-allowed}
+.activity-list{display:flex;flex-direction:column;gap:15px}
+.activity{
+  display:flex;align-items:center;gap:12px;padding-bottom:13px;
+  border-bottom:1px solid #edf0fa;font-size:14px;color:#59698f;
+}
+.activity:last-child{border:0;padding-bottom:0}
+.activity-icon{
+  width:37px;height:37px;border-radius:50%;background:#eaf1ff;
+  display:grid;place-items:center;font-size:18px;flex-shrink:0;
+}
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:17px}
+.info-text{font-size:14px;line-height:1.8;color:#7180a8}
+.pill{font-size:11px;color:#7951ed;background:#f0ebff;padding:5px 9px;border-radius:20px}
+.footer{text-align:center;color:#9aa5c4;font-size:12px;padding:25px 0 5px}
 
-    #loading {
-      text-align: center;
-      padding: 60px 15px;
-    }
-  </style>
+/* RESPONSIVE */
+@media(max-width:1100px){
+ .summary{grid-template-columns:repeat(2,1fr)}
+ .content-grid{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+ .sidebar{position:fixed;z-index:10;left:-260px;top:0;bottom:0;transition:.25s}
+ .sidebar.open{left:0}
+ .main{padding:0 13px 20px;width:100%}
+ .topbar{min-height:70px}
+ .menu-btn{display:block}
+ .topbar h1{font-size:18px}
+ .topbar p{font-size:11px}
+ .top-right{gap:7px}
+ .admin-tag{font-size:11px;padding:9px}
+ .welcome{padding:23px 18px;min-height:130px}
+ .welcome h2{font-size:22px}
+ .welcome p{font-size:13px}
+ .welcome-art{font-size:43px;padding:0 5px}
+ .summary{gap:10px}
+ .stat{padding:13px}
+ .stat-icon{width:40px;height:40px;font-size:19px}
+ .stat h3{font-size:12px}
+ .stat strong{font-size:19px}
+ .panel{padding:15px}
+ .bottom-grid{grid-template-columns:1fr}
+}
+@media(max-width:390px){
+ .summary{grid-template-columns:1fr}
+ .welcome-art{display:none}
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>RULER STUDY · ADMIN</h1>
-    <button onclick="logoutAdmin()">Đăng xuất</button>
+<div id="loading">🔐 Đang kiểm tra quyền quản trị...</div>
+
+<div id="adminArea">
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <div class="brand-logo">📚⭐</div>
+    <h2>RULER STUDY</h2>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
+
+  <nav class="nav">
+    <a class="nav-item active" href="admin.html"><span class="nav-icon">▦</span>Tổng quan</a>
+    <a class="nav-item" href="admin-students.html?v=2"><span class="nav-icon">👥</span>Quản lý học sinh</a>
+    <div class="nav-item"><span class="nav-icon">📖</span>Quản lý môn học <span class="pill">Sau</span></div>
+    <div class="nav-item"><span class="nav-icon">❔</span>Ngân hàng câu hỏi <span class="pill">Sau</span></div>
+    <div class="nav-item"><span class="nav-icon">📊</span>Kết quả học tập <span class="pill">Sau</span></div>
+    <div class="nav-item"><span class="nav-icon">🔔</span>Quản lý thông báo <span class="pill">Sau</span></div>
+    <div class="nav-item"><span class="nav-icon">⚙️</span>Cài đặt hệ thống <span class="pill">Sau</span></div>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="admin-profile">
+      <div class="avatar">👨🏻‍💼</div>
+      <div><strong id="adminName">Admin</strong><small>Quản trị viên 👑</small></div>
+    </div>
+    <button class="logout" onclick="logoutAdmin()">⇥ Đăng xuất</button>
+  </div>
+</aside>
+
+<main class="main">
+  <header class="topbar">
+    <div style="display:flex;align-items:center;gap:13px">
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+      <div>
+        <h1>Trang quản trị</h1>
+        <p>Quản lý và điều hành hệ thống RULER STUDY</p>
+      </div>
+    </div>
+    <div class="top-right">
+      <div class="admin-tag">🛡️ Quản trị viên</div>
+      <div style="font-size:27px">👤</div>
+    </div>
   </header>
 
-  <div id="loading">Đang kiểm tra quyền quản trị...</div>
+  <section class="welcome">
+    <div>
+      <h2>👑 Chào mừng, Admin!</h2>
+      <p>Quản trị hệ thống RULER STUDY một cách dễ dàng và hiệu quả nhất.</p>
+    </div>
+    <div class="welcome-art">💻🎓📚</div>
+  </section>
 
-  <main id="adminArea" style="display:none">
-
-    <section class="welcome">
-      <h2>Xin chào, Quản trị viên!</h2>
-      <p>Chào mừng bạn đến với hệ thống quản lý RULER STUDY.</p>
-    </section>
-
-    <section class="grid">
-
-<a href="admin-students.html?v=2" class="card">  <div class="emoji">👨‍🎓</div>
-  <h3>Quản lý học sinh</h3>
-  <p>Theo dõi và quản lý tài khoản học sinh.</p>
-</a>
-
-      <div class="card">
-        <div class="emoji">📚</div>
-        <h3>Quản lý môn học</h3>
-        <p>Quản lý danh sách và nội dung môn học.</p>
+  <section class="summary">
+    <div class="stat">
+      <div class="stat-top">
+        <div class="stat-icon blue">👥</div>
+        <div><h3>Khu vực quản lý</h3><strong>06</strong></div>
       </div>
-
-      <div class="card">
-        <div class="emoji">📝</div>
-        <h3>Ngân hàng câu hỏi</h3>
-        <p>Quản lý câu hỏi và bài tập ôn luyện.</p>
+      <small>✦ Các chức năng quản trị</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">
+        <div class="stat-icon purple">📚</div>
+        <div><h3>Học tập</h3><strong>Hệ thống</strong></div>
       </div>
-
-      <div class="card">
-        <div class="emoji">📊</div>
-        <h3>Kết quả học tập</h3>
-        <p>Theo dõi kết quả và tiến độ học tập.</p>
+      <small>✦ Nền tảng học tập trực tuyến</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">
+        <div class="stat-icon green">✓</div>
+        <div><h3>Xác thực</h3><strong>Admin</strong></div>
       </div>
-
-      <div class="card">
-        <div class="emoji">📢</div>
-        <h3>Thông báo</h3>
-        <p>Quản lý thông báo dành cho học sinh.</p>
+      <small>✦ Quyền quản trị đã được xác nhận</small>
+    </div>
+    <div class="stat">
+      <div class="stat-top">
+        <div class="stat-icon orange">🏆</div>
+        <div><h3>Trạng thái</h3><strong>Đang truy cập</strong></div>
       </div>
+      <small>✦ Phiên quản trị hiện tại</small>
+    </div>
+  </section>
 
-      <div class="card">
-        <div class="emoji">⚙️</div>
-        <h3>Cài đặt hệ thống</h3>
-        <p>Quản lý các thiết lập của website.</p>
+  <section class="content-grid">
+    <div class="panel">
+      <div class="panel-title">
+        <h3>📊 Tổng quan hệ thống</h3>
+        <span>📈</span>
       </div>
-
-    </section>
-
-    <div class="status">
-      Trạng thái: Đã xác thực quyền quản trị.
+      <p class="chart-note">Khu vực thống kê sẽ được kết nối với dữ liệu thực tế ở bước tiếp theo.</p>
+      <div class="chart">
+        <div class="chart-message">
+          📉<br>
+          **Biểu đồ thống kê học tập**<br>
+          Chưa kết nối dữ liệu thống kê
+        </div>
+      </div>
     </div>
 
-  </main>
+    <div class="panel">
+      <div class="panel-title"><h3>⚡ Thao tác nhanh</h3></div>
+      <div class="quick-grid">
+        <a class="quick" href="admin-students.html?v=2"><span class="q-icon">👥</span>Quản lý học sinh →</a>
+        <div class="quick disabled"><span class="q-icon">📖</span>Quản lý môn học</div>
+        <div class="quick disabled"><span class="q-icon">❔</span>Ngân hàng câu hỏi</div>
+        <div class="quick disabled"><span class="q-icon">📊</span>Kết quả học tập</div>
+      </div>
+    </div>
+  </section>
 
-  <script>
-    const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
+  <section class="bottom-grid">
+    <div class="panel">
+      <div class="panel-title"><h3>🔔 Hoạt động quản trị</h3><span class="pill">Tổng quan</span></div>
+      <div class="activity-list">
+        <div class="activity"><div class="activity-icon">👤</div>Quản trị viên đã đăng nhập vào hệ thống</div>
+        <div class="activity"><div class="activity-icon">🔐</div>Quyền quản trị đã được xác thực</div>
+        <div class="activity"><div class="activity-icon">🎓</div>Khu vực quản lý học sinh đã sẵn sàng</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-title"><h3>✨ RULER STUDY</h3></div>
+      <p class="info-text">
+        Chào mừng đến với trung tâm điều hành RULER STUDY.<br>
+        Tại đây, quản trị viên có thể quản lý các khu vực của nền tảng học tập.
+      </p>
+    </div>
+  </section>
 
-    // Dán publishable key đang dùng trong account.html vào đây.
-    const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
+  <div class="footer">© 2026 RULER STUDY · Admin Dashboard</div>
+</main>
+</div>
+</div>
 
-    const supabaseClient = window.supabase.createClient(
+<script>
+const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
+const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
+
+const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_KEY,
   {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
+    auth:{
+      persistSession:true,
+      autoRefreshToken:true,
+      detectSessionInUrl:true
     }
   }
 );
 
-    
-async function checkAdmin() {
+async function checkAdmin(){
   const loading = document.getElementById("loading");
 
-  // Kiểm tra phiên đăng nhập đã được lưu chưa
-  const { data: sessionData, error: sessionError } =
+  const {data:sessionData,error:sessionError} =
     await supabaseClient.auth.getSession();
 
-  if (sessionError) {
-    loading.textContent =
-      "Lỗi kiểm tra phiên đăng nhập: " + sessionError.message;
+  if(sessionError){
+    loading.textContent = "Lỗi kiểm tra phiên: " + sessionError.message;
     return;
   }
 
-  if (!sessionData.session) {
+  if(!sessionData.session){
     loading.textContent =
       "Chưa tìm thấy phiên đăng nhập. Hãy đăng nhập lại từ trang Tài khoản.";
     return;
   }
 
-  // Xác thực người dùng
-  const { data: userData, error: userError } =
+  const {data:userData,error:userError} =
     await supabaseClient.auth.getUser();
 
-  if (userError || !userData.user) {
-    loading.textContent =
-      "Không xác thực được tài khoản. Vui lòng tải lại trang.";
+  if(userError || !userData.user){
+    loading.textContent = "Không xác thực được tài khoản. Vui lòng tải lại trang.";
     return;
   }
 
-  // Kiểm tra quyền quản trị
-  const { data: roleData, error: roleError } =
+  const {data:roleData,error:roleError} =
     await supabaseClient
       .from("user_roles")
       .select("role")
-      .eq("user_id", userData.user.id)
+      .eq("user_id",userData.user.id)
       .maybeSingle();
 
-  if (roleError) {
-    loading.textContent =
-      "Lỗi kiểm tra quyền quản trị: " + roleError.message;
+  if(roleError){
+    loading.textContent = "Lỗi kiểm tra quyền quản trị: " + roleError.message;
     return;
   }
 
-  if (roleData?.role !== "admin") {
+  if(roleData?.role !== "admin"){
     location.replace("index.html");
     return;
   }
+
+  const email = userData.user.email || "Admin";
+  document.getElementById("adminName").textContent = email.split("@")[0];
 
   loading.style.display = "none";
   document.getElementById("adminArea").style.display = "block";
 }
 
+async function logoutAdmin(){
+  const {error} = await supabaseClient.auth.signOut({scope:"local"});
 
-    async function logoutAdmin() {
-      const { error } = await supabaseClient.auth.signOut();
+  if(error){
+    alert("Đăng xuất chưa thành công: " + error.message);
+    return;
+  }
 
-      if (error) {
-        alert("Đăng xuất chưa thành công: " + error.message);
-        return;
-      }
+  location.href = "account.html";
+}
 
-      location.href = "account.html";
-    }
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
 
-    checkAdmin();
-  </script>
+checkAdmin();
+</script>
 
 </body>
 </html>
