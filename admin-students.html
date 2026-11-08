@@ -1,0 +1,335 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RULER STUDY - Quản lý học sinh</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f1f5f9;
+      color: #172033;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      font-size: 21px;
+    }
+
+    button {
+      border: none;
+      border-radius: 8px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .back {
+      background: #374151;
+      color: white;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 35px auto;
+      padding: 0 18px;
+    }
+
+    .heading {
+      margin-bottom: 22px;
+    }
+
+    .heading h2 {
+      font-size: 27px;
+      margin-bottom: 8px;
+    }
+
+    .heading p {
+      color: #64748b;
+    }
+
+    .toolbar {
+      background: white;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+    }
+
+    .summary {
+      margin: 18px 0;
+      color: #475569;
+      font-weight: bold;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 650px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+    }
+
+    .status {
+      padding: 18px;
+      color: #64748b;
+      text-align: center;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .refresh {
+      background: #2563eb;
+      color: white;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>RULER STUDY · QUẢN LÝ HỌC SINH</h1>
+  <button class="back" onclick="location.href='admin.html'">
+    ← Quay lại Admin
+  </button>
+</header>
+
+<main>
+  <section class="heading">
+    <h2>Quản lý học sinh</h2>
+    <p>Danh sách hồ sơ học sinh trong hệ thống RULER STUDY.</p>
+  </section>
+
+  <section class="toolbar">
+    <input
+      id="searchInput"
+      type="text"
+      placeholder="Tìm theo họ tên hoặc email..."
+      oninput="renderStudents()"
+    >
+
+    <div class="summary" id="studentCount">
+      Đang tải danh sách...
+    </div>
+  </section>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>STT</th>
+          <th>Họ và tên</th>
+          <th>Email</th>
+          <th>Ngày tạo hồ sơ</th>
+        </tr>
+      </thead>
+
+      <tbody id="studentList">
+        <tr>
+          <td colspan="4" class="status">
+            Đang tải dữ liệu...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p id="message" class="status"></p>
+
+  <button class="refresh" onclick="loadStudents()">
+    Làm mới danh sách
+  </button>
+</main>
+
+<script>
+  const SUPABASE_URL =
+    "https://svhwozfwuexgiwrdripm.supabase.co";
+
+  // Sao chép publishable key đang dùng trong admin.html
+  const SUPABASE_KEY = "DAN_PUBLISHABLE_KEY_CUA_BAN_VAO_DAY";
+
+  const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+  let students = [];
+
+  async function checkAdmin() {
+    const { data, error } =
+      await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+      location.replace("account.html");
+      return false;
+    }
+
+    const { data: roleData, error: roleError } =
+      await supabaseClient
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+    if (roleError) {
+      showMessage(
+        "Không kiểm tra được quyền: " + roleError.message,
+        true
+      );
+      return false;
+    }
+
+    if (roleData?.role !== "admin") {
+      location.replace("index.html");
+      return false;
+    }
+
+    return true;
+  }
+
+  function showMessage(text, isError = false) {
+    const el = document.getElementById("message");
+    el.textContent = text;
+    el.className = isError ? "status error" : "status";
+  }
+
+  async function loadStudents() {
+    document.getElementById("studentCount").textContent =
+      "Đang tải danh sách...";
+
+    const allowed = await checkAdmin();
+
+    if (!allowed) return;
+
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("id, user_id, full_name, email, created_at")
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      document.getElementById("studentCount").textContent =
+        "Không tải được danh sách.";
+
+      showMessage("Lỗi tải học sinh: " + error.message, true);
+      return;
+    }
+
+    students = data || [];
+    renderStudents();
+    showMessage("");
+  }
+
+  function renderStudents() {
+    const keyword = document
+      .getElementById("searchInput")
+      .value.trim()
+      .toLowerCase();
+
+    const filtered = students.filter(student => {
+      const name = student.full_name || "";
+      const email = student.email || "";
+
+      return (
+        name.toLowerCase().includes(keyword) ||
+        email.toLowerCase().includes(keyword)
+      );
+    });
+
+    document.getElementById("studentCount").textContent =
+      "Tổng số hồ sơ: " + students.length +
+      " · Đang hiển thị: " + filtered.length;
+
+    const tbody = document.getElementById("studentList");
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="status">
+            Không tìm thấy học sinh.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    tbody.innerHTML = "";
+
+    filtered.forEach((student, index) => {
+      const tr = document.createElement("tr");
+
+      const values = [
+        index + 1,
+        student.full_name || "Chưa cập nhật",
+        student.email || "Chưa có email",
+        student.created_at
+          ? new Date(student.created_at).toLocaleDateString("vi-VN")
+          : "Chưa rõ"
+      ];
+
+      values.forEach(value => {
+        const td = document.createElement("td");
+        td.textContent = value;
+        tr.appendChild(td);
+      });
+
+      tbody.appendChild(tr);
+    });
+  }
+
+  loadStudents();
+</script>
+
+</body>
+</html>
