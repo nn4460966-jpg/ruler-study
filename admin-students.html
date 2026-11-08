@@ -214,37 +214,51 @@
 
   let students = [];
 
-  async function checkAdmin() {
-    const { data, error } =
-      await supabaseClient.auth.getUser();
+  
+async function checkAdmin() {
+  const { data: sessionData, error: sessionError } =
+    await supabaseClient.auth.getSession();
 
-    if (error || !data.user) {
-      location.replace("account.html");
-      return false;
-    }
-
-    const { data: roleData, error: roleError } =
-      await supabaseClient
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", data.user.id)
-        .maybeSingle();
-
-    if (roleError) {
-      showMessage(
-        "Không kiểm tra được quyền: " + roleError.message,
-        true
-      );
-      return false;
-    }
-
-    if (roleData?.role !== "admin") {
-      location.replace("index.html");
-      return false;
-    }
-
-    return true;
+  if (sessionError) {
+    showMessage("Lỗi phiên đăng nhập: " + sessionError.message, true);
+    return false;
   }
+
+  if (!sessionData.session) {
+    showMessage(
+      "Không tìm thấy phiên đăng nhập. Hãy đăng nhập lại.",
+      true
+    );
+    return false;
+  }
+
+  const { data: userData, error: userError } =
+    await supabaseClient.auth.getUser();
+
+  if (userError || !userData.user) {
+    showMessage("Không xác thực được tài khoản.", true);
+    return false;
+  }
+
+  const { data: roleData, error: roleError } =
+    await supabaseClient
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userData.user.id)
+      .maybeSingle();
+
+  if (roleError) {
+    showMessage("Lỗi kiểm tra quyền: " + roleError.message, true);
+    return false;
+  }
+
+  if (roleData?.role !== "admin") {
+    showMessage("Tài khoản này không có quyền quản trị.", true);
+    return false;
+  }
+
+  return true;
+}
 
   function showMessage(text, isError = false) {
     const el = document.getElementById("message");
