@@ -673,6 +673,22 @@ async function checkHomeLogin(){
     return;
   }
 
+  const {data:roleData,error:roleError}=await homeSupabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id",data.session.user.id)
+    .maybeSingle();
+
+  if(roleError){
+    alert("Không kiểm tra được quyền tài khoản: "+roleError.message);
+    return;
+  }
+
+  if(roleData?.role==="admin"){
+    window.location.replace("admin.html");
+    return;
+  }
+
   authButtons.innerHTML=`
     <a href="account.html">Hồ sơ cá nhân</a>
     <button onclick="logoutUser()">Đăng xuất</button>
