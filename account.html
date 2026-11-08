@@ -1317,16 +1317,17 @@ function goBack(){
   }
 }
 async function logoutUser(){
-  const {error}=await supabaseClient.auth.signOut();
+  const {error}=await supabaseClient.auth.signOut({
+    scope: "local"
+  });
 
   if(error){
     alert("Đăng xuất thất bại: "+error.message);
     return;
   }
 
-  location.reload();
+  location.href = "account.html";
 }
-
 async function openRequestedPanel(){
   await loadProfile();
 
