@@ -328,12 +328,13 @@ async function loginUser() {
     return;
   }
 
-  if (roleData.role === "admin") {
+   if (roleData.role === "admin") {
     message.textContent = "Đăng nhập thành công! Quyền ADMIN.";
     showAdminDashboard();
+    await loadStudyProgress();
   } else {
     message.textContent = "Đăng nhập thành công! Chào mừng học sinh.";
-    loadStudyProgress();
+    await loadStudyProgress();
   }
 }
 function showAdminDashboard() {
