@@ -435,7 +435,9 @@ function goBack() {
 }
 
 async function logoutUser() {
-  const { error } = await progressSupabase.auth.signOut();
+  const { error } = await progressSupabase.auth.signOut({
+    scope: "local"
+  });
 
   if (error) {
     alert("Đăng xuất thất bại: " + error.message);
