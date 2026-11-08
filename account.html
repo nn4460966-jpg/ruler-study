@@ -284,12 +284,16 @@ async function saveProfile(){
   const {error:saveError}=await supabaseClient
     .from("profiles")
     .upsert({
+      id:data.user.id,
       user_id:data.user.id,
+      email:data.user.email,
       full_name:fullName
     },{onConflict:"user_id"});
 
   message("profileMessage",
-    saveError?"Lỗi lưu hồ sơ: "+saveError.message:"Đã lưu thông tin thành công!"
+    saveError
+      ?"Lỗi lưu hồ sơ: "+saveError.message
+      :"Đã lưu thông tin thành công!"
   );
 }
 
