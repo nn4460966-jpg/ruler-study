@@ -163,5 +163,27 @@ footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
   </section>
   <footer>© 2026 RULER STUDY</footer>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const subjectsSupabase = window.supabase.createClient(
+  "https://svhwozfwuexgiwrdripm.supabase.co",
+  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
+
+async function logoutUser(){
+  const {error} = await subjectsSupabase.auth.signOut({
+    scope: "local"
+  });
+
+  if(error){
+    alert("Đăng xuất thất bại: " + error.message);
+    return;
+  }
+
+  location.href = "account.html";
+}
+</script>
+
 </body>
 </html>
