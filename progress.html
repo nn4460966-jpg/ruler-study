@@ -2,336 +2,368 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tiến độ học tập | RULER STUDY</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiến độ học tập | RULER STUDY</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f6fc;
-      color: #172554;
-    }
+<style>
+:root{
+  --navy:#142b59;
+  --blue:#3568e8;
+  --purple:#8878f5;
+  --text:#172554;
+  --muted:#64748b;
+}
 
-    header {
-      background: white;
-      padding: 20px 7%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 12px #00000010;
-    }
+*{box-sizing:border-box}
 
-    .logo {
-      font-size: 23px;
-      font-weight: bold;
-      color: #2563eb;
-    }
+body{
+  margin:0;
+  font-family:'Be Vietnam Pro',sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg,#edf3ff,#e7eaff);
+}
 
-    nav a {
-      text-decoration: none;
-      color: #334155;
-      margin-left: 22px;
-      font-weight: 600;
-    }
+.sidebar{
+  width:265px;
+  background:linear-gradient(180deg,#10275a,#19366f);
+  color:white;
+  padding:28px 15px;
+  position:fixed;
+  inset:0 auto 0 0;
+  display:flex;
+  flex-direction:column;
+  z-index:10;
+}
 
-    nav a:hover {
-      color: #2563eb;
-    }
+.brand{
+  text-align:center;
+  padding:5px 0 35px;
+}
 
-    main {
-      max-width: 1100px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+.brand-icon{font-size:48px;margin-bottom:8px}
+.brand h2{margin:0;font-size:25px;font-weight:800}
+.brand p{margin:7px 0 0;font-size:12px}
 
-    .intro {
-      background: linear-gradient(120deg, #2563eb, #60a5fa);
-      color: white;
-      padding: 35px;
-      border-radius: 18px;
-      margin-bottom: 30px;
-    }
+.nav{display:flex;flex-direction:column;gap:10px}
 
-    .intro h1 {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
+.nav a{
+  color:white;
+  text-decoration:none;
+  padding:16px 17px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  font-size:14px;
+  font-weight:600;
+}
 
-    .intro p {
-      line-height: 1.6;
-    }
+.nav a:hover,.nav a.active{
+  background:linear-gradient(100deg,#3975e9,#3156a8);
+  box-shadow:0 6px 18px #071b493d;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 18px;
-      margin-bottom: 30px;
-    }
+.nav-icon{width:27px;text-align:center;font-size:21px}
 
-    .stat-card {
-      background: white;
-      padding: 24px;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px #0000000c;
-    }
+.sidebar-bottom{margin-top:auto;text-align:center}
+.sidebar-art{font-size:70px;padding:20px 0}
 
-    .stat-card .icon {
-      font-size: 30px;
-      margin-bottom: 12px;
-    }
+.main{
+  margin-left:265px;
+  padding:25px 30px 40px;
+}
 
-    .stat-card p {
-      color: #64748b;
-      margin-bottom: 10px;
-    }
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
 
-    .stat-card h2 {
-      font-size: 28px;
-      color: #2563eb;
-    }
+.search{
+  width:min(590px,75%);
+  height:49px;
+  border-radius:30px;
+  background:#ffffffc9;
+  border:1px solid #d7e0ff;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  gap:12px;
+  color:var(--muted);
+}
 
-    .section-card {
-      background: white;
-      padding: 28px;
-      border-radius: 16px;
-      box-shadow: 0 4px 15px #0000000c;
-      margin-bottom: 25px;
-    }
+.top-avatar{
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:#dce7ff;
+  display:grid;
+  place-items:center;
+  font-size:23px;
+}
 
-    .section-card h2 {
-      margin-bottom: 22px;
-      font-size: 22px;
-    }
+.intro{
+  background:linear-gradient(110deg,#9bd0ff,#d9e8ff 48%,#a99aff);
+  border-radius:22px;
+  padding:35px;
+  margin-bottom:25px;
+  box-shadow:0 6px 18px #5578db26;
+}
 
-    .subject-progress {
-      margin-bottom: 22px;
-    }
+.intro h1{font-size:30px;margin:0 0 12px}
+.intro p{font-size:14px;line-height:1.8;margin:0}
 
-    .subject-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 9px;
-      font-weight: 600;
-    }
+.notice{
+  background:#eff6ff;
+  color:#1e40af;
+  padding:17px;
+  border-radius:14px;
+  line-height:1.7;
+  margin-bottom:25px;
+  font-size:13px;
+}
 
-    .progress-track {
-      height: 12px;
-      background: #e2e8f0;
-      border-radius: 20px;
-      overflow: hidden;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:25px;
+}
 
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #2563eb, #60a5fa);
-      border-radius: 20px;
-    }
+.stat-card{
+  background:white;
+  padding:22px;
+  border-radius:19px;
+  box-shadow:0 5px 17px #263c7510;
+}
 
-    .history-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      padding: 16px 0;
-      border-bottom: 1px solid #e2e8f0;
-    }
+.stat-card .icon{font-size:30px;margin-bottom:12px}
+.stat-card p{color:var(--muted);font-size:13px;margin:0 0 10px}
+.stat-card h2{font-size:27px;color:var(--blue);margin:0}
 
-    .history-item:last-child {
-      border-bottom: none;
-    }
+.section-card{
+  background:white;
+  padding:28px;
+  border-radius:20px;
+  box-shadow:0 5px 17px #263c7510;
+  margin-bottom:22px;
+}
 
-    .history-item p {
-      color: #64748b;
-      margin-top: 6px;
-      font-size: 14px;
-    }
+.section-card h2{margin:0 0 22px;font-size:21px}
 
-    .history-time {
-      color: #2563eb;
-      font-weight: bold;
-      white-space: nowrap;
-    }
+.subject-progress{margin-bottom:22px}
+.subject-info{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:9px;
+  font-weight:600;
+  font-size:14px;
+}
 
-    .notice {
-      background: #eff6ff;
-      color: #1e40af;
-      padding: 17px;
-      border-radius: 10px;
-      line-height: 1.6;
-      margin-bottom: 25px;
-    }
+.progress-track{
+  height:12px;
+  background:#e2e8f0;
+  border-radius:20px;
+  overflow:hidden;
+}
 
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #64748b;
-    }
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,#3568e8,#8878f5);
+  border-radius:20px;
+}
 
-    @media (max-width: 600px) {
-      header {
-        flex-direction: column;
-        gap: 15px;
-      }
+.history-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:16px 0;
+  border-bottom:1px solid #e2e8f0;
+}
 
-      nav a {
-        margin: 0 7px;
-      }
+.history-item:last-child{border-bottom:none}
+.history-item p{color:var(--muted);margin-top:6px;font-size:13px}
+.history-time{color:var(--blue);font-weight:bold;white-space:nowrap}
 
-      .intro h1 {
-        font-size: 25px;
-      }
+footer{
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+  font-size:12px;
+}
 
-      .section-card {
-        padding: 20px;
-      }
-    }
-  </style>
+@media(max-width:1100px){
+  .sidebar{width:220px}
+  .main{margin-left:220px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:760px){
+  .sidebar{width:75px;padding:15px 8px}
+  .brand h2,.brand p,.nav-text,.sidebar-art{display:none}
+  .brand-icon{font-size:35px}
+  .nav a{justify-content:center;padding:15px 5px}
+  .main{margin-left:75px;padding:15px}
+  .stats{grid-template-columns:1fr 1fr}
+}
+
+@media(max-width:520px){
+  .intro{padding:23px}
+  .intro h1{font-size:23px}
+  .section-card{padding:19px}
+  .history-item{align-items:flex-start;flex-direction:column}
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <div class="logo">RULER STUDY</div>
+<aside class="sidebar">
+  <div class="brand">
+    <div class="brand-icon">📚⭐</div>
+    <h2>RULER STUDY</h2>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
 
-    <nav>
-      <a href="index.html">Trang chủ</a>
-      <a href="subjects.html">Môn học</a>
-      <a href="tools.html">Công cụ</a>
-      <a href="practice.html">Ôn luyện</a>
-      <a href="progress.html">Tiến độ</a>
-    </nav>
+  <nav class="nav">
+    <a href="index.html">
+      <span class="nav-icon">⌂</span>
+      <span class="nav-text">Trang chủ</span>
+    </a>
+
+    <a href="subjects.html">
+      <span class="nav-icon">📖</span>
+      <span class="nav-text">Bài học</span>
+    </a>
+
+    <a href="progress.html" class="active">
+      <span class="nav-icon">▥</span>
+      <span class="nav-text">Tiến độ học tập</span>
+    </a>
+
+    <a href="practice.html">
+      <span class="nav-icon">✍️</span>
+      <span class="nav-text">Ôn luyện</span>
+    </a>
+
+    <a href="account.html">
+      <span class="nav-icon">🔤</span>
+      <span class="nav-text">Từ vựng</span>
+    </a>
+
+    <a href="account.html">
+      <span class="nav-icon">👤</span>
+      <span class="nav-text">Hồ sơ cá nhân</span>
+    </a>
+
+    <a href="achievements.html">
+      <span class="nav-icon">🏆</span>
+      <span class="nav-text">Thành tích</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-art">🎓📚</div>
+  </div>
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+    <div class="search">
+      🔍
+      <span>Không gian học tập RULER STUDY</span>
+    </div>
+    <div class="top-avatar">👤</div>
   </header>
 
-  <main>
+  <section class="intro">
+    <h1>Tiến độ học tập 📊</h1>
+    <p>Theo dõi quá trình học tập, đánh giá kết quả và nhìn lại những nỗ lực của bạn.</p>
+  </section>
 
-    <section class="intro">
-      <h1>Tiến độ học tập 📊</h1>
-      <p>
-        Theo dõi quá trình học tập, đánh giá kết quả
-        và nhìn lại những nỗ lực của bạn.
-      </p>
-    </section>
+  <div class="notice">
+    📌 Đây là giao diện tổng quan mẫu. Dữ liệu thật sẽ được kết nối với tài khoản và cơ sở dữ liệu Supabase ở bước tiếp theo.
+  </div>
 
-    <div class="notice">
-      📌 Đây là giao diện tổng quan mẫu. Dữ liệu thật sẽ được
-      kết nối với tài khoản và cơ sở dữ liệu Supabase ở bước tiếp theo.
+  <section class="stats">
+
+    <div class="stat-card">
+      <div class="icon">⏱️</div>
+      <p>Tổng thời gian học</p>
+      <h2 id="totalTime">--</h2>
     </div>
 
-    <section class="stats">
+    <div class="stat-card">
+      <div class="icon">📚</div>
+      <p>Nhiệm vụ hoàn thành</p>
+      <h2 id="completedTasks">--</h2>
+    </div>
 
-      <div class="stat-card">
-        <div class="icon">⏱️</div>
-        <p>Tổng thời gian học</p>
-        <h2 id="totalTime">--</h2>
-      </div>
+    <div class="stat-card">
+      <div class="icon">🎯</div>
+      <p>Số môn đã học</p>
+      <h2 id="studiedSubjects">--</h2>
+    </div>
 
-      <div class="stat-card">
-        <div class="icon">📚</div>
-        <p>Nhiệm vụ hoàn thành</p>
-        <h2 id="completedTasks">--</h2>
-      </div>
+    <div class="stat-card">
+      <div class="icon">🏆</div>
+      <p>Kết quả luyện tập</p>
+      <h2 id="quizResult">--</h2>
+    </div>
 
-      <div class="stat-card">
-        <div class="icon">🎯</div>
-        <p>Số môn đã học</p>
-        <h2 id="studiedSubjects">--</h2>
-      </div>
+  </section>
 
-      <div class="stat-card">
-        <div class="icon">🏆</div>
-        <p>Kết quả luyện tập</p>
-        <h2 id="quizResult">--</h2>
-      </div>
+  <section class="section-card">
+    <h2>📈 Tiến độ theo môn học</h2>
 
-    </section>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Toán học</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
 
-    <section class="section-card">
-      <h2>📈 Tiến độ theo môn học</h2>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Ngữ văn</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Toán học</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Tiếng Anh</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Ngữ văn</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Vật lý</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Tiếng Anh</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Hóa học</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Vật lý</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+    <div class="subject-progress">
+      <div class="subject-info"><span>Sinh học</span><span>--</span></div>
+      <div class="progress-track"><div class="progress-fill" style="width:0%"></div></div>
+    </div>
+  </section>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Hóa học</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+  <section class="section-card">
+    <h2>🕒 Lịch sử học tập</h2>
+    <div id="studyHistory">
+      <p style="color:#64748b;">
+        Dữ liệu lịch sử học tập sẽ hiển thị sau khi kết nối hệ thống.
+      </p>
+    </div>
+  </section>
 
-      <div class="subject-progress">
-        <div class="subject-info">
-          <span>Sinh học</span>
-          <span>--</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width:0%"></div>
-        </div>
-      </div>
+  <footer>© 2026 RULER STUDY</footer>
 
-    </section>
-
-    <section class="section-card">
-      <h2>🕒 Lịch sử học tập</h2>
-
-      <div id="studyHistory">
-        <p style="color:#64748b;">
-          Dữ liệu lịch sử học tập sẽ hiển thị sau khi kết nối hệ thống.
-        </p>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    © 2026 RULER STUDY
-  </footer>
-
+</main>
 </body>
 </html>
