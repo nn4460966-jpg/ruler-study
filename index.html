@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -6,215 +5,375 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang chủ | RULER STUDY</title>
 
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
+:root {
+  --navy:#142b59;
+  --blue:#3568e8;
+  --purple:#8878f5;
+  --text:#172554;
+  --muted:#64748b;
+}
+
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+  box-sizing:border-box;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #f4f7fd;
-  color: #172554;
+  margin:0;
+  font-family:'Be Vietnam Pro',sans-serif;
+  color:var(--text);
+  background:linear-gradient(135deg,#edf3ff,#e7eaff);
 }
 
-header {
-  background: white;
-  padding: 18px 6%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 3px 15px #0000000c;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.app {
+  min-height:100vh;
 }
 
-.logo {
-  color: #2563eb;
-  font-size: 24px;
-  font-weight: 800;
+.sidebar {
+  width:265px;
+  background:linear-gradient(180deg,#10275a,#19366f);
+  color:white;
+  padding:28px 15px;
+  position:fixed;
+  inset:0 auto 0 0;
+  display:flex;
+  flex-direction:column;
+  z-index:10;
 }
 
-nav {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
+.brand {
+  text-align:center;
+  padding:5px 0 35px;
 }
 
-nav a {
-  text-decoration: none;
-  color: #475569;
-  font-weight: 600;
-  font-size: 14px;
+.brand-icon {
+  font-size:48px;
+  margin-bottom:8px;
 }
 
-nav a:hover,
-nav a.active {
-  color: #2563eb;
+.brand h2 {
+  margin:0;
+  font-size:25px;
+  font-weight:800;
 }
 
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 35px 22px;
+.brand p {
+  margin:7px 0 0;
+  font-size:12px;
+}
+
+.nav {
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.nav a {
+  color:white;
+  text-decoration:none;
+  padding:16px 17px;
+  border-radius:15px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  font-size:14px;
+  font-weight:600;
+  transition:.2s;
+}
+
+.nav a:hover,
+.nav a.active {
+  background:linear-gradient(100deg,#3975e9,#3156a8);
+  box-shadow:0 6px 18px #071b493d;
+}
+
+.nav-icon {
+  width:27px;
+  text-align:center;
+  font-size:21px;
+}
+
+.sidebar-bottom {
+  margin-top:auto;
+  text-align:center;
+}
+
+.sidebar-art {
+  font-size:70px;
+  padding:20px 0;
+}
+
+.main {
+  margin-left:265px;
+  padding:25px 30px 40px;
+}
+
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
+
+.search {
+  width:min(590px,75%);
+  height:49px;
+  border-radius:30px;
+  background:#ffffffc9;
+  border:1px solid #d7e0ff;
+  display:flex;
+  align-items:center;
+  padding:0 20px;
+  gap:12px;
+  color:var(--muted);
+}
+
+.top-avatar {
+  width:43px;
+  height:43px;
+  border-radius:50%;
+  background:#dce7ff;
+  display:grid;
+  place-items:center;
+  font-size:23px;
 }
 
 .hero {
-  background: linear-gradient(120deg, #1d4ed8, #60a5fa);
-  color: white;
-  border-radius: 24px;
-  padding: 55px 45px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 25px;
-  margin-bottom: 35px;
+  min-height:245px;
+  border-radius:22px;
+  padding:35px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  background:linear-gradient(110deg,#9bd0ff,#d9e8ff 48%,#a99aff);
+  box-shadow:0 6px 18px #5578db26;
+  margin-bottom:25px;
+  overflow:hidden;
 }
 
 .hero h1 {
-  font-size: 36px;
-  margin-bottom: 16px;
+  font-size:30px;
+  margin:0 0 14px;
 }
 
 .hero p {
-  font-size: 16px;
-  line-height: 1.7;
-  max-width: 550px;
-  color: #eff6ff;
+  max-width:570px;
+  line-height:1.8;
+  font-size:14px;
+  color:#263c70;
 }
 
 .hero-icon {
-  font-size: 100px;
+  font-size:105px;
 }
 
 .hero-button {
-  display: inline-block;
-  margin-top: 24px;
-  padding: 13px 22px;
-  background: white;
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 10px;
+  display:inline-block;
+  margin-top:13px;
+  padding:13px 22px;
+  border-radius:12px;
+  background:white;
+  color:#3568e8;
+  text-decoration:none;
+  font-weight:800;
+  font-size:14px;
 }
 
-.section-title {
-  margin-bottom: 20px;
+.section-heading {
+  margin:28px 0 18px;
 }
 
-.section-title h2 {
-  font-size: 25px;
-  margin-bottom: 8px;
+.section-heading h2 {
+  font-size:22px;
+  margin:0 0 7px;
 }
 
-.section-title p {
-  color: #64748b;
+.section-heading p {
+  color:var(--muted);
+  font-size:13px;
+  margin:0;
+}
+
+.stats {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.card {
+  background:#ffffffd9;
+  border:1px solid #dce4ff;
+  border-radius:20px;
+  box-shadow:0 5px 17px #263c7510;
+  padding:22px;
+}
+
+.stat {
+  display:flex;
+  align-items:center;
+  gap:15px;
+}
+
+.stat-icon {
+  width:55px;
+  height:55px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:27px;
+  background:#e5efff;
+}
+
+.stat strong {
+  font-size:19px;
+  display:block;
+}
+
+.stat span {
+  color:var(--muted);
+  font-size:12px;
 }
 
 .features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
 }
 
 .feature {
-  background: white;
-  padding: 25px;
-  border-radius: 17px;
-  box-shadow: 0 4px 15px #00000008;
-  text-decoration: none;
-  color: #172554;
-  border: 1px solid #e8eef8;
-  transition: .2s;
+  background:#ffffffd9;
+  border:1px solid #dce4ff;
+  border-radius:20px;
+  padding:23px;
+  text-decoration:none;
+  color:var(--text);
+  box-shadow:0 5px 17px #263c7510;
+  transition:.2s;
 }
 
 .feature:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px #2563eb18;
-  border-color: #93c5fd;
+  transform:translateY(-5px);
+  box-shadow:0 10px 25px #2563eb18;
+  border-color:#93c5fd;
 }
 
 .feature-icon {
-  font-size: 36px;
-  margin-bottom: 17px;
+  width:55px;
+  height:55px;
+  border-radius:16px;
+  background:#e5efff;
+  display:grid;
+  place-items:center;
+  font-size:28px;
+  margin-bottom:17px;
 }
 
 .feature h3 {
-  font-size: 19px;
-  margin-bottom: 10px;
+  font-size:16px;
+  margin:0 0 10px;
 }
 
 .feature p {
-  color: #64748b;
-  line-height: 1.6;
-  font-size: 14px;
+  color:var(--muted);
+  line-height:1.7;
+  font-size:12px;
+  min-height:42px;
 }
 
 .feature span {
-  display: inline-block;
-  color: #2563eb;
-  font-weight: bold;
-  margin-top: 18px;
-  font-size: 14px;
+  display:inline-block;
+  color:var(--blue);
+  font-weight:700;
+  font-size:13px;
+  margin-top:10px;
 }
 
 .motto {
-  margin-top: 35px;
-  background: #eaf2ff;
-  border-radius: 18px;
-  padding: 30px;
-  text-align: center;
+  margin-top:25px;
+  border-radius:20px;
+  padding:27px;
+  text-align:center;
+  background:linear-gradient(110deg,#dceaff,#eeeaff);
 }
 
 .motto h2 {
-  color: #1d4ed8;
-  margin-bottom: 10px;
+  color:#3156a8;
+  font-size:20px;
 }
 
 .motto p {
-  color: #475569;
-  line-height: 1.6;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.7;
 }
 
 footer {
-  text-align: center;
-  padding: 30px;
-  color: #64748b;
-  margin-top: 25px;
+  text-align:center;
+  padding:25px;
+  color:var(--muted);
+  font-size:12px;
 }
 
-@media(max-width: 850px) {
-  header {
-    flex-direction: column;
-    gap: 17px;
-  }
-
-  nav {
-    justify-content: center;
-  }
-
+@media(max-width:1050px) {
   .features {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:repeat(2,1fr);
   }
 }
 
-@media(max-width: 550px) {
-  .features {
-    grid-template-columns: 1fr;
+@media(max-width:760px) {
+  .sidebar {
+    width:75px;
+    padding:15px 8px;
+  }
+
+  .brand h2,
+  .brand p,
+  .nav-text,
+  .sidebar-art {
+    display:none;
+  }
+
+  .brand-icon {
+    font-size:35px;
+  }
+
+  .nav a {
+    justify-content:center;
+    padding:15px 5px;
+  }
+
+  .main {
+    margin-left:75px;
+    padding:15px;
   }
 
   .hero {
-    padding: 35px 25px;
-  }
-
-  .hero h1 {
-    font-size: 28px;
+    padding:23px;
   }
 
   .hero-icon {
-    display: none;
+    font-size:65px;
+  }
+
+  .stats {
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:520px) {
+  .features {
+    grid-template-columns:1fr;
+  }
+
+  .hero-icon {
+    display:none;
+  }
+
+  .hero h1 {
+    font-size:23px;
   }
 }
 </style>
@@ -222,91 +381,182 @@ footer {
 
 <body>
 
-<header>
-  <div class="logo">RULER STUDY</div>
+<div class="app">
 
-  <nav>
-    <a href="index.html" class="active">Trang chủ</a>
-    <a href="subjects.html">Môn học</a>
-    <a href="tools.html">Công cụ</a>
-    <a href="practice.html">Ôn luyện</a>
-    <a href="progress.html">Tiến độ</a>
-    <a href="achievements.html">Thành tích</a>
-    <a href="account.html">Tài khoản</a>
+<aside class="sidebar">
+
+  <div class="brand">
+    <div class="brand-icon">📚⭐</div>
+    <h2>RULER STUDY</h2>
+    <p>Học tốt hơn - Thành công hơn</p>
+  </div>
+
+  <nav class="nav">
+
+    <a href="index.html" class="active">
+      <span class="nav-icon">⌂</span>
+      <span class="nav-text">Trang chủ</span>
+    </a>
+
+    <a href="subjects.html">
+      <span class="nav-icon">📖</span>
+      <span class="nav-text">Bài học</span>
+    </a>
+
+    <a href="progress.html">
+      <span class="nav-icon">▥</span>
+      <span class="nav-text">Tiến độ học tập</span>
+    </a>
+
+    <a href="practice.html">
+      <span class="nav-icon">✍️</span>
+      <span class="nav-text">Ôn luyện</span>
+    </a>
+
+    <a href="account.html">
+      <span class="nav-icon">🔤</span>
+      <span class="nav-text">Từ vựng</span>
+    </a>
+
+    <a href="account.html">
+      <span class="nav-icon">👤</span>
+      <span class="nav-text">Hồ sơ cá nhân</span>
+    </a>
+
+    <a href="achievements.html">
+      <span class="nav-icon">🏆</span>
+      <span class="nav-text">Thành tích</span>
+    </a>
+
   </nav>
-</header>
 
-<main>
+  <div class="sidebar-bottom">
+    <div class="sidebar-art">🎓📚</div>
+  </div>
+
+</aside>
+
+<main class="main">
+
+  <header class="topbar">
+    <div class="search">
+      🔍
+      <span>Chào mừng đến với không gian học tập!</span>
+    </div>
+
+    <div class="top-avatar">👤</div>
+  </header>
 
   <section class="hero">
+
     <div>
       <h1>Chào mừng đến với RULER STUDY! 👋</h1>
 
       <p>
         Không gian học tập trực tuyến giúp bạn quản lý việc học,
-        luyện tập kiến thức, theo dõi tiến độ và chinh phục
-        những mục tiêu mới mỗi ngày.
+        khám phá bài học, luyện tập kiến thức và theo dõi
+        hành trình tiến bộ của mình mỗi ngày.
       </p>
 
       <a href="subjects.html" class="hero-button">
-        Khám phá môn học →
+        Khám phá bài học →
       </a>
     </div>
 
     <div class="hero-icon">🎓</div>
+
   </section>
 
   <section>
-    <div class="section-title">
-      <h2>Không gian học tập</h2>
-      <p>Chọn một chức năng để bắt đầu hành trình học tập của bạn.</p>
+
+    <div class="section-heading">
+      <h2>📊 Tổng quan học tập</h2>
+      <p>Các thông tin tổng quan về hành trình học tập của bạn.</p>
+    </div>
+
+    <div class="stats">
+
+      <div class="card stat">
+        <div class="stat-icon">📚</div>
+        <div>
+          <strong>RULER</strong>
+          <span>Không gian học tập</span>
+        </div>
+      </div>
+
+      <div class="card stat">
+        <div class="stat-icon">🎯</div>
+        <div>
+          <strong>Mỗi ngày</strong>
+          <span>Một bước tiến bộ</span>
+        </div>
+      </div>
+
+      <div class="card stat">
+        <div class="stat-icon">⭐</div>
+        <div>
+          <strong>Khám phá</strong>
+          <span>Tri thức mới</span>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <section>
+
+    <div class="section-heading">
+      <h2>✨ Không gian học tập</h2>
+      <p>Chọn một chức năng để bắt đầu hành trình của bạn.</p>
     </div>
 
     <div class="features">
 
       <a href="subjects.html" class="feature">
-        <div class="feature-icon">📚</div>
-        <h3>Môn học</h3>
-        <p>Khám phá và quản lý các môn học của bạn.</p>
+        <div class="feature-icon">📖</div>
+        <h3>Bài học</h3>
+        <p>Khám phá các môn học và nội dung học tập.</p>
         <span>Khám phá ngay →</span>
-      </a>
-
-      <a href="tools.html" class="feature">
-        <div class="feature-icon">🛠️</div>
-        <h3>Công cụ học tập</h3>
-        <p>Sử dụng ghi chú, thời khóa biểu và đồng hồ Pomodoro.</p>
-        <span>Mở công cụ →</span>
-      </a>
-
-      <a href="practice.html" class="feature">
-        <div class="feature-icon">✍️</div>
-        <h3>Ôn luyện</h3>
-        <p>Luyện tập kiến thức thông qua các câu hỏi và bài tập.</p>
-        <span>Bắt đầu luyện tập →</span>
       </a>
 
       <a href="progress.html" class="feature">
         <div class="feature-icon">📊</div>
         <h3>Tiến độ học tập</h3>
-        <p>Theo dõi quá trình học và những mục tiêu đã hoàn thành.</p>
+        <p>Theo dõi quá trình học và mục tiêu của bạn.</p>
         <span>Xem tiến độ →</span>
+      </a>
+
+      <a href="practice.html" class="feature">
+        <div class="feature-icon">✍️</div>
+        <h3>Ôn luyện</h3>
+        <p>Luyện tập kiến thức thông qua các bài tập.</p>
+        <span>Bắt đầu ôn luyện →</span>
+      </a>
+
+      <a href="account.html" class="feature">
+        <div class="feature-icon">🔤</div>
+        <h3>Từ vựng</h3>
+        <p>Không gian học và ôn tập từ vựng.</p>
+        <span>Khám phá ngay →</span>
+      </a>
+
+      <a href="account.html" class="feature">
+        <div class="feature-icon">👤</div>
+        <h3>Hồ sơ cá nhân</h3>
+        <p>Quản lý thông tin và hồ sơ học sinh.</p>
+        <span>Mở hồ sơ →</span>
       </a>
 
       <a href="achievements.html" class="feature">
         <div class="feature-icon">🏆</div>
         <h3>Thành tích</h3>
-        <p>Khám phá huy hiệu và những cột mốc học tập.</p>
+        <p>Khám phá các cột mốc học tập của bạn.</p>
         <span>Xem thành tích →</span>
       </a>
 
-      <a href="account.html" class="feature">
-        <div class="feature-icon">👤</div>
-        <h3>Tài khoản</h3>
-        <p>Quản lý thông tin cá nhân và cài đặt tài khoản.</p>
-        <span>Quản lý tài khoản →</span>
-      </a>
-
     </div>
+
   </section>
 
   <section class="motto">
@@ -317,11 +567,13 @@ footer {
     </p>
   </section>
 
+  <footer>
+    © 2026 RULER STUDY. All rights reserved.
+  </footer>
+
 </main>
 
-<footer>
-  © 2026 RULER STUDY. All rights reserved.
-</footer>
+</div>
 
 </body>
 </html>
