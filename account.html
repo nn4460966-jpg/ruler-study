@@ -135,7 +135,22 @@ button{cursor:pointer}
   width:calc(100% - 265px);
   padding:22px 30px 40px;
 }
+.back-btn{
+  padding:10px 16px;
+  border:0;
+  border-radius:12px;
+  background:white;
+  color:#263b70;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 3px 10px #00000010;
+}
 
+.back-btn:hover{
+  background:#e8edff;
+}
 .topbar{
   height:55px;
   display:flex;
@@ -702,12 +717,17 @@ button{cursor:pointer}
   <main class="main">
 
     <header class="topbar">
-      <div class="search">
+    <button class="back-btn" onclick="goBack()">
+        ← Quay lại
+    </button>
+
+    <div class="search">
         <span>🔍</span>
         <input placeholder="Tìm kiếm..." disabled>
-      </div>
-      <div class="top-avatar" id="topAvatar">👤</div>
-    </header>
+    </div>
+
+    <div class="top-avatar" id="topAvatar">👤</div>
+</header>
 
     <!-- HỒ SƠ CÁ NHÂN -->
     <section id="personal" class="profile-panel">
@@ -1281,7 +1301,15 @@ async function changePassword(){
     document.getElementById("confirmPassword").value="";
   }
 }
+function goBack(){
+  const previous = document.referrer;
 
+  if(previous && new URL(previous).origin === location.origin){
+    history.back();
+  }else{
+    location.href = "index.html";
+  }
+}
 async function logoutUser(){
   const {error}=await supabaseClient.auth.signOut();
 
