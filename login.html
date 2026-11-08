@@ -137,6 +137,12 @@ if(roleError){
 if(roleData?.role==="admin"){
   window.location.replace("admin.html");
 }else{
+  const {error:activityError}=await client.rpc("record_student_login");
+
+  if(activityError){
+    console.warn("Không ghi nhận được đăng nhập:",activityError.message);
+  }
+
   window.location.replace("index.html");
 }
 });
