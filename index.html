@@ -401,8 +401,10 @@ function showAdminDashboard() {
   async function checkSavedLogin() {
   const { data, error } = await supabaseClient.auth.getSession();
 
-  if (error || !data.session) return;
-
+  if (error || !data.session)
+    await loadStudyProgress();
+    return;
+  }
   const user = data.session.user;
 
   const { data: roleData, error: roleError } = await supabaseClient
@@ -744,6 +746,12 @@ async function deleteStudyProgress(id) {
   }
 
   message.textContent = "Đã đăng xuất thành công!";
+  document.getElementById("progressStats").textContent =
+     "Vui lòng đăng nhập để xem dữ liệu.";
+ document.getElementById("progressList").textContent =
+     "Vui lòng đăng nhập để xem dữ liệu.";
+ document.getElementById("quizHistory").textContent =
+     "Vui lòng đăng nhập để xem dữ liệu.";
 }
 </script>
 </body>
