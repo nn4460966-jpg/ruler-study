@@ -680,6 +680,8 @@ async function checkHomeLogin(){
 }
 
 async function logoutUser(){
+  await homeSupabase.rpc("record_student_logout");
+
   const {error}=await homeSupabase.auth.signOut({
     scope:"local"
   });
