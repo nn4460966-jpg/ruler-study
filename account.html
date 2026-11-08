@@ -1324,7 +1324,30 @@ async function openRequestedPanel(){
   }
 }
 
+async function startStudentHeartbeat() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  if (!session) return;
+
+  const { data: roleData } = await supabaseClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", session.user.id)
+    .maybeSingle();
+
+  if (roleData?.role === "admin") return;
+
+  await supabaseClient.rpc("record_student_heartbeat");
+
+  setInterval(async () => {
+    if (!document.hidden) {
+      await supabaseClient.rpc("record_student_heartbeat");
+    }
+  }, 30000);
+}
+
 openRequestedPanel();
+startStudentHeartbeat();
 </script>
 
 </body>
