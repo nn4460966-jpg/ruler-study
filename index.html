@@ -398,13 +398,14 @@ function showAdminDashboard() {
   loadQuestions();
   loadResults();
 }
-  async function checkSavedLogin() {
+ async function checkSavedLogin() {
   const { data, error } = await supabaseClient.auth.getSession();
 
-  if (error || !data.session)
+  if (error || !data.session) {
     await loadStudyProgress();
     return;
   }
+
   const user = data.session.user;
 
   const { data: roleData, error: roleError } = await supabaseClient
@@ -413,7 +414,11 @@ function showAdminDashboard() {
     .eq("user_id", user.id)
     .single();
 
-  if (roleError) return;
+  if (roleError) {
+    document.getElementById("accountMessage").textContent =
+      "Không kiểm tra được quyền tài khoản.";
+    return;
+  }
 
   if (roleData.role === "admin") {
     document.getElementById("accountMessage").textContent =
@@ -422,7 +427,7 @@ function showAdminDashboard() {
   } else {
     document.getElementById("accountMessage").textContent =
       "Đã tự động đăng nhập học sinh!";
-    loadStudyProgress();
+    await loadStudyProgress();
   }
 }
 
