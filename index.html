@@ -4,761 +4,324 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RULER STUDY - Học tập thông minh</title>
+<title>Trang chủ | RULER STUDY</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#081426;color:#fff}
-header{background:#101f38;padding:18px 7%;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:5;border-bottom:1px solid #263c5a}
-.logo{font-size:23px;font-weight:bold;color:#39d8e8}
-nav a{color:#dce8f8;text-decoration:none;margin-left:18px;font-size:14px}
-nav a:hover{color:#39d8e8}
-.hero{padding:65px 8%;background:linear-gradient(120deg,#102c50,#07546b);text-align:center}
-.hero h1{font-size:42px;margin:10px}
-.hero p{color:#d0e5f5;font-size:17px}
-.btn{background:#24c5d8;color:#061426;border:0;padding:12px 22px;border-radius:9px;font-weight:bold;cursor:pointer;margin:8px}
-section{padding:35px 7%}
-h2{color:#43d9e8}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px}
-.card{background:#142640;padding:22px;border:1px solid #263e5e;border-radius:14px}
-.card h3{margin:8px 0;color:#fff}
-.card p{color:#b7c8dc;font-size:14px}
-.card button{margin-top:8px}
-button{cursor:pointer}
-.tool{background:#142640;padding:20px;border-radius:12px;border:1px solid #263e5e}
-input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid #45617e;background:#0b1b30;color:white;margin:8px 0}
-footer{text-align:center;padding:25px;color:#91a8c4;background:#101f38}
-#quiz{display:none}
-.option{display:block;width:100%;text-align:left;background:#203a59;color:white;padding:13px;margin:9px 0;border:1px solid #42617e;border-radius:8px}
-.option:hover{background:#176079}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f7fd;
+  color: #172554;
+}
+
+header {
+  background: white;
+  padding: 18px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 3px 15px #0000000c;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.logo {
+  color: #2563eb;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+nav {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: #475569;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+nav a:hover,
+nav a.active {
+  color: #2563eb;
+}
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 22px;
+}
+
+.hero {
+  background: linear-gradient(120deg, #1d4ed8, #60a5fa);
+  color: white;
+  border-radius: 24px;
+  padding: 55px 45px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  margin-bottom: 16px;
+}
+
+.hero p {
+  font-size: 16px;
+  line-height: 1.7;
+  max-width: 550px;
+  color: #eff6ff;
+}
+
+.hero-icon {
+  font-size: 100px;
+}
+
+.hero-button {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 13px 22px;
+  background: white;
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.section-title {
+  margin-bottom: 20px;
+}
+
+.section-title h2 {
+  font-size: 25px;
+  margin-bottom: 8px;
+}
+
+.section-title p {
+  color: #64748b;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature {
+  background: white;
+  padding: 25px;
+  border-radius: 17px;
+  box-shadow: 0 4px 15px #00000008;
+  text-decoration: none;
+  color: #172554;
+  border: 1px solid #e8eef8;
+  transition: .2s;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px #2563eb18;
+  border-color: #93c5fd;
+}
+
+.feature-icon {
+  font-size: 36px;
+  margin-bottom: 17px;
+}
+
+.feature h3 {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.feature p {
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.feature span {
+  display: inline-block;
+  color: #2563eb;
+  font-weight: bold;
+  margin-top: 18px;
+  font-size: 14px;
+}
+
+.motto {
+  margin-top: 35px;
+  background: #eaf2ff;
+  border-radius: 18px;
+  padding: 30px;
+  text-align: center;
+}
+
+.motto h2 {
+  color: #1d4ed8;
+  margin-bottom: 10px;
+}
+
+.motto p {
+  color: #475569;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+  margin-top: 25px;
+}
+
+@media(max-width: 850px) {
+  header {
+    flex-direction: column;
+    gap: 17px;
+  }
+
+  nav {
+    justify-content: center;
+  }
+
+  .features {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(max-width: 550px) {
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding: 35px 25px;
+  }
+
+  .hero h1 {
+    font-size: 28px;
+  }
+
+  .hero-icon {
+    display: none;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<div class="logo">🎓 RULER STUDY</div>
-<nav>
-<a href="#home">Trang chủ</a>
-<a href="#subjects">Môn học</a>
-<a href="#tools">Công cụ</a>
-<a href="#quiz">Trắc nghiệm</a>
-<a href="#progress">Tiến độ</a>
-</nav>
+  <div class="logo">RULER STUDY</div>
+
+  <nav>
+    <a href="index.html" class="active">Trang chủ</a>
+    <a href="subjects.html">Môn học</a>
+    <a href="tools.html">Công cụ</a>
+    <a href="practice.html">Ôn luyện</a>
+    <a href="progress.html">Tiến độ</a>
+    <a href="achievements.html">Thành tích</a>
+    <a href="account.html">Tài khoản</a>
+  </nav>
 </header>
 
-<div class="hero" id="home">
-<h1>CHÀO MỪNG ĐẾN RULER STUDY</h1>
-<p>Học tập thông minh – Khám phá tri thức – Chinh phục tương lai.</p>
-<a href="#subjects"><button class="btn">Khám phá môn học</button></a>
-<a href="#quiz"><button class="btn">Luyện tập ngay</button></a>
-</div>
+<main>
 
-<section id="subjects">
-<h2>📚 THƯ VIỆN MÔN HỌC</h2>
-<div class="grid">
-<div class="card"><h3>➗ Toán học</h3><p>Công thức, bài tập và kiến thức toán.</p></div>
-<div class="card"><h3>📖 Ngữ văn</h3><p>Đọc hiểu, tác phẩm và luyện viết.</p></div>
-<div class="card"><h3>🌐 Tiếng Anh</h3><p>Từ vựng, ngữ pháp và giao tiếp.</p></div>
-<div class="card"><h3>⚡ Vật lý</h3><p>Khám phá các hiện tượng tự nhiên.</p></div>
-<div class="card"><h3>🧪 Hóa học</h3><p>Nguyên tố, phản ứng và bài tập.</p></div>
-<div class="card"><h3>🧬 Sinh học</h3><p>Khám phá thế giới sinh vật.</p></div>
-<div class="card"><h3>🏛️ Lịch sử</h3><p>Tìm hiểu lịch sử Việt Nam và thế giới.</p></div>
-<div class="card"><h3>🌍 Địa lý</h3><p>Khám phá địa lý và các vùng miền.</p></div>
-</div>
-</section>
+  <section class="hero">
+    <div>
+      <h1>Chào mừng đến với RULER STUDY! 👋</h1>
 
-<section id="tools">
-<h2>🧠 CÔNG CỤ HỌC TẬP</h2>
-<div class="grid">
-<div class="tool"><h3>📝 Ghi chú học tập</h3>
-<textarea id="notes" rows="5" placeholder="Viết ghi chú của m..."></textarea>
-<button class="btn" onclick="saveNotes()">Lưu ghi chú</button>
-<p id="saved"></p>
-</div>
-<div class="tool"><h3>📅 Thời khóa biểu</h3>
-<p>Ghi lại kế hoạch học tập của m.</p>
-<input id="plan" placeholder="Ví dụ: 19h học Toán">
-<button class="btn" onclick="savePlan()">Lưu kế hoạch</button>
-<p id="planList"></p>
-</div>
-<div class="tool"><h3>🃏 Flashcards</h3>
-<p id="flash">Bấm nút để ôn tập kiến thức.</p>
-<button class="btn" onclick="flashNext()">Lật thẻ tiếp theo</button>
-</div>
-</div>
-</section>
+      <p>
+        Không gian học tập trực tuyến giúp bạn quản lý việc học,
+        luyện tập kiến thức, theo dõi tiến độ và chinh phục
+        những mục tiêu mới mỗi ngày.
+      </p>
 
-<section>
-<h2>🏆 LUYỆN TẬP KIẾN THỨC</h2>
-<div class="card">
-<p>Thử sức với bộ câu hỏi trắc nghiệm và kiểm tra kiến thức của m.</p>
-<button class="btn" onclick="startQuiz()">Bắt đầu làm bài</button>
-<div id="quiz">
-<h3 id="question"></h3>
-<div id="answers"></div>
-<p id="result"></p>
-<button class="btn" id="next" onclick="nextQuestion()" style="display:none">Câu tiếp theo</button>
-</div>
-</div>
-</section>
-<section id="progress">
-  <h2>📊 Quản lý tiến độ học tập</h2>
-  <p>Theo dõi thời gian và kết quả học tập của bạn.</p>
+      <a href="subjects.html" class="hero-button">
+        Khám phá môn học →
+      </a>
+    </div>
 
-  <div class="card">
-    <h3>Thêm nội dung học tập</h3>
+    <div class="hero-icon">🎓</div>
+  </section>
 
-    <input id="progressSubject" type="text" placeholder="Môn học">
-    <input id="progressLesson" type="text" placeholder="Tên bài học">
-    <input id="progressMinutes" type="number" min="0" placeholder="Thời gian học (phút)">
+  <section>
+    <div class="section-title">
+      <h2>Không gian học tập</h2>
+      <p>Chọn một chức năng để bắt đầu hành trình học tập của bạn.</p>
+    </div>
 
-    <select id="progressStatus">
-      <option value="planned">Dự định học</option>
-      <option value="in_progress">Đang học</option>
-      <option value="completed">Đã hoàn thành</option>
-    </select>
+    <div class="features">
 
-    <input id="progressDate" type="date">
-    <textarea id="progressNotes" placeholder="Ghi chú"></textarea>
+      <a href="subjects.html" class="feature">
+        <div class="feature-icon">📚</div>
+        <h3>Môn học</h3>
+        <p>Khám phá và quản lý các môn học của bạn.</p>
+        <span>Khám phá ngay →</span>
+      </a>
 
-    <button class="btn" onclick="saveStudyProgress()">Lưu tiến độ</button>
-    <p id="progressMessage"></p>
-  </div>
+      <a href="tools.html" class="feature">
+        <div class="feature-icon">🛠️</div>
+        <h3>Công cụ học tập</h3>
+        <p>Sử dụng ghi chú, thời khóa biểu và đồng hồ Pomodoro.</p>
+        <span>Mở công cụ →</span>
+      </a>
 
-  <div class="card">
-    <h3>Thống kê học tập</h3>
-    <div id="progressStats">Đang tải...</div>
-  </div>
+      <a href="practice.html" class="feature">
+        <div class="feature-icon">✍️</div>
+        <h3>Ôn luyện</h3>
+        <p>Luyện tập kiến thức thông qua các câu hỏi và bài tập.</p>
+        <span>Bắt đầu luyện tập →</span>
+      </a>
 
-  <div class="card">
-    <h3>Lịch sử học tập</h3>
-    <div id="progressList">Đang tải...</div>
-  </div>
+      <a href="progress.html" class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Tiến độ học tập</h3>
+        <p>Theo dõi quá trình học và những mục tiêu đã hoàn thành.</p>
+        <span>Xem tiến độ →</span>
+      </a>
 
-  <div class="card">
-    <h3>Lịch sử trắc nghiệm</h3>
-    <div id="quizHistory">Đang tải...</div>
-  </div>
-</section>
+      <a href="achievements.html" class="feature">
+        <div class="feature-icon">🏆</div>
+        <h3>Thành tích</h3>
+        <p>Khám phá huy hiệu và những cột mốc học tập.</p>
+        <span>Xem thành tích →</span>
+      </a>
+
+      <a href="account.html" class="feature">
+        <div class="feature-icon">👤</div>
+        <h3>Tài khoản</h3>
+        <p>Quản lý thông tin cá nhân và cài đặt tài khoản.</p>
+        <span>Quản lý tài khoản →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <section class="motto">
+    <h2>Học tập thông minh – Tiến bộ mỗi ngày ✨</h2>
+    <p>
+      RULER STUDY đồng hành cùng bạn trên hành trình
+      xây dựng thói quen học tập tốt và chinh phục tri thức.
+    </p>
+  </section>
+
+</main>
+
 <footer>
-<h3>RULER STUDY</h3>
-<p>Nền tảng học tập trực tuyến</p>
-<p>© 2026 RULER STUDY. All rights reserved.</p>
+  © 2026 RULER STUDY. All rights reserved.
 </footer>
 
-<script>
-const questions=[
-{q:"Kết quả của 12 × 8 là bao nhiêu?",a:["86","96","88","108"],c:1},
-{q:"Tác giả Truyện Kiều là ai?",a:["Nguyễn Du","Nguyễn Trãi","Nam Cao","Tố Hữu"],c:0},
-{q:"'Apple' trong tiếng Anh có nghĩa là gì?",a:["Quả cam","Quả chuối","Quả táo","Quả nho"],c:2},
-{q:"Hành tinh nào gần Mặt Trời nhất?",a:["Trái Đất","Sao Kim","Sao Hỏa","Sao Thủy"],c:3},
-{q:"Nước có công thức hóa học là gì?",a:["CO2","H2O","O2","NaCl"],c:1},
-{q:"Cơ quan nào giúp con người hô hấp?",a:["Tim","Gan","Phổi","Dạ dày"],c:2},
-{q:"Ngày Quốc khánh Việt Nam là ngày nào?",a:["30/4","2/9","19/5","22/12"],c:1},
-{q:"Thủ đô của Việt Nam là gì?",a:["Huế","Đà Nẵng","TP. Hồ Chí Minh","Hà Nội"],c:3},
-{q:"Số nào là số nguyên tố?",a:["9","15","7","21"],c:2},
-{q:"Từ trái nghĩa với 'hot' là gì?",a:["Cold","Warm","Big","Fast"],c:0}
-];
-let current=0,score=0,answered=false;
-function startQuiz(){
-current=0;score=0;
-document.getElementById("quiz").style.display="block";
-showQuestion();
-}
-function showQuestion(){
-answered=false;
-let q=questions[current];
-document.getElementById("question").textContent="Câu "+(current+1)+": "+q.q;
-document.getElementById("result").textContent="";
-document.getElementById("next").style.display="none";
-let box=document.getElementById("answers");box.innerHTML="";
-q.a.forEach((a,i)=>{
-let b=document.createElement("button");
-b.className="option";
-b.textContent=String.fromCharCode(65+i)+". "+a;
-b.onclick=()=>checkAnswer(i);
-box.appendChild(b);
-});
-}
-function checkAnswer(i){
-if(answered)return;
-answered=true;
-let q=questions[current];
-if(i===q.c){score++;document.getElementById("result").textContent="Chính xác! 🎉";}
-else{document.getElementById("result").textContent="Chưa đúng. Đáp án đúng là "+q.a[q.c]+".";}
-document.getElementById("next").style.display="inline-block";
-document.getElementById("next").textContent=current===questions.length-1?"Xem kết quả":"Câu tiếp theo";
-}
-async function nextQuestion(){
-  if(current < questions.length - 1){
-    current++;
-    showQuestion();
-  } else {
-    document.getElementById("question").textContent = "Hoàn thành bài thi!";
-    document.getElementById("answers").innerHTML = "";
-    document.getElementById("result").textContent =
-      "Kết quả: " + score + "/" + questions.length + " câu đúng.";
-    document.getElementById("next").style.display = "none";
-
-    const { data: sessionData } = await supabaseClient.auth.getSession();
-    const user = sessionData.session?.user;
-
-    if(user){
-      const { error } = await supabaseClient
-        .from("quiz_attempts")
-        .insert({
-          user_id: user.id,
-          score: score,
-          total: questions.length
-        });
-
-      if(error){
-        document.getElementById("result").textContent +=
-          " (Không lưu được kết quả: " + error.message + ")";
-      } else {
-        document.getElementById("result").textContent +=
-          " (Đã lưu kết quả!)";
-      }
-    }
-  }
-}
-function saveNotes(){
-localStorage.setItem("rulerNotes",document.getElementById("notes").value);
-document.getElementById("saved").textContent="Đã lưu ghi chú trên thiết bị!";
-}
-document.getElementById("notes").value=localStorage.getItem("rulerNotes")||"";
-function savePlan(){
-let p=document.getElementById("plan").value;
-if(!p)return;
-let arr=JSON.parse(localStorage.getItem("rulerPlans")||"[]");
-arr.push(p);localStorage.setItem("rulerPlans",JSON.stringify(arr));
-document.getElementById("plan").value="";
-showPlans();
-}
-function showPlans(){
-let arr=JSON.parse(localStorage.getItem("rulerPlans")||"[]");
-document.getElementById("planList").innerHTML=arr.map(x=>"• "+x).join("<br>");
-}
-showPlans();
-let flashcards=["2 + 2 = 4","Thủ đô Việt Nam là Hà Nội","Water nghĩa là nước","H2O là công thức hóa học của nước"];
-let fi=0;
-function flashNext(){
-document.getElementById("flash").textContent=flashcards[fi];
-fi=(fi+1)%flashcards.length;
-}
-</script>
-<section id="account">
-  <h2>👤 TÀI KHOẢN HỌC SINH</h2>
-  <div class="card">
-    <h3>Đăng ký tài khoản</h3>
-    <input id="regEmail" type="email" placeholder="Nhập email">
-    <input id="regPassword" type="password" placeholder="Tạo mật khẩu">
-    <button class="btn" onclick="registerUser()">Đăng ký</button>
-
-    <hr>
-    <h3>Đăng nhập</h3>
-    <input id="loginEmail" type="email" placeholder="Email">
-    <input id="loginPassword" type="password" placeholder="Mật khẩu">
-    <label>
-  <input id="rememberLogin" type="checkbox" checked style="width:auto">
-  Ghi nhớ đăng nhập
-</label>
-    <button class="btn" onclick="loginUser()">Đăng nhập</button>
-    <button class="btn" onclick="logoutUser()">Đăng xuất</button>
-    <p id="accountMessage"></p>
-  </div>
-</section>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
-  }
-);
-
-async function registerUser() {
-  const email = document.getElementById("regEmail").value;
-  const password = document.getElementById("regPassword").value;
-  const message = document.getElementById("accountMessage");
-
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
-
-  message.textContent = error
-    ? error.message
-    : "Đăng ký thành công! Hãy kiểm tra email nếu được yêu cầu xác nhận.";
-}
-
-async function loginUser() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-  const message = document.getElementById("accountMessage");
-
-  message.textContent = "Đang đăng nhập...";
-
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
-
-  if (error) {
-    message.textContent = error.message;
-    return;
-  }
-
-  const { data: roleData, error: roleError } = await supabaseClient
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", data.user.id)
-    .single();
-
-  if (roleError) {
-    message.textContent = "Đăng nhập được nhưng không kiểm tra được quyền.";
-    return;
-  }
-
-   if (roleData.role === "admin") {
-    message.textContent = "Đăng nhập thành công! Quyền ADMIN.";
-    showAdminDashboard();
-    await loadStudyProgress();
-  } else {
-    message.textContent = "Đăng nhập thành công! Chào mừng học sinh.";
-    await loadStudyProgress();
-  }
-}
-function showAdminDashboard() {
-  let panel = document.getElementById("adminDashboard");
-
-  if (!panel) {
-    panel = document.createElement("section");
-    panel.id = "adminDashboard";
-
-    panel.innerHTML = `
-<h2>👑 BẢNG ĐIỀU KHIỂN ADMIN</h2>
-<p>Chào mừng quản trị viên RULER STUDY!</p>
-
-<div class="grid">
-  <div class="tool">
-    <h3>👥 Quản lý học sinh</h3>
-    <button class="btn" onclick="loadStudents()">Xem học sinh</button>
-    <div id="studentsList"></div>
-  </div>
-
-  <div class="tool">
-    <h3>📚 Quản lý môn học</h3>
-    <input id="subjectName" placeholder="Tên môn học">
-    <input id="subjectDesc" placeholder="Mô tả môn học">
-    <button class="btn" onclick="addSubject()">Thêm môn học</button>
-    <div id="subjectsList"></div>
-  </div>
-
-  <div class="tool">
-    <h3>❓ Quản lý câu hỏi</h3>
-    <input id="qText" placeholder="Nội dung câu hỏi">
-    <select id="qSubject">
-      <option value="">Chọn môn học</option>
-    </select>
-    <input id="qA" placeholder="Đáp án A">
-    <input id="qB" placeholder="Đáp án B">
-    <input id="qC" placeholder="Đáp án C">
-    <input id="qD" placeholder="Đáp án D">
-    <select id="qCorrect">
-      <option value="0">Đáp án đúng A</option>
-      <option value="1">Đáp án đúng B</option>
-      <option value="2">Đáp án đúng C</option>
-      <option value="3">Đáp án đúng D</option>
-    </select>
-    <button class="btn" onclick="addQuestion()">Thêm câu hỏi</button>
-    <div id="questionsList"></div>
-  </div>
-
-  <div class="tool">
-    <h3>🏆 Kết quả học tập</h3>
-    <button class="btn" onclick="loadResults()">Xem kết quả</button>
-    <div id="resultsList"></div>
-  </div>
-</div>
-`;
-
-    document.body.appendChild(panel);
-  }
-
-  loadStudents();
-  loadSubjects();
-  loadQuestions();
-  loadResults();
-}
- async function checkSavedLogin() {
-  const { data, error } = await supabaseClient.auth.getSession();
-
-  if (error || !data.session) {
-    await loadStudyProgress();
-    return;
-  }
-
-  const user = data.session.user;
-
-  const { data: roleData, error: roleError } = await supabaseClient
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
-
-  if (roleError) {
-    document.getElementById("accountMessage").textContent =
-      "Không kiểm tra được quyền tài khoản.";
-    return;
-  }
-
-  if (roleData.role === "admin") {
-    document.getElementById("accountMessage").textContent =
-      "Đã tự động đăng nhập ADMIN!";
-    showAdminDashboard();
-  } else {
-    document.getElementById("accountMessage").textContent =
-      "Đã tự động đăng nhập học sinh!";
-    await loadStudyProgress();
-  }
-}
-
-window.addEventListener("load", checkSavedLogin);
-function safeText(value) {
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;",
-    '"': "&quot;", "'": "&#39;"
-  })[c]);
-}
-
-// 1. DANH SÁCH HỌC SINH
-async function loadStudents() {
-  const box = document.getElementById("studentsList");
-  box.textContent = "Đang tải...";
-
-  const { data, error } = await supabaseClient
-    .from("profiles")
-    .select("id,email,created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    box.textContent = error.message;
-    return;
-  }
-
-  box.innerHTML = data.length
-    ? data.map(s => `<p>👤 ${safeText(s.email)}</p>`).join("")
-    : "Chưa có học sinh.";
-}
-
-// 2. QUẢN LÝ MÔN HỌC
-async function loadSubjects() {
-  const box = document.getElementById("subjectsList");
-  const select = document.getElementById("qSubject");
-
-  const { data, error } = await supabaseClient
-    .from("subjects").select("*").order("name");
-
-  if (error) {
-    box.textContent = error.message;
-    return;
-  }
-
-  select.innerHTML = '<option value="">Chọn môn học</option>';
-
-  data.forEach(s => {
-    select.innerHTML +=
-      `<option value="${safeText(s.id)}">${safeText(s.name)}</option>`;
-  });
-
-  box.innerHTML = data.map(s => `
-    <p>${safeText(s.name)}
-    <button onclick="deleteSubject('${s.id}')">Xóa</button></p>
-  `).join("") || "Chưa có môn học.";
-}
-
-async function addSubject() {
-  const name = document.getElementById("subjectName").value.trim();
-  const description = document.getElementById("subjectDesc").value.trim();
-
-  if (!name) {
-    alert("Nhập tên môn học!");
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("subjects").insert({ name, description });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  document.getElementById("subjectName").value = "";
-  document.getElementById("subjectDesc").value = "";
-  loadSubjects();
-}
-
-async function deleteSubject(id) {
-  if (!confirm("Xóa môn học này?")) return;
-
-  const { error } = await supabaseClient
-    .from("subjects").delete().eq("id", id);
-
-  if (error) alert(error.message);
-  else loadSubjects();
-}
-
-// 3. QUẢN LÝ CÂU HỎI
-async function loadQuestions() {
-  const box = document.getElementById("questionsList");
-
-  const { data, error } = await supabaseClient
-    .from("questions")
-    .select("id,question")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    box.textContent = error.message;
-    return;
-  }
-
-  box.innerHTML = data.map(q => `
-    <p>${safeText(q.question)}
-    <button onclick="deleteQuestion('${q.id}')">Xóa</button></p>
-  `).join("") || "Chưa có câu hỏi.";
-}
-
-async function addQuestion() {
-  const question = document.getElementById("qText").value.trim();
-  const options = ["qA", "qB", "qC", "qD"].map(
-    id => document.getElementById(id).value.trim()
-  );
-
-  if (!question || options.some(x => !x)) {
-    alert("Nhập câu hỏi và đủ 4 đáp án!");
-    return;
-  }
-
-  const subject = document.getElementById("qSubject").value;
-
-  const { error } = await supabaseClient.from("questions").insert({
-    question,
-    options,
-    subject_id: subject || null,
-    correct_index: Number(document.getElementById("qCorrect").value)
-  });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  ["qText", "qA", "qB", "qC", "qD"].forEach(id => {
-    document.getElementById(id).value = "";
-  });
-
-  loadQuestions();
-  alert("Đã thêm câu hỏi!");
-}
-
-async function deleteQuestion(id) {
-  if (!confirm("Xóa câu hỏi này?")) return;
-
-  const { error } = await supabaseClient
-    .from("questions").delete().eq("id", id);
-
-  if (error) alert(error.message);
-  else loadQuestions();
-}
-
-// 4. KẾT QUẢ HỌC TẬP
-async function loadResults() {
-  const box = document.getElementById("resultsList");
-
-  const { data, error } = await supabaseClient
-    .from("quiz_attempts")
-    .select("user_id,score,total,created_at")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    box.textContent = error.message;
-    return;
-  }
-
-  box.innerHTML = data.map(r => `
-    <p>Học sinh: ${safeText(r.user_id)}<br>
-    Điểm: ${r.score}/${r.total}</p>
-  `).join("") || "Chưa có kết quả.";
-}
-async function loadStudyProgress() {
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  const user = sessionData.session?.user;
-
-  const list = document.getElementById("progressList");
-  const stats = document.getElementById("progressStats");
-  const history = document.getElementById("quizHistory");
-
-  if (!user) {
-    list.textContent = stats.textContent = history.textContent =
-      "Vui lòng đăng nhập để xem dữ liệu.";
-    return;
-  }
-
-  const { data, error } = await supabaseClient
-    .from("study_progress")
-    .select("*")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    list.textContent = "Lỗi tải tiến độ: " + error.message;
-    return;
-  }
-
-  const rows = data || [];
-  const minutes = rows.reduce(
-    (sum, item) => sum + Number(item.study_minutes || 0), 0
-  );
-  const completed = rows.filter(
-    item => item.status === "completed"
-  ).length;
-
-  stats.innerHTML = `
-    <p>📚 Nội dung đã ghi: <b>${rows.length}</b></p>
-    <p>⏱️ Tổng thời gian: <b>${minutes}</b> phút</p>
-    <p>✅ Bài hoàn thành: <b>${completed}</b></p>
-  `;
-
-  list.innerHTML = rows.length ? rows.map(item => `
-    <div class="card" style="margin:10px 0">
-      <b>${safeText(item.subject)} — ${safeText(item.lesson_title)}</b>
-      <p>${Number(item.study_minutes)} phút · ${
-        item.status === "completed" ? "Đã hoàn thành" :
-        item.status === "in_progress" ? "Đang học" : "Dự định học"
-      }</p>
-      <p>Ngày: ${safeText(item.target_date || "Chưa đặt")}</p>
-      <p>${safeText(item.notes || "")}</p>
-      <button class="btn" onclick="deleteStudyProgress('${item.id}')">Xóa</button>
-    </div>
-  `).join("") : "Chưa có nội dung học nào.";
-
-  const { data: attempts, error: quizError } = await supabaseClient
-    .from("quiz_attempts")
-    .select("score,total,created_at")
-    .eq("user_id", user.id)
-    .order("created_at", { ascending: false });
-
-  if (quizError) {
-    history.textContent = "Lỗi tải lịch sử: " + quizError.message;
-    return;
-  }
-
-  history.innerHTML = attempts?.length ? attempts.map(a => `
-    <p>Điểm: <b>${a.score}/${a.total}</b> ·
-    ${new Date(a.created_at).toLocaleString("vi-VN")}</p>
-  `).join("") : "Bạn chưa có kết quả trắc nghiệm nào.";
-}
-
-async function saveStudyProgress() {
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  const user = sessionData.session?.user;
-  const message = document.getElementById("progressMessage");
-
-  if (!user) {
-    message.textContent = "Bạn cần đăng nhập trước.";
-    return;
-  }
-
-  const subject = document.getElementById("progressSubject").value.trim();
-  const lesson_title = document.getElementById("progressLesson").value.trim();
-  const study_minutes = Number(
-    document.getElementById("progressMinutes").value || 0
-  );
-
-  if (!subject || !lesson_title ||
-      !Number.isFinite(study_minutes) || study_minutes < 0 ||
-      !Number.isInteger(study_minutes)) {
-    message.textContent = "Hãy nhập môn học, tên bài và số phút hợp lệ.";
-    return;
-  }
-
-  const { error } = await supabaseClient.from("study_progress").insert({
-    user_id: user.id,
-    subject,
-    lesson_title,
-    study_minutes,
-    status: document.getElementById("progressStatus").value,
-    target_date: document.getElementById("progressDate").value || null,
-    notes: document.getElementById("progressNotes").value.trim() || null
-  });
-
-  if (error) {
-    message.textContent = "Không lưu được: " + error.message;
-    return;
-  }
-
-  message.textContent = "Đã lưu tiến độ!";
-
-  ["progressSubject", "progressLesson", "progressMinutes",
-   "progressDate", "progressNotes"].forEach(id => {
-    document.getElementById(id).value = "";
-  });
-
-  await loadStudyProgress();
-}
-
-async function deleteStudyProgress(id) {
-  if (!confirm("Bạn có chắc muốn xóa mục tiến độ này?")) return;
-
-  const { data: sessionData } = await supabaseClient.auth.getSession();
-  const user = sessionData.session?.user;
-  if (!user) return;
-
-  const { error } = await supabaseClient
-    .from("study_progress")
-    .delete()
-    .eq("id", id)
-    .eq("user_id", user.id);
-
-  if (error) {
-    alert("Không xóa được: " + error.message);
-  } else {
-    await loadStudyProgress();
-  }
-}
-  async function logoutUser() {
-  const { error } = await supabaseClient.auth.signOut();
-
-  const dashboard = document.getElementById("adminDashboard");
-  if (dashboard) {
-    dashboard.remove();
-  }
-
-  const message = document.getElementById("accountMessage");
-
-  if (error) {
-    message.textContent = "Lỗi đăng xuất: " + error.message;
-    return;
-  }
-
-  message.textContent = "Đã đăng xuất thành công!";
-  document.getElementById("progressStats").textContent =
-     "Vui lòng đăng nhập để xem dữ liệu.";
- document.getElementById("progressList").textContent =
-     "Vui lòng đăng nhập để xem dữ liệu.";
- document.getElementById("quizHistory").textContent =
-     "Vui lòng đăng nhập để xem dữ liệu.";
-}
-</script>
 </body>
 </html>
