@@ -537,9 +537,31 @@ async function saveContent(publish){
   return;
 }
 
+let vocabularyWords=[];
+
 if(currentType==="question_bank"){
   if(questions.length===0){
     $("formStatus").textContent="Hãy thêm ít nhất một câu hỏi vào ngân hàng.";
+    return;
+  }
+}else if(currentType==="vocabulary"){
+  const cards=$("questionList").querySelectorAll(".question");
+
+  vocabularyWords=Array.from(cards).map(card=>({
+    word:card.querySelector("[data-word]")?.value.trim()||"",
+    pronunciation:card.querySelector("[data-pronunciation]")?.value.trim()||"",
+    meaning:card.querySelector("[data-meaning]")?.value.trim()||"",
+    wordtype:card.querySelector("[data-wordtype]")?.value.trim()||"",
+    example:card.querySelector("[data-example]")?.value.trim()||""
+  }));
+
+  if(!vocabularyWords.length){
+    $("formStatus").textContent="Hãy thêm ít nhất một từ vựng.";
+    return;
+  }
+
+  if(vocabularyWords.some(word=>!word.word||!word.meaning)){
+    $("formStatus").textContent="Mỗi từ cần có từ vựng và nghĩa tiếng Việt.";
     return;
   }
 }else{
