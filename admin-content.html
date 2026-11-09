@@ -344,6 +344,7 @@ function initializePage(){
 
 function setType(type){
   currentType=type;
+  questions=[];
 
   document.querySelectorAll(".tab").forEach(button=>{
     button.classList.toggle("active",button.dataset.type===type);
@@ -352,9 +353,15 @@ function setType(type){
   if(type==="vocabulary"){
     $("addQuestionButton").textContent="＋ Thêm từ vựng";
     $("editorTitle").textContent="🔤 Tạo danh sách từ vựng mới";
+
+    $("questionList").innerHTML=
+      '<div class="empty">Chưa có từ vựng. Bấm “Thêm từ vựng” để bắt đầu.</div>';
   }else{
     $("addQuestionButton").textContent="＋ Thêm câu hỏi";
     $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+
+    $("questionList").innerHTML=
+      '<div class="empty">Chưa có câu hỏi. Bấm “Thêm câu hỏi” để bắt đầu.</div>';
   }
 
   loadContents();
