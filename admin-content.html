@@ -360,6 +360,17 @@ function setType(type){
   loadContents();
 }
 
+  if(type==="vocabulary"){
+    $("addQuestionButton").textContent="＋ Thêm từ vựng";
+    $("editorTitle").textContent="🔤 Tạo danh sách từ vựng mới";
+  }else{
+    $("addQuestionButton").textContent="＋ Thêm câu hỏi";
+    $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+  }
+
+  loadContents();
+}
+
 function updatePreview(){
   $("previewTitle").textContent=$("titleInput").value||"Tiêu đề bài học";
   $("previewMeta").textContent=$("subjectSelect").value+" · Lớp "+$("classSelect").value;
