@@ -323,7 +323,16 @@ function initializePage(){
   $("publishButton").onclick=()=>saveContent(true);
   $("draftButton").onclick=()=>saveContent(false);
   $("cancelButton").onclick=resetForm;
-  $("addQuestionButton").onclick=()=>addQuestion();
+  $("addQuestionButton").onclick=()=>{
+  if(currentType==="vocabulary"){
+    addVocabularyWord();
+    $("addQuestionButton").textContent="＋ Thêm từ vựng";
+    $("editorTitle").textContent="🔤 Tạo danh sách từ vựng mới";
+  }else{
+    addQuestion();
+    $("addQuestionButton").textContent="＋ Thêm câu hỏi";
+  }
+};
 
   const params=new URLSearchParams(location.search);
   const requested=params.get("type");
