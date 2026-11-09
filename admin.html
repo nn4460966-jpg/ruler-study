@@ -33,6 +33,25 @@ button{font:inherit;cursor:pointer}
 .brand h2{font-size:23px;letter-spacing:.5px}
 .brand p{font-size:12px;margin-top:8px;color:#d5defe}
 .nav{display:flex;flex-direction:column;gap:8px}
+  .nav-label{
+  color:#91a8e8;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.2px;
+  padding:17px 10px 5px;
+}
+
+.nav-item{
+  min-width:0;
+  flex-wrap:wrap;
+}
+
+.sidebar{
+  height:100vh;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:#526da9 transparent;
+}
 .nav-item{
   display:flex;align-items:center;gap:13px;padding:14px 13px;
   border-radius:13px;color:#edf2ff;text-decoration:none;font-size:15px;
@@ -191,15 +210,45 @@ display:grid;place-items:center;font-size:25px}
     <p>Học tốt hơn - Thành công hơn</p>
   </div>
 
-  <nav class="nav">
-    <a class="nav-item active" href="admin.html"><span class="nav-icon">▦</span>Tổng quan</a>
-    <a class="nav-item" href="admin-students.html?v=2"><span class="nav-icon">👥</span>Quản lý học sinh</a>
-    <div class="nav-item"><span class="nav-icon">📖</span>Quản lý môn học <span class="pill">Sau</span></div>
-    <div class="nav-item"><span class="nav-icon">❔</span>Ngân hàng câu hỏi <span class="pill">Sau</span></div>
-    <div class="nav-item"><span class="nav-icon">📊</span>Kết quả học tập <span class="pill">Sau</span></div>
-    <div class="nav-item"><span class="nav-icon">🔔</span>Quản lý thông báo <span class="pill">Sau</span></div>
-    <div class="nav-item"><span class="nav-icon">⚙️</span>Cài đặt hệ thống <span class="pill">Sau</span></div>
-  </nav>
+ <nav class="nav">
+
+  <div class="nav-label">TỔNG QUAN</div>
+  <a class="nav-item active" href="admin.html">
+    <span class="nav-icon">▦</span>Tổng quan
+  </a>
+
+  <div class="nav-label">QUẢN LÝ HỌC TẬP</div>
+  <div class="nav-item"><span class="nav-icon">📚</span>Quản lý môn học <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">📖</span>Quản lý bài học <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">✍️</span>Quản lý bài tập <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">❔</span>Ngân hàng câu hỏi <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">📝</span>Quản lý đề kiểm tra <span class="pill">Sau</span></div>
+
+  <div class="nav-label">QUẢN LÝ TỪ VỰNG</div>
+  <div class="nav-item"><span class="nav-icon">🔤</span>Danh sách từ vựng <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">🗂️</span>Bộ thẻ từ vựng <span class="pill">Sau</span></div>
+
+  <div class="nav-label">QUẢN LÝ IELTS</div>
+  <div class="nav-item"><span class="nav-icon">🎧</span>Listening <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">📖</span>Reading <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">✍️</span>Writing <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">🎤</span>Speaking <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">🏆</span>Ngân hàng đề IELTS <span class="pill">Sau</span></div>
+
+  <div class="nav-label">QUẢN LÝ HỌC SINH</div>
+  <a class="nav-item" href="admin-students.html?v=2">
+    <span class="nav-icon">👥</span>Quản lý học sinh
+  </a>
+  <div class="nav-item"><span class="nav-icon">📊</span>Kết quả học tập <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">📈</span>Tiến độ & thành tích <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">🕒</span>Lịch sử hoạt động <span class="pill">Sau</span></div>
+
+  <div class="nav-label">QUẢN LÝ HỆ THỐNG</div>
+  <div class="nav-item"><span class="nav-icon">🔔</span>Quản lý thông báo <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">📁</span>Quản lý tài liệu <span class="pill">Sau</span></div>
+  <div class="nav-item"><span class="nav-icon">⚙️</span>Cài đặt hệ thống <span class="pill">Sau</span></div>
+
+</nav>
 
   <div class="sidebar-bottom">
     <div class="admin-profile">
