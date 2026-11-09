@@ -3,283 +3,499 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Quản lý nội dung | RULER STUDY</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5ff;color:#172554}
-header{background:linear-gradient(100deg,#10245d,#2869e8);color:white;padding:24px}
-header h1{margin:0 0 8px}
-header p{margin:0;color:#dce7ff}
-main{max-width:1150px;margin:25px auto;padding:0 18px}
-.panel{background:white;padding:22px;border-radius:17px;margin-bottom:20px;box-shadow:0 4px 16px #253f8b12}
-h2{font-size:19px;margin:0 0 18px}
-.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-label{display:block;font-size:13px;font-weight:bold;margin-bottom:8px}
-select,input,textarea{width:100%;padding:12px;border:1px solid #dce3f5;border-radius:10px;font:inherit;background:white;color:#172554}
-textarea{min-height:150px;resize:vertical;line-height:1.6}
-.field{margin-bottom:16px}
-button{border:0;border-radius:10px;padding:11px 16px;font-weight:bold;cursor:pointer}
-.primary{background:#2869e8;color:white}
-.secondary{background:#edf2ff;color:#2454bc}
-.danger{background:#fff0f0;color:#d33}
-.actions{display:flex;gap:9px;flex-wrap:wrap}
-.status{font-size:13px;margin-top:12px;color:#2869e8;white-space:pre-wrap}
-.content-item{border:1px solid #e1e7f8;border-radius:13px;padding:16px;margin-top:12px}
-.content-item h3{margin:0 0 9px;font-size:17px}
-.meta{font-size:12px;color:#7180a8;margin-bottom:10px}
-.description{font-size:14px;line-height:1.6;white-space:pre-wrap;margin-bottom:13px}
-.tag{display:inline-block;padding:5px 9px;border-radius:20px;background:#edf2ff;color:#2869e8;font-size:11px;margin-right:6px}
-.empty{padding:25px;text-align:center;color:#7180a8;background:#f7f8ff;border-radius:12px}
-.back{color:white;text-decoration:none;font-weight:bold}
-@media(max-width:650px){.filters{grid-template-columns:1fr}header{padding:20px}main{padding:0 12px}}
+body{margin:0;font-family:'Be Vietnam Pro',Arial,sans-serif;background:#f2f5ff;color:#172554}
+button,input,select,textarea{font:inherit}
+.sidebar{position:fixed;inset:0 auto 0 0;width:240px;background:linear-gradient(180deg,#142b60,#101f48);padding:22px 13px;color:white;overflow-y:auto}
+.brand{text-align:center;font-size:20px;font-weight:800;padding:8px 0 25px}
+.brand small{display:block;font-size:11px;font-weight:400;color:#bdcefa;margin-top:6px}
+.nav-label{font-size:10px;color:#9eb5ed;padding:16px 12px 7px;font-weight:bold;letter-spacing:1px}
+.nav a{display:block;text-decoration:none;color:#e7edff;padding:12px;border-radius:10px;font-size:13px;margin:3px 0}
+.nav a:hover,.nav a.active{background:#2869ee;color:white}
+.main{margin-left:240px;min-height:100vh}
+.top{height:65px;background:white;border-bottom:1px solid #e1e8f8;padding:0 28px;display:flex;align-items:center;justify-content:space-between}
+.top strong{color:#2869ee;font-size:19px}
+.top a{color:#49628f;text-decoration:none;font-size:13px}
+.wrap{max-width:1450px;margin:auto;padding:25px}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:20px}
+.heading h1{margin:0;font-size:25px}
+.heading p{color:#7180a5;font-size:13px}
+.hint{background:#eeeaff;color:#6246c9;padding:12px 15px;border-radius:10px;font-size:12px}
+.tabs{display:flex;gap:8px;overflow-x:auto;margin-bottom:17px}
+.tab{white-space:nowrap;border:1px solid #dce5fa;background:white;color:#33466f;padding:11px 15px;border-radius:10px;cursor:pointer;font-weight:bold}
+.tab.active{background:#2869ee;color:white;border-color:#2869ee}
+.layout{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(270px,.8fr);gap:16px;align-items:start}
+.panel{background:white;border:1px solid #e0e7f6;border-radius:16px;padding:20px;margin-bottom:15px;box-shadow:0 4px 16px #263d8010}
+.panel h2{font-size:17px;margin:0 0 17px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.field{margin-bottom:15px}
+.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:7px}
+.field input,.field select,.field textarea,.question input,.question select,.question textarea{width:100%;padding:11px;border:1px solid #d9e2f3;border-radius:9px;outline:none;color:#172554;background:white}
+.field textarea{min-height:190px;resize:vertical;line-height:1.7}
+.field input:focus,.field textarea:focus,.question input:focus,.question textarea:focus{border-color:#2869ee}
+.toolbar{display:flex;gap:6px;background:#f4f7ff;padding:8px;border:1px solid #dce5fa;border-bottom:0;border-radius:9px 9px 0 0}
+.tool{border:0;background:white;padding:7px 12px;border-radius:6px;cursor:pointer}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.btn{border:0;border-radius:9px;padding:11px 16px;cursor:pointer;font-weight:bold}
+.primary{background:#2869ee;color:white}
+.soft{background:#edf2ff;color:#2855b5}
+.purple{background:#eeeaff;color:#6544d5}
+.danger{background:#fff0f0;color:#c43e4a}
+.preview{position:sticky;top:15px}
+.preview-cover{background:linear-gradient(120deg,#3984ff,#8968f5);border-radius:12px;padding:24px;color:white}
+.preview-cover h2{font-size:21px;margin:10px 0}
+.preview-body{padding:17px 5px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;min-height:100px}
+.success{background:#edfff4;border:1px solid #a5e1b9;color:#18733a;padding:12px;border-radius:10px;font-size:12px}
+.question{border:1px solid #dce5fa;border-radius:12px;padding:15px;margin-top:12px}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.answer-row{display:grid;grid-template-columns:30px 1fr;gap:8px;align-items:center;margin:7px 0}
+.answer-row b{background:#edf2ff;padding:9px;text-align:center;border-radius:7px}
+.list-item{border:1px solid #dce5fa;padding:14px;border-radius:11px;margin-top:10px}
+.list-item h3{margin:0 0 7px;font-size:15px}
+.muted{color:#7180a5;font-size:12px}
+.pill{display:inline-block;background:#edf2ff;color:#315fc4;padding:5px 9px;border-radius:20px;font-size:11px;margin:4px}
+.empty{text-align:center;padding:25px;color:#7180a5;background:#f7f9ff;border-radius:10px}
+.hidden{display:none!important}
+.status{font-size:12px;color:#2869ee;margin-top:10px;white-space:pre-wrap}
+.check{display:flex;align-items:center;gap:8px;font-size:13px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px}
+@media(max-width:1050px){.layout{grid-template-columns:1fr}.preview{position:static}}
+@media(max-width:700px){.sidebar{position:static;width:auto;max-height:240px}.main{margin:0}.wrap{padding:13px}.grid3,.qgrid{grid-template-columns:1fr}.heading{display:block}.top{padding:0 13px}}
 </style>
 </head>
 <body>
 
-<header>
-  <a class="back" href="admin.html">← Trang quản trị</a>
-  <h1>📚 Quản lý nội dung học tập</h1>
-  <p>Quản lý bài học theo từng lớp và môn học</p>
+<aside class="sidebar">
+  <div class="brand">🎓 RULER STUDY<small>Học tốt hơn, vươn xa hơn!</small></div>
+  <nav class="nav">
+    <div class="nav-label">QUẢN TRỊ</div>
+    <a href="admin.html">▦ Tổng quan</a>
+    <a href="admin-students.html">♟ Quản lý học sinh</a>
+    <a href="subjects.html">📚 Môn học</a>
+    <div class="nav-label">NỘI DUNG HỌC TẬP</div>
+    <a class="active" href="admin-content.html">📘 Quản lý bài học</a>
+    <a href="admin-content.html?type=exercise">✏️ Quản lý bài tập</a>
+    <a href="admin-content.html?type=question">❔ Ngân hàng câu hỏi</a>
+    <a href="admin-content.html?type=test">📝 Đề kiểm tra</a>
+    <a href="admin-content.html?type=vocabulary">🔤 Từ vựng</a>
+    <a href="admin-content.html?type=ielts">🌍 IELTS</a>
+    <div class="nav-label">HỆ THỐNG</div>
+    <a href="admin.html">🔔 Thông báo</a>
+    <a href="admin.html">📁 Tài liệu</a>
+    <a href="admin-students.html">📊 Kết quả & tiến độ</a>
+  </nav>
+</aside>
+
+<div class="main">
+<header class="top">
+  <strong>RULER STUDY</strong>
+  <a href="admin.html">← Quay lại trang quản trị</a>
 </header>
 
-<main>
-  <section class="panel">
-    <h2>🎯 Chọn khu vực quản lý</h2>
-    <div class="filters">
-      <div>
-        <label for="classSelect">Lớp học</label>
-        <select id="classSelect"></select>
-      </div>
-      <div>
-        <label for="subjectSelect">Môn học</label>
-        <select id="subjectSelect"></select>
-      </div>
-      <div>
-        <label for="typeSelect">Loại nội dung</label>
-        <select id="typeSelect">
-          <option value="">Tất cả nội dung</option>
-          <option value="lesson">Bài học</option>
-          <option value="knowledge">Kiến thức</option>
-          <option value="exercise">Bài tập</option>
-          <option value="test">Đề kiểm tra</option>
-          <option value="resource">Tài liệu</option>
-        </select>
-      </div>
+<main class="wrap">
+  <div class="heading">
+    <div>
+      <h1>📝 Quản lý nội dung</h1>
+      <p>Tự tạo, chỉnh sửa và đăng nội dung cho học sinh.</p>
     </div>
-  </section>
+    <div class="hint">💡 Chỉ nội dung đã xuất bản mới hiển thị với học sinh.</div>
+  </div>
 
-  <section class="panel" id="editor">
-    <h2 id="formTitle">➕ Thêm nội dung mới</h2>
-    <div class="field">
-      <label for="titleInput">Tên nội dung</label>
-      <input id="titleInput" placeholder="Ví dụ: Phương trình bậc hai">
-    </div>
-    <div class="field">
-      <label for="descriptionInput">Mô tả ngắn</label>
-      <input id="descriptionInput" placeholder="Giới thiệu nội dung bài học">
-    </div>
-    <div class="field">
-      <label for="bodyInput">Nội dung chi tiết</label>
-      <textarea id="bodyInput" placeholder="Nhập kiến thức, hướng dẫn học tập hoặc nội dung bài tập tại đây..."></textarea>
-    </div>
-    <div class="field">
-      <label>
-        <input type="checkbox" id="publishInput" style="width:auto">
-        Xuất bản để học sinh có thể xem
-      </label>
-    </div>
-    <div class="actions">
-      <button class="primary" id="saveButton">Lưu nội dung</button>
-      <button class="secondary" id="cancelButton" style="display:none">Hủy chỉnh sửa</button>
-    </div>
-    <div class="status" id="formStatus"></div>
-  </section>
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-type="lesson">📘 Bài học</button>
+    <button class="tab" data-type="exercise">✏️ Bài tập</button>
+    <button class="tab" data-type="knowledge">💡 Kiến thức</button>
+    <button class="tab" data-type="test">📝 Đề kiểm tra</button>
+    <button class="tab" data-type="resource">📁 Tài liệu</button>
+  </div>
 
-  <section class="panel">
-    <h2>📖 Danh sách nội dung</h2>
-    <div id="contentList"><div class="empty">Đang tải nội dung...</div></div>
-  </section>
+  <div class="layout">
+    <div>
+      <section class="panel">
+        <h2>🎯 Chọn nơi đăng nội dung</h2>
+        <div class="grid3">
+          <div class="field">
+            <label>LỚP HỌC</label>
+            <select id="classSelect"></select>
+          </div>
+          <div class="field">
+            <label>MÔN HỌC</label>
+            <select id="subjectSelect"></select>
+          </div>
+          <div class="field">
+            <label>CHỦ ĐỀ / CHƯƠNG</label>
+            <input id="categoryInput" placeholder="Ví dụ: Đại số">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <h2 id="editorTitle">📘 Tạo bài học mới</h2>
+          <span class="pill">Trình soạn nội dung</span>
+        </div>
+
+        <div class="field">
+          <label>TIÊU ĐỀ *</label>
+          <input id="titleInput" placeholder="Ví dụ: Phương trình bậc hai">
+        </div>
+
+        <div class="field">
+          <label>MÔ TẢ NGẮN</label>
+          <input id="descriptionInput" placeholder="Giới thiệu nội dung cho học sinh">
+        </div>
+
+        <div class="field">
+          <label>NỘI DUNG CHI TIẾT *</label>
+          <div class="toolbar">
+            <button class="tool" data-insert="**">B</button>
+            <button class="tool" data-insert="## ">H</button>
+            <button class="tool" data-insert="\n• ">☷</button>
+            <button class="tool" data-insert="\n\n">↵</button>
+          </div>
+          <textarea id="bodyInput" placeholder="Tự nhập kiến thức, công thức, ví dụ, hướng dẫn..."></textarea>
+        </div>
+
+        <div class="field">
+          <label>LINK HÌNH ẢNH (TÙY CHỌN)</label>
+          <input id="imageUrlInput" type="url" placeholder="https://...">
+        </div>
+
+        <div class="check">
+          <input type="checkbox" id="publishInput">
+          <label for="publishInput" style="margin:0">Xuất bản ngay để học sinh nhìn thấy</label>
+        </div>
+
+        <div class="actions">
+          <button class="btn primary" id="publishButton">➤ Đăng nội dung</button>
+          <button class="btn soft" id="draftButton">▣ Lưu bản nháp</button>
+          <button class="btn purple hidden" id="cancelButton">Hủy sửa</button>
+        </div>
+        <div class="status" id="formStatus"></div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <h2>❔ Tạo câu hỏi</h2>
+          <button class="btn purple" id="addQuestionButton">＋ Thêm câu hỏi</button>
+        </div>
+        <p class="muted">Tự nhập câu hỏi, đáp án và lời giải. Câu hỏi sẽ được lưu cùng nội dung đang soạn.</p>
+        <div id="questionList">
+          <div class="empty">Chưa có câu hỏi. Bấm “Thêm câu hỏi” để bắt đầu.</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-title">
+          <h2>📚 Nội dung đã tạo</h2>
+          <span class="muted" id="countLabel"></span>
+        </div>
+        <div id="contentList"><div class="empty">Đang tải...</div></div>
+      </section>
+    </div>
+
+    <aside class="preview">
+      <section class="panel">
+        <h2>👁 Xem trước nội dung</h2>
+        <div class="preview-cover">
+          <div style="font-size:28px">🎓</div>
+          <h2 id="previewTitle">Tiêu đề bài học</h2>
+          <span id="previewMeta">Toán học · Lớp 10</span>
+        </div>
+        <div class="preview-body" id="previewBody">Nội dung sẽ hiển thị ở đây khi mày nhập.</div>
+        <div class="success">✓ Nội dung sẽ được phân phối theo đúng lớp và môn sau khi đăng thành công.</div>
+      </section>
+    </aside>
+  </div>
 </main>
+</div>
 
 <script>
-const client = window.supabase.createClient(
+const client=window.supabase.createClient(
   "https://svhwozfwuexgiwrdripm.supabase.co",
   "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
 );
 
-const subjects = [
-  "Toán học","Ngữ văn","Tiếng Anh","Vật lý",
-  "Hóa học","Sinh học","Lịch sử","Địa lý",
-  "Tin học","Công nghệ","Giáo dục công dân",
-  "Giáo dục thể chất","Âm nhạc","Mỹ thuật"
+const subjects=[
+  "Toán học","Ngữ văn","Tiếng Anh","Vật lý","Hóa học",
+  "Sinh học","Lịch sử","Địa lý","Tin học","Công nghệ",
+  "Giáo dục công dân","Giáo dục thể chất","Âm nhạc","Mỹ thuật"
 ];
 
-const typeNames = {
+const typeNames={
   lesson:"Bài học",
-  knowledge:"Kiến thức",
   exercise:"Bài tập",
+  knowledge:"Kiến thức",
   test:"Đề kiểm tra",
   resource:"Tài liệu"
 };
 
-let adminUser = null;
-let editingId = null;
+let adminUser=null;
+let editingId=null;
+let currentType="lesson";
+let questions=[];
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
 async function checkAdmin(){
-  const {data,error} = await client.auth.getUser();
+  const {data,error}=await client.auth.getUser();
 
-  if(error || !data.user){
-    document.body.innerHTML = "<h2 style='padding:30px'>Vui lòng đăng nhập Admin trước.</h2>";
+  if(error||!data.user){
+    document.body.innerHTML="<h2 style='padding:30px'>Phiên đăng nhập không hợp lệ. Hãy đăng nhập Admin trước.</h2>";
     return;
   }
 
-  const {data:role,error:roleError} = await client
+  const {data:role,error:roleError}=await client
     .from("user_roles")
     .select("role")
     .eq("user_id",data.user.id)
     .maybeSingle();
 
-  if(roleError || role?.role !== "admin"){
-    document.body.innerHTML = "<h2 style='padding:30px'>Bạn không có quyền truy cập trang này.</h2>";
+  if(roleError||role?.role!=="admin"){
+    document.body.innerHTML="<h2 style='padding:30px'>Bạn không có quyền Admin.</h2>";
     return;
   }
 
-  adminUser = data.user;
+  adminUser=data.user;
   initializePage();
 }
 
 function initializePage(){
   for(let i=1;i<=12;i++){
-    const option=document.createElement("option");
-    option.value=i;
-    option.textContent="Lớp "+i;
-    $("classSelect").appendChild(option);
+    $("classSelect").add(new Option("Lớp "+i,String(i)));
   }
 
-  subjects.forEach(subject=>{
-    const option=document.createElement("option");
-    option.value=subject;
-    option.textContent=subject;
-    $("subjectSelect").appendChild(option);
+  subjects.forEach(s=>$("subjectSelect").add(new Option(s,s)));
+
+  $("classSelect").value="10";
+  $("subjectSelect").value="Toán học";
+
+  $("tabs").addEventListener("click",e=>{
+    const button=e.target.closest("[data-type]");
+    if(button)setType(button.dataset.type);
   });
 
-  $("classSelect").addEventListener("change",loadContents);
-  $("subjectSelect").addEventListener("change",loadContents);
-  $("typeSelect").addEventListener("change",loadContents);
-  $("saveButton").addEventListener("click",saveContent);
-  $("cancelButton").addEventListener("click",resetForm);
+  document.querySelectorAll("[data-insert]").forEach(button=>{
+    button.onclick=()=>{
+      const area=$("bodyInput");
+      const value=button.dataset.insert;
+      area.setRangeText(value,area.selectionStart,area.selectionEnd,"end");
+      area.focus();
+      updatePreview();
+    };
+  });
+
+  ["titleInput","bodyInput","descriptionInput","classSelect","subjectSelect"]
+    .forEach(id=>$(id).addEventListener("input",updatePreview));
+
+  $("classSelect").onchange=loadContents;
+  $("subjectSelect").onchange=loadContents;
+
+  $("publishButton").onclick=()=>saveContent(true);
+  $("draftButton").onclick=()=>saveContent(false);
+  $("cancelButton").onclick=resetForm;
+  $("addQuestionButton").onclick=()=>addQuestion();
+
+  const params=new URLSearchParams(location.search);
+  const requested=params.get("type");
+
+  if(typeNames[requested])setType(requested);
 
   loadContents();
 }
 
-async function loadContents(){
-  $("contentList").textContent="Đang tải dữ liệu...";
+function setType(type){
+  currentType=type;
 
-  let query=client
-    .from("ruler_learning_contents")
-    .select("*")
-    .eq("class_number",Number($("classSelect").value))
-    .eq("subject_name",$("subjectSelect").value)
-    .order("created_at",{ascending:false});
+  document.querySelectorAll(".tab").forEach(button=>{
+    button.classList.toggle("active",button.dataset.type===type);
+  });
 
-  if($("typeSelect").value){
-    query=query.eq("content_type",$("typeSelect").value);
-  }
-
-  const {data,error}=await query;
-
-  if(error){
-    $("contentList").textContent="Lỗi tải dữ liệu: "+error.message;
-    return;
-  }
-
-  renderContents(data || []);
+  $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+  loadContents();
 }
 
-function renderContents(items){
-  const list=$("contentList");
-  list.replaceChildren();
+function updatePreview(){
+  $("previewTitle").textContent=$("titleInput").value||"Tiêu đề bài học";
+  $("previewMeta").textContent=$("subjectSelect").value+" · Lớp "+$("classSelect").value;
+  $("previewBody").textContent=$("bodyInput").value||"Nội dung sẽ hiển thị ở đây khi mày nhập.";
+}
 
-  if(!items.length){
-    const empty=document.createElement("div");
-    empty.className="empty";
-    empty.textContent="Chưa có nội dung nào trong lớp và môn học này.";
-    list.appendChild(empty);
-    return;
+function addQuestion(question){
+  if($("questionList").querySelector(".empty")){
+    $("questionList").replaceChildren();
   }
 
-  items.forEach(item=>{
-    const card=document.createElement("article");
-    card.className="content-item";
+  questions.push(question||{
+    type:"mcq",
+    text:"",
+    answers:["","","",""],
+    correct:"A",
+    explanation:""
+  });
 
-    const heading=document.createElement("h3");
-    heading.textContent=item.title;
+  renderQuestions();
+}
 
-    const meta=document.createElement("div");
-    meta.className="meta";
-    meta.textContent="Lớp "+item.class_number+" · "+item.subject_name;
+function renderQuestions(){
+  const root=$("questionList");
+  root.replaceChildren();
 
-    const type=document.createElement("span");
-    type.className="tag";
-    type.textContent=typeNames[item.content_type] || item.content_type;
+  questions.forEach((q,index)=>{
+    const card=document.createElement("div");
+    card.className="question";
 
-    const status=document.createElement("span");
-    status.className="tag";
-    status.textContent=item.is_published?"Đã xuất bản":"Bản nháp";
+    card.innerHTML=`
+      <div class="section-title">
+        <b>Câu hỏi ${index+1}</b>
+        <button class="btn danger" data-remove="${index}">Xóa câu</button>
+      </div>
+      <div class="qgrid">
+        <div class="field">
+          <label>LOẠI CÂU HỎI</label>
+          <select data-qtype="${index}">
+            <option value="mcq">Trắc nghiệm 4 đáp án</option>
+            <option value="truefalse">Đúng / Sai</option>
+            <option value="short">Trả lời ngắn</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>ĐÁP ÁN ĐÚNG</label>
+          <select data-correct="${index}">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+            <option value="D">D</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>NỘI DUNG CÂU HỎI *</label>
+        <textarea data-qtext="${index}" rows="3" placeholder="Nhập câu hỏi..."></textarea>
+      </div>
+      <div data-answers="${index}"></div>
+      <div class="field">
+        <label>ĐÁP ÁN CHUẨN / LỜI GIẢI</label>
+        <textarea data-explain="${index}" rows="2" placeholder="Nhập đáp án hoặc lời giải..."></textarea>
+      </div>
+    `;
 
-    const description=document.createElement("div");
-    description.className="description";
-    description.textContent=item.description || "";
+    root.appendChild(card);
 
-    const actions=document.createElement("div");
-    actions.className="actions";
+    const typeSelect=card.querySelector("[data-qtype]");
+    const correctSelect=card.querySelector("[data-correct]");
+    const answers=card.querySelector("[data-answers]");
 
-    const edit=document.createElement("button");
-    edit.className="secondary";
-    edit.textContent="✏️ Sửa";
-    edit.onclick=()=>editContent(item);
+    typeSelect.value=q.type;
+    correctSelect.value=q.correct;
+    card.querySelector("[data-qtext]").value=q.text;
+    card.querySelector("[data-explain]").value=q.explanation;
 
-    const toggle=document.createElement("button");
-    toggle.className="secondary";
-    toggle.textContent=item.is_published?"Ẩn bài":"Xuất bản";
-    toggle.onclick=()=>togglePublish(item);
+    if(q.type==="mcq"){
+      q.answers.forEach((answer,j)=>{
+        const row=document.createElement("div");
+        row.className="answer-row";
+        row.innerHTML=`<b>${"ABCD"[j]}</b><input data-answer="${index}-${j}" placeholder="Nhập đáp án ${"ABCD"[j]}">`;
+        answers.appendChild(row);
+        row.querySelector("input").value=answer;
+      });
+    }else if(q.type==="truefalse"){
+      correctSelect.innerHTML='<option value="A">Đúng</option><option value="B">Sai</option>';
+      correctSelect.value=q.correct;
+      answers.innerHTML='<p class="muted">A = Đúng, B = Sai.</p>';
+    }else{
+      correctSelect.innerHTML='<option value="A">Sử dụng đáp án chuẩn bên dưới</option>';
+      correctSelect.value="A";
+      answers.innerHTML='<p class="muted">Nhập đáp án chuẩn ở ô bên dưới.</p>';
+    }
+  });
 
-    const remove=document.createElement("button");
-    remove.className="danger";
-    remove.textContent="🗑️ Xóa";
-    remove.onclick=()=>deleteContent(item);
+  root.querySelectorAll("[data-remove]").forEach(button=>{
+    button.onclick=()=>{
+      questions.splice(Number(button.dataset.remove),1);
+      renderQuestions();
+    };
+  });
 
-    card.append(heading,meta,type,status,description,actions);
-    actions.append(edit,toggle,remove);
-    list.appendChild(card);
+  root.querySelectorAll("[data-qtype]").forEach(select=>{
+    select.onchange=()=>{
+      const i=Number(select.dataset.qtype);
+      questions[i].type=select.value;
+      if(select.value==="truefalse")questions[i].correct="A";
+      if(select.value==="short")questions[i].correct="A";
+      renderQuestions();
+    };
+  });
+
+  root.querySelectorAll("[data-qtext]").forEach(input=>{
+    input.oninput=()=>questions[Number(input.dataset.qtext)].text=input.value;
+  });
+
+  root.querySelectorAll("[data-correct]").forEach(select=>{
+    select.onchange=()=>questions[Number(select.dataset.correct)].correct=select.value;
+  });
+
+  root.querySelectorAll("[data-explain]").forEach(input=>{
+    input.oninput=()=>questions[Number(input.dataset.explain)].explanation=input.value;
+  });
+
+  root.querySelectorAll("[data-answer]").forEach(input=>{
+    input.oninput=()=>{
+      const [i,j]=input.dataset.answer.split("-").map(Number);
+      questions[i].answers[j]=input.value;
+    };
   });
 }
 
-async function saveContent(){
+async function saveContent(publish){
   const title=$("titleInput").value.trim();
-  const description=$("descriptionInput").value.trim();
   const body=$("bodyInput").value.trim();
 
-  if(!title || !body){
-    $("formStatus").textContent="Vui lòng nhập tên và nội dung chi tiết.";
+  if(!title||!body){
+    $("formStatus").textContent="Hãy nhập tiêu đề và nội dung chi tiết.";
     return;
   }
 
-  $("saveButton").disabled=true;
-  $("formStatus").textContent="Đang lưu...";
+  for(let i=0;i<questions.length;i++){
+    const q=questions[i];
+
+    if(!q.text.trim()){
+      $("formStatus").textContent="Câu hỏi "+(i+1)+" chưa có nội dung.";
+      return;
+    }
+
+    if(q.type==="mcq"&&q.answers.some(answer=>!answer.trim())){
+      $("formStatus").textContent="Câu hỏi "+(i+1)+" cần đủ 4 đáp án.";
+      return;
+    }
+
+    if(q.type==="short"&&!q.explanation.trim()){
+      $("formStatus").textContent="Hãy nhập đáp án chuẩn cho câu hỏi "+(i+1)+".";
+      return;
+    }
+  }
+
+  $("publishButton").disabled=true;
+  $("draftButton").disabled=true;
+  $("formStatus").textContent="Đang lưu nội dung...";
 
   const payload={
     class_number:Number($("classSelect").value),
     subject_name:$("subjectSelect").value,
-    content_type:$("typeSelect").value || "lesson",
-    title,
-    description,
-    content:{body},
-    is_published:$("publishInput").checked,
+    content_type:currentType,
+    title:title,
+    description:$("descriptionInput").value.trim(),
+    content:{
+      body:body,
+      category:$("categoryInput").value.trim(),
+      image_url:$("imageUrlInput").value.trim(),
+      questions:questions
+    },
+    is_published:publish,
     updated_at:new Date().toISOString()
   };
 
@@ -297,16 +513,109 @@ async function saveContent(){
       .insert(payload);
   }
 
-  $("saveButton").disabled=false;
+  $("publishButton").disabled=false;
+  $("draftButton").disabled=false;
 
   if(result.error){
-    $("formStatus").textContent="Lỗi: "+result.error.message;
+    $("formStatus").textContent="Lỗi lưu nội dung: "+result.error.message;
     return;
   }
 
-  $("formStatus").textContent="Đã lưu nội dung thành công!";
-  resetForm();
+  $("formStatus").textContent=publish
+    ?"Đã đăng nội dung thành công!"
+    :"Đã lưu bản nháp thành công!";
+
+  resetForm(false);
   await loadContents();
+}
+
+function resetForm(clearStatus=true){
+  editingId=null;
+  questions=[];
+
+  ["titleInput","descriptionInput","bodyInput","categoryInput","imageUrlInput"]
+    .forEach(id=>$(id).value="");
+
+  $("questionList").innerHTML='<div class="empty">Chưa có câu hỏi. Bấm “Thêm câu hỏi” để bắt đầu.</div>';
+  $("cancelButton").classList.add("hidden");
+  $("publishButton").textContent="➤ Đăng nội dung";
+  $("draftButton").textContent="▣ Lưu bản nháp";
+
+  if(clearStatus)$("formStatus").textContent="";
+  updatePreview();
+}
+
+async function loadContents(){
+  if(!adminUser)return;
+
+  $("contentList").textContent="Đang tải nội dung...";
+
+  const {data,error}=await client
+    .from("ruler_learning_contents")
+    .select("*")
+    .eq("class_number",Number($("classSelect").value))
+    .eq("subject_name",$("subjectSelect").value)
+    .eq("content_type",currentType)
+    .order("created_at",{ascending:false});
+
+  if(error){
+    $("contentList").textContent="Lỗi tải dữ liệu: "+error.message;
+    return;
+  }
+
+  $("countLabel").textContent=(data||[]).length+" nội dung";
+  renderContents(data||[]);
+}
+
+function renderContents(items){
+  const root=$("contentList");
+  root.replaceChildren();
+
+  if(!items.length){
+    root.innerHTML='<div class="empty">Chưa có nội dung ở lớp và môn này.</div>';
+    return;
+  }
+
+  items.forEach(item=>{
+    const card=document.createElement("div");
+    card.className="list-item";
+
+    const title=document.createElement("h3");
+    title.textContent=item.title;
+
+    const meta=document.createElement("p");
+    meta.className="muted";
+    meta.textContent=
+      "Lớp "+item.class_number+" · "+item.subject_name+
+      " · "+(item.is_published?"Đã xuất bản":"Bản nháp")+
+      " · "+(item.content?.questions?.length||0)+" câu hỏi";
+
+    const description=document.createElement("p");
+    description.className="muted";
+    description.textContent=item.description||"";
+
+    const actions=document.createElement("div");
+    actions.className="actions";
+
+    const edit=document.createElement("button");
+    edit.className="btn soft";
+    edit.textContent="✏️ Sửa";
+    edit.onclick=()=>editContent(item);
+
+    const toggle=document.createElement("button");
+    toggle.className="btn purple";
+    toggle.textContent=item.is_published?"Ẩn bài":"Đăng bài";
+    toggle.onclick=()=>toggleContent(item);
+
+    const remove=document.createElement("button");
+    remove.className="btn danger";
+    remove.textContent="🗑️ Xóa";
+    remove.onclick=()=>deleteContent(item);
+
+    actions.append(edit,toggle,remove);
+    card.append(title,meta,description,actions);
+    root.appendChild(card);
+  });
 }
 
 function editContent(item){
@@ -314,33 +623,26 @@ function editContent(item){
 
   $("classSelect").value=String(item.class_number);
   $("subjectSelect").value=item.subject_name;
-  $("typeSelect").value=item.content_type;
+  setType(item.content_type);
 
-  $("titleInput").value=item.title || "";
-  $("descriptionInput").value=item.description || "";
-  $("bodyInput").value=item.content?.body || "";
-  $("publishInput").checked=item.is_published;
+  $("titleInput").value=item.title||"";
+  $("descriptionInput").value=item.description||"";
+  $("bodyInput").value=item.content?.body||"";
+  $("categoryInput").value=item.content?.category||"";
+  $("imageUrlInput").value=item.content?.image_url||"";
 
-  $("formTitle").textContent="✏️ Chỉnh sửa nội dung";
-  $("saveButton").textContent="Cập nhật nội dung";
-  $("cancelButton").style.display="inline-block";
+  questions=Array.isArray(item.content?.questions)
+    ?JSON.parse(JSON.stringify(item.content.questions))
+    :[];
 
-  window.scrollTo({top:$("editor").offsetTop,behavior:"smooth"});
+  renderQuestions();
+  $("cancelButton").classList.remove("hidden");
+  $("formStatus").textContent="Đang chỉnh sửa nội dung đã chọn.";
+  updatePreview();
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function resetForm(){
-  editingId=null;
-  $("titleInput").value="";
-  $("descriptionInput").value="";
-  $("bodyInput").value="";
-  $("publishInput").checked=false;
-  $("formTitle").textContent="➕ Thêm nội dung mới";
-  $("saveButton").textContent="Lưu nội dung";
-  $("cancelButton").style.display="none";
-  $("formStatus").textContent="";
-}
-
-async function togglePublish(item){
+async function toggleContent(item){
   const {error}=await client
     .from("ruler_learning_contents")
     .update({
@@ -358,7 +660,7 @@ async function togglePublish(item){
 }
 
 async function deleteContent(item){
-  if(!confirm("Mày có chắc muốn xóa nội dung '"+item.title+"' không?"))return;
+  if(!confirm("Mày có chắc muốn xóa nội dung "+item.title+" không?"))return;
 
   const {error}=await client
     .from("ruler_learning_contents")
