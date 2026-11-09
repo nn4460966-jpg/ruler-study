@@ -503,19 +503,6 @@ function addVocabularyWord(wordData={}){
     $("questionList").replaceChildren();
   }
 
-  
-
-  card.querySelector("[data-word]").value=wordData.word||"";
-  card.querySelector("[data-pronunciation]").value=wordData.pronunciation||"";
-  card.querySelector("[data-meaning]").value=wordData.meaning||"";
-  card.querySelector("[data-wordtype]").value=wordData.wordtype||"";
-  card.querySelector("[data-example]").value=wordData.example||"";
-
-  card.querySelector("button").onclick=()=>card.remove();
-
-  $("questionList").appendChild(card);
-}
-
   const card=document.createElement("div");
   card.className="question";
 
@@ -530,6 +517,7 @@ function addVocabularyWord(wordData={}){
         <label>TỪ / CỤM TỪ</label>
         <input data-word placeholder="Ví dụ: Environment">
       </div>
+
       <div class="field">
         <label>PHIÊN ÂM</label>
         <input data-pronunciation placeholder="Ví dụ: /ɪnˈvaɪrənmənt/">
@@ -552,9 +540,18 @@ function addVocabularyWord(wordData={}){
     </div>
   `;
 
+  card.querySelector("[data-word]").value=wordData.word||"";
+  card.querySelector("[data-pronunciation]").value=wordData.pronunciation||"";
+  card.querySelector("[data-meaning]").value=wordData.meaning||"";
+  card.querySelector("[data-wordtype]").value=wordData.wordtype||"";
+  card.querySelector("[data-example]").value=wordData.example||"";
+
   card.querySelector("button").onclick=()=>card.remove();
+
   $("questionList").appendChild(card);
 }
+
+  
 async function saveContent(publish){
   const title=$("titleInput").value.trim();
   const body=$("bodyInput").value.trim();
