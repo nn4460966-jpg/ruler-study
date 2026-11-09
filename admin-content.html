@@ -484,10 +484,57 @@ function renderQuestions(){
     };
   });
 }
-function addVocabularyWord(){
+function addVocabularyWord(wordData={}){
   if($("questionList").querySelector(".empty")){
     $("questionList").replaceChildren();
   }
+
+  const card=document.createElement("div");
+  card.className="question";
+
+  card.innerHTML=`
+    <div class="section-title">
+      <b>📝 Từ vựng mới</b>
+      <button class="btn danger">Xóa</button>
+    </div>
+
+    <div class="qgrid">
+      <div class="field">
+        <label>TỪ / CỤM TỪ</label>
+        <input data-word placeholder="Ví dụ: Environment">
+      </div>
+      <div class="field">
+        <label>PHIÊN ÂM</label>
+        <input data-pronunciation placeholder="Ví dụ: /ɪnˈvaɪrənmənt/">
+      </div>
+    </div>
+
+    <div class="field">
+      <label>NGHĨA TIẾNG VIỆT</label>
+      <input data-meaning placeholder="Môi trường">
+    </div>
+
+    <div class="field">
+      <label>LOẠI TỪ</label>
+      <input data-wordtype placeholder="Danh từ, động từ...">
+    </div>
+
+    <div class="field">
+      <label>VÍ DỤ</label>
+      <textarea data-example rows="2" placeholder="Nhập câu ví dụ..."></textarea>
+    </div>
+  `;
+
+  card.querySelector("[data-word]").value=wordData.word||"";
+  card.querySelector("[data-pronunciation]").value=wordData.pronunciation||"";
+  card.querySelector("[data-meaning]").value=wordData.meaning||"";
+  card.querySelector("[data-wordtype]").value=wordData.wordtype||"";
+  card.querySelector("[data-example]").value=wordData.example||"";
+
+  card.querySelector("button").onclick=()=>card.remove();
+
+  $("questionList").appendChild(card);
+}
 
   const card=document.createElement("div");
   card.className="question";
