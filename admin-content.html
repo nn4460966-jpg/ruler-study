@@ -762,10 +762,20 @@ function renderContents(items){
 
     const meta=document.createElement("p");
     meta.className="muted";
+
+    let countText="";
+
+    if(item.content_type==="vocabulary"){
+      const total=item.content?.vocabulary_words?.length||0;
+      countText=" · "+total+" từ vựng";
+    }else if(item.content?.questions?.length){
+      countText=" · "+item.content.questions.length+" câu hỏi";
+    }
+
     meta.textContent=
       "Lớp "+item.class_number+" · "+item.subject_name+
       " · "+(item.is_published?"Đã xuất bản":"Bản nháp")+
-      " · "+(item.content?.questions?.length||0)+" câu hỏi";
+      countText;
 
     const description=document.createElement("p");
     description.className="muted";
@@ -794,7 +804,6 @@ function renderContents(items){
     root.appendChild(card);
   });
 }
-
 function editContent(item){
   editingId=item.id;
 
