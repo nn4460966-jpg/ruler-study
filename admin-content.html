@@ -480,10 +480,22 @@ async function saveContent(publish){
   const title=$("titleInput").value.trim();
   const body=$("bodyInput").value.trim();
 
-  if(!title||!body){
-    $("formStatus").textContent="Hãy nhập tiêu đề và nội dung chi tiết.";
+  if(!title){
+  $("formStatus").textContent="Hãy nhập tiêu đề nội dung.";
+  return;
+}
+
+if(currentType==="question_bank"){
+  if(questions.length===0){
+    $("formStatus").textContent="Hãy thêm ít nhất một câu hỏi vào ngân hàng.";
     return;
   }
+}else{
+  if(!body){
+    $("formStatus").textContent="Hãy nhập nội dung chi tiết.";
+    return;
+  }
+}
 
   for(let i=0;i<questions.length;i++){
     const q=questions[i];
