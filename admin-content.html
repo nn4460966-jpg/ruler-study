@@ -349,7 +349,14 @@ function setType(type){
     button.classList.toggle("active",button.dataset.type===type);
   });
 
-  $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+  if(type==="vocabulary"){
+    $("addQuestionButton").textContent="＋ Thêm từ vựng";
+    $("editorTitle").textContent="🔤 Tạo danh sách từ vựng mới";
+  }else{
+    $("addQuestionButton").textContent="＋ Thêm câu hỏi";
+    $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+  }
+
   loadContents();
 }
 
