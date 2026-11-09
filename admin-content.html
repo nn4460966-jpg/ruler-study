@@ -601,11 +601,12 @@ if(currentType==="question_bank"){
     title:title,
     description:$("descriptionInput").value.trim(),
     content:{
-      body:body,
-      category:$("categoryInput").value.trim(),
-      image_url:$("imageUrlInput").value.trim(),
-      questions:questions
-    },
+  body:body,
+  category:$("categoryInput").value.trim(),
+  image_url:$("imageUrlInput").value.trim(),
+  questions:questions,
+  vocabulary_words:vocabularyWords
+},
     is_published:publish,
     updated_at:new Date().toISOString()
   };
