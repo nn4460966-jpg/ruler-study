@@ -794,13 +794,32 @@ function editContent(item){
     ?JSON.parse(JSON.stringify(item.content.questions))
     :[];
 
-  renderQuestions();
+  if(item.content_type==="vocabulary"){
+    $("questionList").replaceChildren();
+
+    const words=Array.isArray(item.content?.vocabulary_words)
+      ?item.content.vocabulary_words
+      :[];
+
+    if(words.length){
+      words.forEach(word=>addVocabularyWord(word));
+    }else{
+      $("questionList").innerHTML=
+        '<div class="empty">Danh sách này chưa có từ vựng.</div>';
+    }
+
+    $("addQuestionButton").textContent="＋ Thêm từ vựng";
+    $("editorTitle").textContent="🔤 Chỉnh sửa danh sách từ vựng";
+  }else{
+    renderQuestions();
+    $("addQuestionButton").textContent="＋ Thêm câu hỏi";
+  }
+
   $("cancelButton").classList.remove("hidden");
   $("formStatus").textContent="Đang chỉnh sửa nội dung đã chọn.";
   updatePreview();
   window.scrollTo({top:0,behavior:"smooth"});
 }
-
 async function toggleContent(item){
   const {error}=await client
     .from("ruler_learning_contents")
