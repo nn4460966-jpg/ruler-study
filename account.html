@@ -1165,10 +1165,20 @@ button{cursor:pointer}
             <input id="className" placeholder="Ví dụ: 10A1">
           </div>
 
-          <div class="field full-width">
-            <label>Trường học</label>
-            <input id="schoolName" placeholder="Nhập tên trường">
-          </div>
+         <div class="field full-width">
+  <label>Chọn ảnh đại diện từ thiết bị</label>
+  <input
+    id="avatarFile"
+    type="file"
+    accept="image/png,image/jpeg,image/webp"
+  >
+  <small>Hỗ trợ ảnh PNG, JPG và WEBP.</small>
+</div>
+
+<div class="field full-width">
+  <label>Hoặc nhập đường dẫn ảnh</label>
+  <input id="avatarUrl" placeholder="https://...">
+</div>
 
           <div class="field full-width">
             <label>Đường dẫn ảnh đại diện</label>
