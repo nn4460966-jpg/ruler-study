@@ -541,11 +541,13 @@ async function checkAdmin(){
     return;
   }
 
-  const email = userData.user.email || "Admin";
-  document.getElementById("adminName").textContent = email.split("@")[0];
+ const email = userData.user.email || "Admin";
+document.getElementById("adminName").textContent = email.split("@")[0];
 
-  loading.style.display = "none";
-  document.getElementById("adminArea").style.display = "block";
+await loadAdminAvatar(userData.user.id);
+
+loading.style.display = "none";
+document.getElementById("adminArea").style.display = "block";
 }
 
 async function logoutAdmin(){
