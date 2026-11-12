@@ -1725,10 +1725,12 @@ if(avatarFile){
   document.getElementById("summaryEmail").textContent=user.email||"";
   document.getElementById("summaryBirth").textContent=birthDate||"Chưa cập nhật";
   document.getElementById("summaryClass").textContent=className||"Chưa cập nhật";
+document.getElementById("avatarUrl").value=avatarUrl||"";
+document.getElementById("avatarFile").value="";
 
-  updateAvatar(avatarUrl);
+updateAvatar(avatarUrl);
 
-  message("profileMessage","Đã lưu hồ sơ thành công!");
+message("profileMessage","Đã lưu hồ sơ thành công!");
 }
 
 async function changePassword(){
