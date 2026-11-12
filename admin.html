@@ -532,26 +532,22 @@ document.getElementById("adminAvatarFile").addEventListener("change",async funct
 
     if(profileError)throw profileError;
 
-    let saveResult;
+      const {data:saveResult,error:saveError}=await supabaseClient
+      .from("profiles")
+      .update({
+        avatar_url:avatarUrl
+      })
+      .eq("user_id",user.id)
+      .select("user_id,avatar_url")
+      .maybeSingle();
 
-    if(profile){
-      saveResult=await supabaseClient
-        .from("profiles")
-        .update({avatar_url:avatarUrl})
-        .eq("user_id",user.id);
-    }else{
-      saveResult=await supabaseClient
-        .from("profiles")
-        .insert({
-          id:user.id,
-          user_id:user.id,
-          email:user.email,
-          full_name:user.email?.split("@")[0]||"Admin",
-          avatar_url:avatarUrl
-        });
+    if(saveError){
+      throw new Error("Lỗi lưu ảnh vào hồ sơ: "+saveError.message);
     }
 
-    if(saveResult.error)throw saveResult.error;
+    if(!saveResult){
+      throw new Error("Không tìm thấy hồ sơ Admin để cập nhật ảnh!");
+    }
 
     await loadAdminAvatar(user.id);
 
