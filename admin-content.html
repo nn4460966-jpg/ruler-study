@@ -320,9 +320,18 @@ function initializePage(){
   $("classSelect").onchange=loadContents;
   $("subjectSelect").onchange=loadContents;
 
-  $("publishButton").onclick=()=>saveContent(true);
-  $("draftButton").onclick=()=>saveContent(false);
-  $("cancelButton").onclick=resetForm;
+  $("publishInput").onchange=()=>{
+  $("publishButton").textContent=$("publishInput").checked
+    ?"➤ Đăng nội dung"
+    :"▣ Lưu bản nháp";
+};
+
+$("publishButton").onclick=()=>{
+  saveContent($("publishInput").checked);
+};
+
+$("draftButton").onclick=()=>saveContent(false);
+$("cancelButton").onclick=resetForm;
   $("addQuestionButton").onclick=()=>{
   if(currentType==="vocabulary"){
     addVocabularyWord();
@@ -358,8 +367,9 @@ function setType(type,keepEditing=false){
     ].forEach(id=>$(id).value="");
 
     $("cancelButton").classList.add("hidden");
-    $("publishButton").textContent="➤ Đăng nội dung";
-    $("draftButton").textContent="▣ Lưu bản nháp";
+$("publishInput").checked=false;
+$("publishButton").textContent="▣ Lưu bản nháp";
+$("draftButton").textContent="▣ Lưu bản nháp";
     $("formStatus").textContent="";
   }
 
@@ -810,7 +820,11 @@ function editContent(item){
   $("bodyInput").value=item.content?.body||"";
   $("categoryInput").value=item.content?.category||"";
   $("imageUrlInput").value=item.content?.image_url||"";
+$("publishInput").checked=!!item.is_published;
 
+$("publishButton").textContent=item.is_published
+  ?"➤ Đăng nội dung"
+  :"▣ Lưu bản nháp";
   questions=Array.isArray(item.content?.questions)
     ?JSON.parse(JSON.stringify(item.content.questions))
     :[];
