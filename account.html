@@ -1671,7 +1671,18 @@ async function saveProfile(){
   const birthDate=document.getElementById("birthDate").value||null;
   const className=document.getElementById("className").value.trim();
   const schoolName=document.getElementById("schoolName").value.trim();
-  const avatarUrl=document.getElementById("avatarUrl").value.trim();
+  let avatarUrl=document.getElementById("avatarUrl").value.trim();
+
+const avatarFile=document.getElementById("avatarFile").files[0];
+
+if(avatarFile){
+  try{
+    avatarUrl=await uploadAvatar(avatarFile,user.id);
+  }catch(uploadError){
+    message("profileMessage","Lỗi tải ảnh: "+uploadError.message);
+    return;
+  }
+}
 
   if(!fullName){
     message("profileMessage","Hãy nhập họ và tên!");
