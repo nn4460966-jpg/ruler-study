@@ -252,9 +252,26 @@ display:grid;place-items:center;font-size:25px}
 
   <div class="sidebar-bottom">
     <div class="admin-profile">
-      <div class="avatar">👨🏻‍💼</div>
-      <div><strong id="adminName">Admin</strong><small>Quản trị viên 👑</small></div>
-    </div>
+  <div class="admin-avatar-wrap">
+    <div class="avatar" id="adminAvatar">👨🏻‍💼</div>
+
+    <label for="adminAvatarFile" class="admin-avatar-edit">
+      📷
+    </label>
+
+    <input
+      type="file"
+      id="adminAvatarFile"
+      accept="image/png,image/jpeg,image/webp"
+      hidden
+    >
+  </div>
+
+  <div>
+    <strong id="adminName">Admin</strong>
+    <small>Quản trị viên 👑</small>
+  </div>
+</div>
     <button class="logout" onclick="logoutAdmin()">⇥ Đăng xuất</button>
   </div>
 </aside>
