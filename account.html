@@ -1622,7 +1622,41 @@ function updateAvatar(url){
 document.getElementById("avatarUrl").addEventListener("input",function(){
   updateAvatar(this.value.trim());
 });
+async function uploadAvatar(file,userId){
+  if(!file) return null;
 
+  const allowedTypes=[
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+  ];
+
+  if(!allowedTypes.includes(file.type)){
+    throw new Error("Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP!");
+  }
+
+  if(file.size>5*1024*1024){
+    throw new Error("Ảnh không được lớn hơn 5MB!");
+  }
+
+  const extension=file.name.split(".").pop().toLowerCase();
+  const filePath=userId+"/"+Date.now()+"."+extension;
+
+  const {error}=await supabaseClient.storage
+    .from("avatars")
+    .upload(filePath,file,{
+      cacheControl:"3600",
+      upsert:true
+    });
+
+  if(error) throw error;
+
+  const {data}=supabaseClient.storage
+    .from("avatars")
+    .getPublicUrl(filePath);
+
+  return data.publicUrl;
+}
 async function saveProfile(){
   const {data,error}=await supabaseClient.auth.getUser();
 
