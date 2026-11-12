@@ -342,9 +342,26 @@ function initializePage(){
   loadContents();
 }
 
-function setType(type){
+function setType(type,keepEditing=false){
   currentType=type;
   questions=[];
+
+  if(!keepEditing){
+    editingId=null;
+
+    [
+      "titleInput",
+      "descriptionInput",
+      "bodyInput",
+      "categoryInput",
+      "imageUrlInput"
+    ].forEach(id=>$(id).value="");
+
+    $("cancelButton").classList.add("hidden");
+    $("publishButton").textContent="➤ Đăng nội dung";
+    $("draftButton").textContent="▣ Lưu bản nháp";
+    $("formStatus").textContent="";
+  }
 
   document.querySelectorAll(".tab").forEach(button=>{
     button.classList.toggle("active",button.dataset.type===type);
@@ -352,18 +369,23 @@ function setType(type){
 
   if(type==="vocabulary"){
     $("addQuestionButton").textContent="＋ Thêm từ vựng";
-    $("editorTitle").textContent="🔤 Tạo danh sách từ vựng mới";
+    $("editorTitle").textContent=keepEditing
+      ?"🔤 Chỉnh sửa danh sách từ vựng"
+      :"🔤 Tạo danh sách từ vựng mới";
 
     $("questionList").innerHTML=
       '<div class="empty">Chưa có từ vựng. Bấm “Thêm từ vựng” để bắt đầu.</div>';
   }else{
     $("addQuestionButton").textContent="＋ Thêm câu hỏi";
-    $("editorTitle").textContent="✎ Tạo "+typeNames[type]+" mới";
+    $("editorTitle").textContent=keepEditing
+      ?"✎ Chỉnh sửa "+typeNames[type]
+      :"✎ Tạo "+typeNames[type]+" mới";
 
     $("questionList").innerHTML=
       '<div class="empty">Chưa có câu hỏi. Bấm “Thêm câu hỏi” để bắt đầu.</div>';
   }
 
+  updatePreview();
   loadContents();
 }
 
@@ -781,7 +803,7 @@ function editContent(item){
 
   $("classSelect").value=String(item.class_number);
   $("subjectSelect").value=item.subject_name;
-  setType(item.content_type);
+  setType(item.content_type,true);
 
   $("titleInput").value=item.title||"";
   $("descriptionInput").value=item.description||"";
