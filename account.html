@@ -1622,6 +1622,14 @@ function updateAvatar(url){
 document.getElementById("avatarUrl").addEventListener("input",function(){
   updateAvatar(this.value.trim());
 });
+  document.getElementById("avatarFile").addEventListener("change",function(){
+  const file=this.files[0];
+
+  if(!file)return;
+
+  const previewUrl=URL.createObjectURL(file);
+  updateAvatar(previewUrl);
+});
 async function uploadAvatar(file,userId){
   if(!file) return null;
 
