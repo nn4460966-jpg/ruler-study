@@ -703,7 +703,9 @@ function resetForm(clearStatus=true){
 
   ["titleInput","descriptionInput","bodyInput","categoryInput","imageUrlInput"]
     .forEach(id=>$(id).value="");
-
+$("publishInput").checked=false;
+$("publishButton").textContent="▣ Lưu bản nháp";
+$("draftButton").textContent="▣ Lưu bản nháp";
   if(currentType==="vocabulary"){
     $("questionList").innerHTML=
       '<div class="empty">Chưa có từ vựng. Bấm “Thêm từ vựng” để bắt đầu.</div>';
