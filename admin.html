@@ -456,12 +456,11 @@ async function uploadAdminAvatar(file,userId){
 
   const extension=file.name.split(".").pop().toLowerCase();
   const filePath=userId+"/admin-"+Date.now()+"."+extension;
-
   const {error}=await supabaseClient.storage
     .from("avatars")
     .upload(filePath,file,{
       cacheControl:"3600",
-      upsert:true
+      upsert:false
     });
 
   if(error)throw error;
