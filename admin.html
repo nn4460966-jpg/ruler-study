@@ -499,7 +499,72 @@ async function loadAdminAvatar(userId){
     avatar.appendChild(img);
   }
 }
-async function checkAdmin(){
+document.getElementById("adminAvatarFile").addEventListener("change",async function(){
+  const file=this.files[0];
+  if(!file)return;
+
+  const avatar=document.getElementById("adminAvatar");
+
+  try{
+    const {data:userData,error:userError}=
+      await supabaseClient.auth.getUser();
+
+    if(userError||!userData.user){
+      throw new Error("Không xác định được tài khoản Admin!");
+    }
+
+    const user=userData.user;
+
+    const previewUrl=URL.createObjectURL(file);
+
+    avatar.innerHTML="";
+    const preview=document.createElement("img");
+    preview.src=previewUrl;
+    avatar.appendChild(preview);
+
+    const avatarUrl=await uploadAdminAvatar(file,user.id);
+
+    const {data:profile,error:profileError}=await supabaseClient
+      .from("profiles")
+      .select("user_id")
+      .eq("user_id",user.id)
+      .maybeSingle();
+
+    if(profileError)throw profileError;
+
+    let saveResult;
+
+    if(profile){
+      saveResult=await supabaseClient
+        .from("profiles")
+        .update({avatar_url:avatarUrl})
+        .eq("user_id",user.id);
+    }else{
+      saveResult=await supabaseClient
+        .from("profiles")
+        .insert({
+          id:user.id,
+          user_id:user.id,
+          email:user.email,
+          full_name:user.email?.split("@")[0]||"Admin",
+          avatar_url:avatarUrl
+        });
+    }
+
+    if(saveResult.error)throw saveResult.error;
+
+    await loadAdminAvatar(user.id);
+
+    alert("Đã cập nhật ảnh đại diện Admin thành công!");
+
+  }catch(error){
+    alert("Không thể cập nhật ảnh: "+error.message);
+    await loadAdminAvatar((await supabaseClient.auth.getUser()).data.user.id);
+  }
+
+  this.value="";
+});
+  async function checkAdmin(){
   const loading = document.getElementById("loading");
 
   const {data:sessionData,error:sessionError} =
