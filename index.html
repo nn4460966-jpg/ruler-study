@@ -2,11 +2,9 @@
 <html lang="vi">
 <head>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Trang chủ | RULER STUDY</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -17,22 +15,14 @@
   --text:#172554;
   --muted:#64748b;
 }
-
-* {
-  box-sizing:border-box;
-}
-
+* { box-sizing:border-box; }
 body {
   margin:0;
   font-family:'Be Vietnam Pro',sans-serif;
   color:var(--text);
   background:linear-gradient(135deg,#edf3ff,#e7eaff);
 }
-
-.app {
-  min-height:100vh;
-}
-
+.app { min-height:100vh; }
 .sidebar {
   width:265px;
   background:linear-gradient(180deg,#10275a,#19366f);
@@ -44,34 +34,11 @@ body {
   flex-direction:column;
   z-index:10;
 }
-
-.brand {
-  text-align:center;
-  padding:5px 0 35px;
-}
-
-.brand-icon {
-  font-size:48px;
-  margin-bottom:8px;
-}
-
-.brand h2 {
-  margin:0;
-  font-size:25px;
-  font-weight:800;
-}
-
-.brand p {
-  margin:7px 0 0;
-  font-size:12px;
-}
-
-.nav {
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
+.brand { text-align:center; padding:5px 0 35px; }
+.brand-icon { font-size:48px; margin-bottom:8px; }
+.brand h2 { margin:0; font-size:25px; font-weight:800; }
+.brand p { margin:7px 0 0; font-size:12px; }
+.nav { display:flex; flex-direction:column; gap:10px; }
 .nav a {
   color:white;
   text-decoration:none;
@@ -84,75 +51,50 @@ body {
   font-weight:600;
   transition:.2s;
 }
-
-.nav a:hover,
-.nav a.active {
+.nav a:hover,.nav a.active {
   background:linear-gradient(100deg,#3975e9,#3156a8);
   box-shadow:0 6px 18px #071b493d;
 }
-
-.nav-icon {
-  width:27px;
-  text-align:center;
-  font-size:21px;
-}
+.nav-icon { width:27px; text-align:center; font-size:21px; }
 .logout-btn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 15px 17px;
-  border: 1px solid #ffffff35;
-  border-radius: 15px;
-  background: #ffffff12;
-  color: white;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: left;
-  cursor: pointer;
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:15px 17px;
+  border:1px solid #ffffff35;
+  border-radius:15px;
+  background:#ffffff12;
+  color:white;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  text-align:left;
+  cursor:pointer;
 }
-
-.logout-btn:hover {
-  background: #dc2626;
-}
-.sidebar-bottom {
-  margin-top:auto;
-  text-align:center;
-}
-
-.sidebar-art {
-  font-size:70px;
-  padding:20px 0;
-}
-
-.main {
-  margin-left:265px;
-  padding:25px 30px 40px;
-}
+.logout-btn:hover { background:#dc2626; }
+.sidebar-bottom { margin-top:auto; text-align:center; }
+.sidebar-art { font-size:70px; padding:20px 0; }
+.main { margin-left:265px; padding:25px 30px 40px; }
 .back-btn {
-  padding: 10px 16px;
-  border: none;
-  border-radius: 12px;
-  background: white;
-  color: #263b70;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 3px 10px #00000010;
+  padding:10px 16px;
+  border:none;
+  border-radius:12px;
+  background:white;
+  color:#263b70;
+  font-family:inherit;
+  font-size:14px;
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:0 3px 10px #00000010;
 }
-
-.back-btn:hover {
-  background: #e8edff;
-}
+.back-btn:hover { background:#e8edff; }
 .topbar {
   display:flex;
   align-items:center;
   justify-content:space-between;
   margin-bottom:22px;
 }
-
 .search {
   width:min(590px,75%);
   height:49px;
@@ -165,7 +107,6 @@ body {
   gap:12px;
   color:var(--muted);
 }
-
 .top-avatar {
   width:43px;
   height:43px;
@@ -175,7 +116,6 @@ body {
   place-items:center;
   font-size:23px;
 }
-
 .hero {
   min-height:245px;
   border-radius:22px;
@@ -189,23 +129,14 @@ body {
   margin-bottom:25px;
   overflow:hidden;
 }
-
-.hero h1 {
-  font-size:30px;
-  margin:0 0 14px;
-}
-
+.hero h1 { font-size:30px; margin:0 0 14px; }
 .hero p {
   max-width:570px;
   line-height:1.8;
   font-size:14px;
   color:#263c70;
 }
-
-.hero-icon {
-  font-size:105px;
-}
-
+.hero-icon { font-size:105px; }
 .hero-button {
   display:inline-block;
   margin-top:13px;
@@ -217,28 +148,10 @@ body {
   font-weight:800;
   font-size:14px;
 }
-
-.section-heading {
-  margin:28px 0 18px;
-}
-
-.section-heading h2 {
-  font-size:22px;
-  margin:0 0 7px;
-}
-
-.section-heading p {
-  color:var(--muted);
-  font-size:13px;
-  margin:0;
-}
-
-.stats {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-
+.section-heading { margin:28px 0 18px; }
+.section-heading h2 { font-size:22px; margin:0 0 7px; }
+.section-heading p { color:var(--muted); font-size:13px; margin:0; }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
 .card {
   background:#ffffffd9;
   border:1px solid #dce4ff;
@@ -246,13 +159,7 @@ body {
   box-shadow:0 5px 17px #263c7510;
   padding:22px;
 }
-
-.stat {
-  display:flex;
-  align-items:center;
-  gap:15px;
-}
-
+.stat { display:flex; align-items:center; gap:15px; }
 .stat-icon {
   width:55px;
   height:55px;
@@ -262,23 +169,9 @@ body {
   font-size:27px;
   background:#e5efff;
 }
-
-.stat strong {
-  font-size:19px;
-  display:block;
-}
-
-.stat span {
-  color:var(--muted);
-  font-size:12px;
-}
-
-.features {
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:17px;
-}
-
+.stat strong { font-size:19px; display:block; }
+.stat span { color:var(--muted); font-size:12px; }
+.features { display:grid; grid-template-columns:repeat(3,1fr); gap:17px; }
 .feature {
   background:#ffffffd9;
   border:1px solid #dce4ff;
@@ -289,13 +182,11 @@ body {
   box-shadow:0 5px 17px #263c7510;
   transition:.2s;
 }
-
 .feature:hover {
   transform:translateY(-5px);
   box-shadow:0 10px 25px #2563eb18;
   border-color:#93c5fd;
 }
-
 .feature-icon {
   width:55px;
   height:55px;
@@ -306,19 +197,13 @@ body {
   font-size:28px;
   margin-bottom:17px;
 }
-
-.feature h3 {
-  font-size:16px;
-  margin:0 0 10px;
-}
-
+.feature h3 { font-size:16px; margin:0 0 10px; }
 .feature p {
   color:var(--muted);
   line-height:1.7;
   font-size:12px;
   min-height:42px;
 }
-
 .feature span {
   display:inline-block;
   color:var(--blue);
@@ -326,7 +211,6 @@ body {
   font-size:13px;
   margin-top:10px;
 }
-
 .motto {
   margin-top:25px;
   border-radius:20px;
@@ -334,93 +218,181 @@ body {
   text-align:center;
   background:linear-gradient(110deg,#dceaff,#eeeaff);
 }
-
-.motto h2 {
-  color:#3156a8;
-  font-size:20px;
-}
-
-.motto p {
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.7;
-}
-
-footer {
-  text-align:center;
-  padding:25px;
-  color:var(--muted);
-  font-size:12px;
-}
+.motto h2 { color:#3156a8; font-size:20px; }
+.motto p { color:var(--muted); font-size:13px; line-height:1.7; }
+footer { text-align:center; padding:25px; color:var(--muted); font-size:12px; }
 
 @media(max-width:1050px) {
-  .features {
-    grid-template-columns:repeat(2,1fr);
-  }
+  .features { grid-template-columns:repeat(2,1fr); }
 }
-
 @media(max-width:760px) {
-  .sidebar {
-    width:75px;
-    padding:15px 8px;
-  }
-
-  .brand h2,
-  .brand p,
-  .nav-text,
-  .sidebar-art {
-    display:none;
-  }
-
-  .brand-icon {
-    font-size:35px;
-  }
-
-  .nav a {
-    justify-content:center;
-    padding:15px 5px;
-  }
-
-  .main {
-    margin-left:75px;
-    padding:15px;
-  }
-
-  .hero {
-    padding:23px;
-  }
-
-  .hero-icon {
-    font-size:65px;
-  }
-
-  .stats {
-    grid-template-columns:1fr;
-  }
+  .sidebar { width:75px; padding:15px 8px; }
+  .brand h2,.brand p,.nav-text,.sidebar-art { display:none; }
+  .brand-icon { font-size:35px; }
+  .nav a { justify-content:center; padding:15px 5px; }
+  .main { margin-left:75px; padding:15px; }
+  .hero { padding:23px; }
+  .hero-icon { font-size:65px; }
+  .stats { grid-template-columns:1fr; }
+}
+@media(max-width:520px) {
+  .features { grid-template-columns:1fr; }
+  .hero-icon { display:none; }
+  .hero h1 { font-size:23px; }
 }
 
-@media(max-width:520px) {
-  .features {
-    grid-template-columns:1fr;
-  }
-
-  .hero-icon {
-    display:none;
-  }
-
-  .hero h1 {
-    font-size:23px;
-  }
+/* RULER STUDY 3D COMMAND ENVIRONMENT */
+:root {
+  --navy:#020b18;
+  --blue:#00d9ff;
+  --purple:#287bff;
+  --text:#e8faff;
+  --muted:#9bbccc;
+}
+html,body {
+  min-height:100%;
+  background:#020916 !important;
+  color:var(--text) !important;
+  overflow-x:hidden;
+}
+body { font-family:'Be Vietnam Pro',sans-serif; }
+#ruler3d-scene {
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:radial-gradient(ellipse at 50% 42%,#073b5c 0%,#03172b 42%,#010711 100%);
+}
+#ruler3d-canvas { width:100%; height:100%; display:block; }
+#ruler3d-vignette {
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at center,transparent 35%,#010711aa 100%),
+    linear-gradient(180deg,#02091644,transparent 35%,#02091688);
+}
+.app { position:relative; z-index:1; min-height:100vh; }
+.sidebar {
+  width:238px;
+  padding:22px 13px;
+  background:linear-gradient(180deg,#03182bef,#041326ef);
+  border-right:1px solid #00d9ff66;
+  box-shadow:8px 0 35px #00cfff1c;
+  backdrop-filter:blur(18px);
+  color:#eafaff;
+}
+.brand { padding:8px 0 26px; }
+.brand-icon { font-size:39px; filter:drop-shadow(0 0 13px #00d9ff); }
+.brand h2 {
+  color:#70efff;
+  font-size:21px;
+  letter-spacing:1.4px;
+  text-shadow:0 0 15px #00cfff88;
+}
+.brand p { color:#91b9cd; }
+.nav { gap:8px; }
+.nav a,.logout-btn {
+  color:#c9eaf5;
+  border:1px solid transparent;
+  border-radius:10px;
+  background:linear-gradient(110deg,#06243b99,#061a2c88);
+  transition:all .22s ease;
+}
+.nav a { padding:13px 12px; }
+.nav a:hover,.nav a.active {
+  color:white;
+  border-color:#00d9ff99;
+  background:linear-gradient(100deg,#007d9d66,#0754a866);
+  box-shadow:0 0 18px #00cfff33,inset 0 0 15px #00cfff12;
+}
+.nav-icon { color:#5beaff; text-shadow:0 0 10px #00d9ff; }
+.logout-btn { width:100%; color:#d8f8ff; border-color:#00d9ff55; }
+.logout-btn:hover { background:#8d1f35; }
+.sidebar-art { filter:drop-shadow(0 0 15px #00cfff); opacity:.8; }
+.main { margin-left:238px; padding:20px 25px 35px; min-width:0; }
+.topbar { gap:15px; }
+.search {
+  background:#041b2dcc;
+  color:#c9f4ff;
+  border:1px solid #00cfff66;
+  box-shadow:0 0 20px #00cfff18;
+  backdrop-filter:blur(15px);
+}
+#authButtons a,#authButtons button {
+  border:1px solid #00d9ff88 !important;
+  border-radius:10px !important;
+  background:#06243be8 !important;
+  color:#eaffff !important;
+  box-shadow:0 0 14px #00cfff22;
+  text-decoration:none;
+}
+.top-avatar { border:1px solid #00d9ff; box-shadow:0 0 15px #00cfff77; }
+.hero,.card,.feature,.motto {
+  color:#e9faff !important;
+  border:1px solid #00cfff66 !important;
+  background:linear-gradient(145deg,#06243bd9,#031326e8) !important;
+  box-shadow:0 0 25px #00cfff19,inset 0 0 22px #00cfff0c !important;
+  backdrop-filter:blur(17px);
+}
+.hero {
+  min-height:215px;
+  border-radius:16px;
+  position:relative;
+  background:
+    radial-gradient(circle at 82% 50%,#007d9d55,transparent 28%),
+    linear-gradient(110deg,#06233bef,#073858d9,#06162bef) !important;
+}
+.hero h1,.section-heading h2,.motto h2 {
+  color:#eafaff !important;
+  text-shadow:0 0 15px #00cfff55;
+}
+.hero p,.section-heading p,.feature p,.stat span,.motto p,footer {
+  color:#a5c8d8 !important;
+}
+.hero-icon { color:#5beaff; filter:drop-shadow(0 0 22px #00cfff); }
+.hero-button {
+  background:linear-gradient(100deg,#007eaa,#0868c9) !important;
+  color:white !important;
+  border:1px solid #69edff;
+  box-shadow:0 0 18px #00cfff55;
+}
+.card,.feature { border-radius:14px !important; }
+.feature:hover {
+  transform:translateY(-5px);
+  border-color:#6af0ff !important;
+  box-shadow:0 0 28px #00cfff44 !important;
+}
+.stat-icon,.feature-icon {
+  color:#66efff;
+  background:linear-gradient(145deg,#06486a,#06223c);
+  border:1px solid #00d9ff77;
+  box-shadow:0 0 14px #00cfff22;
+}
+.feature h3,.stat strong { color:#effcff !important; }
+.feature span { color:#60eaff !important; }
+.motto { text-align:center; }
+footer { color:#85aebe !important; }
+#authButtons { gap:9px !important; }
+@media(max-width:760px) {
+  .sidebar { width:70px; padding:12px 7px; }
+  .main { margin-left:70px; padding:12px; }
+  .brand h2,.brand p,.nav-text,.sidebar-art { display:none; }
+  .brand-icon { font-size:30px; }
+  .nav a { justify-content:center; padding:13px 4px; }
 }
 </style>
 </head>
 
 <body>
 
+<div id="ruler3d-scene" aria-hidden="true">
+  <canvas id="ruler3d-canvas"></canvas>
+  <div id="ruler3d-vignette"></div>
+</div>
+
 <div class="app">
-
 <aside class="sidebar">
-
   <div class="brand">
     <div class="brand-icon">📚⭐</div>
     <h2>RULER STUDY</h2>
@@ -428,204 +400,145 @@ footer {
   </div>
 
   <nav class="nav">
-
     <a href="index.html" class="active">
       <span class="nav-icon">⌂</span>
       <span class="nav-text">Trang chủ</span>
     </a>
-
     <a href="subjects.html">
       <span class="nav-icon">📖</span>
       <span class="nav-text">Bài học</span>
     </a>
-
-   
-
     <a href="practice.html">
       <span class="nav-icon">✍️</span>
       <span class="nav-text">Ôn luyện</span>
     </a>
-
     <a href="account.html">
       <span class="nav-icon">🔤</span>
       <span class="nav-text">Từ vựng</span>
     </a>
-
     <a href="account.html">
       <span class="nav-icon">👤</span>
       <span class="nav-text">Hồ sơ cá nhân</span>
     </a>
-
     <a href="progress.html">
-  <span class="nav-icon">📊</span>
-  <span class="nav-text">Tiến độ & thành tích</span>
-</a>
-
+      <span class="nav-icon">📊</span>
+      <span class="nav-text">Tiến độ & thành tích</span>
+    </a>
   </nav>
 
   <div class="sidebar-bottom">
-  <div class="sidebar-art">🎓📚</div>
-
-  <button class="logout-btn" onclick="logoutUser()">
-    <span class="nav-icon">⇥</span>
-    <span class="nav-text">Đăng xuất</span>
-  </button>
-</div>
-
+    <div class="sidebar-art">🎓📚</div>
+    <button class="logout-btn" onclick="logoutUser()">
+      <span class="nav-icon">⇥</span>
+      <span class="nav-text">Đăng xuất</span>
+    </button>
+  </div>
 </aside>
 
 <main class="main">
-
 <header class="topbar">
   <div class="search">
     🔍
     <span>Chào mừng đến với không gian học tập!</span>
   </div>
 
- <div id="authButtons" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-  <a href="login.html" style="
-    padding:12px 20px;
-    border:1px solid #3568e8;
-    border-radius:12px;
-    color:#3568e8;
-    background:white;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:700;
-  ">Đăng nhập</a>
-
-  <a href="register.html" style="
-    padding:12px 20px;
-    border-radius:12px;
-    color:white;
-    background:linear-gradient(100deg,#3568e8,#8175ee);
-    text-decoration:none;
-    font-size:13px;
-    font-weight:700;
-    box-shadow:0 4px 12px #3568e830;
-  ">Đăng ký</a>
-</div>
+  <div id="authButtons" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <a href="login.html" style="padding:12px 20px;border:1px solid #3568e8;border-radius:12px;color:#3568e8;background:white;text-decoration:none;font-size:13px;font-weight:700;">Đăng nhập</a>
+    <a href="register.html" style="padding:12px 20px;border-radius:12px;color:white;background:linear-gradient(100deg,#3568e8,#8175ee);text-decoration:none;font-size:13px;font-weight:700;box-shadow:0 4px 12px #3568e830;">Đăng ký</a>
+  </div>
 </header>
-  <section class="hero">
 
-    <div>
-      <h1>Chào mừng đến với RULER STUDY! 👋</h1>
-
-      <p>
-        Không gian học tập trực tuyến giúp bạn quản lý việc học,
-        khám phá bài học, luyện tập kiến thức và theo dõi
-        hành trình tiến bộ của mình mỗi ngày.
-      </p>
-
-      <a href="subjects.html" class="hero-button">
-        Khám phá bài học →
-      </a>
-    </div>
-
-    <div class="hero-icon">🎓</div>
-
-  </section>
-
-  <section>
-
-    <div class="section-heading">
-      <h2>📊 Tổng quan học tập</h2>
-      <p>Các thông tin tổng quan về hành trình học tập của bạn.</p>
-    </div>
-
-    <div class="stats">
-
-      <div class="card stat">
-        <div class="stat-icon">📚</div>
-        <div>
-          <strong>RULER</strong>
-          <span>Không gian học tập</span>
-        </div>
-      </div>
-
-      <div class="card stat">
-        <div class="stat-icon">🎯</div>
-        <div>
-          <strong>Mỗi ngày</strong>
-          <span>Một bước tiến bộ</span>
-        </div>
-      </div>
-
-      <div class="card stat">
-        <div class="stat-icon">⭐</div>
-        <div>
-          <strong>Khám phá</strong>
-          <span>Tri thức mới</span>
-        </div>
-      </div>
-
-    </div>
-
-  </section>
-
-  <section>
-
-    <div class="section-heading">
-      <h2>✨ Không gian học tập</h2>
-      <p>Chọn một chức năng để bắt đầu hành trình của bạn.</p>
-    </div>
-
-    <div class="features">
-
-      <a href="subjects.html" class="feature">
-        <div class="feature-icon">📖</div>
-        <h3>Bài học</h3>
-        <p>Khám phá các môn học và nội dung học tập.</p>
-        <span>Khám phá ngay →</span>
-      </a>
-
-      <a href="practice.html" class="feature">
-        <div class="feature-icon">✍️</div>
-        <h3>Ôn luyện</h3>
-        <p>Luyện tập kiến thức thông qua các bài tập.</p>
-        <span>Bắt đầu ôn luyện →</span>
-      </a>
-
-      <a href="account.html" class="feature">
-        <div class="feature-icon">🔤</div>
-        <h3>Từ vựng</h3>
-        <p>Không gian học và ôn tập từ vựng.</p>
-        <span>Khám phá ngay →</span>
-      </a>
-
-      <a href="account.html" class="feature">
-        <div class="feature-icon">👤</div>
-        <h3>Hồ sơ cá nhân</h3>
-        <p>Quản lý thông tin và hồ sơ học sinh.</p>
-        <span>Mở hồ sơ →</span>
-      </a>
-
-      <a href="progress.html" class="feature">
-  <div class="feature-icon">📊🏆</div>
-  <h3>Tiến độ & thành tích</h3>
-  <p>Theo dõi quá trình học tập và khám phá những thành tích đã đạt được.</p>
-  <span>Xem ngay →</span>
-</a>
-
-    </div>
-
-  </section>
-
-  <section class="motto">
-    <h2>Học tập thông minh – Tiến bộ mỗi ngày ✨</h2>
+<section class="hero">
+  <div>
+    <h1>Chào mừng đến với RULER STUDY! 👋</h1>
     <p>
-      RULER STUDY đồng hành cùng bạn trên hành trình
-      xây dựng thói quen học tập tốt và chinh phục tri thức.
+      Không gian học tập trực tuyến giúp bạn quản lý việc học,
+      khám phá bài học, luyện tập kiến thức và theo dõi
+      hành trình tiến bộ của mình mỗi ngày.
     </p>
-  </section>
+    <a href="subjects.html" class="hero-button">Khám phá bài học →</a>
+  </div>
+  <div class="hero-icon">🎓</div>
+</section>
 
-  <footer>
-    © 2026 RULER STUDY. All rights reserved.
-  </footer>
+<section>
+  <div class="section-heading">
+    <h2>📊 Tổng quan học tập</h2>
+    <p>Các thông tin tổng quan về hành trình học tập của bạn.</p>
+  </div>
 
+  <div class="stats">
+    <div class="card stat">
+      <div class="stat-icon">📚</div>
+      <div><strong>RULER</strong><span>Không gian học tập</span></div>
+    </div>
+    <div class="card stat">
+      <div class="stat-icon">🎯</div>
+      <div><strong>Mỗi ngày</strong><span>Một bước tiến bộ</span></div>
+    </div>
+    <div class="card stat">
+      <div class="stat-icon">⭐</div>
+      <div><strong>Khám phá</strong><span>Tri thức mới</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-heading">
+    <h2>✨ Không gian học tập</h2>
+    <p>Chọn một chức năng để bắt đầu hành trình của bạn.</p>
+  </div>
+
+  <div class="features">
+    <a href="subjects.html" class="feature">
+      <div class="feature-icon">📖</div>
+      <h3>Bài học</h3>
+      <p>Khám phá các môn học và nội dung học tập.</p>
+      <span>Khám phá ngay →</span>
+    </a>
+
+    <a href="practice.html" class="feature">
+      <div class="feature-icon">✍️</div>
+      <h3>Ôn luyện</h3>
+      <p>Luyện tập kiến thức thông qua các bài tập.</p>
+      <span>Bắt đầu ôn luyện →</span>
+    </a>
+
+    <a href="account.html" class="feature">
+      <div class="feature-icon">🔤</div>
+      <h3>Từ vựng</h3>
+      <p>Không gian học và ôn tập từ vựng.</p>
+      <span>Khám phá ngay →</span>
+    </a>
+
+    <a href="account.html" class="feature">
+      <div class="feature-icon">👤</div>
+      <h3>Hồ sơ cá nhân</h3>
+      <p>Quản lý thông tin và hồ sơ học sinh.</p>
+      <span>Mở hồ sơ →</span>
+    </a>
+
+    <a href="progress.html" class="feature">
+      <div class="feature-icon">📊🏆</div>
+      <h3>Tiến độ & thành tích</h3>
+      <p>Theo dõi quá trình học tập và khám phá những thành tích đã đạt được.</p>
+      <span>Xem ngay →</span>
+    </a>
+  </div>
+</section>
+
+<section class="motto">
+  <h2>Học tập thông minh – Tiến bộ mỗi ngày ✨</h2>
+  <p>
+    RULER STUDY đồng hành cùng bạn trên hành trình
+    xây dựng thói quen học tập tốt và chinh phục tri thức.
+  </p>
+</section>
+
+<footer>© 2026 RULER STUDY. All rights reserved.</footer>
 </main>
-
 </div>
+
 <script>
 const homeSupabase = window.supabase.createClient(
   "https://svhwozfwuexgiwrdripm.supabase.co",
@@ -634,9 +547,7 @@ const homeSupabase = window.supabase.createClient(
 
 async function checkHomeLogin(){
   const {data,error}=await homeSupabase.auth.getSession();
-
   const authButtons=document.getElementById("authButtons");
-
   if(!authButtons)return;
 
   if(error || !data.session){
@@ -648,7 +559,6 @@ async function checkHomeLogin(){
   }
 
   const user=data.session.user;
-
   const {data:roleData,error:roleError}=await homeSupabase
     .from("user_roles")
     .select("role")
@@ -676,52 +586,23 @@ async function checkHomeLogin(){
   }
 
   const avatarUrl=profile?.avatar_url||"";
-
   authButtons.innerHTML=`
-    <a href="account.html" style="
-      display:flex;
-      align-items:center;
-      gap:9px;
-      padding:7px 12px;
-      border-radius:12px;
-      background:white;
-      border:1px solid #dce5ff;
-      color:#2454bc;
-      text-decoration:none;
-      font-weight:700;
-      font-size:13px;
-    ">
-      <span id="homeAvatarFallback" style="
-        width:38px;
-        height:38px;
-        border-radius:50%;
-        background:#e7edff;
-        display:grid;
-        place-items:center;
-        font-size:20px;
-        overflow:hidden;
-      ">👤</span>
+    <a href="account.html" style="display:flex;align-items:center;gap:9px;padding:7px 12px;border-radius:12px;background:white;border:1px solid #dce5ff;color:#2454bc;text-decoration:none;font-weight:700;font-size:13px;">
+      <span id="homeAvatarFallback" style="width:38px;height:38px;border-radius:50%;background:#e7edff;display:grid;place-items:center;font-size:20px;overflow:hidden;">👤</span>
       <span>${profile?.full_name||"Hồ sơ cá nhân"}</span>
     </a>
-
     <button onclick="logoutUser()">Đăng xuất</button>
   `;
 
   const avatarBox=document.getElementById("homeAvatarFallback");
-
   if(avatarUrl && avatarUrl.startsWith("https://")){
     const img=document.createElement("img");
-
     img.src=avatarUrl;
     img.alt="Ảnh đại diện";
     img.style.width="100%";
     img.style.height="100%";
     img.style.objectFit="cover";
-
-    img.onerror=()=>{
-      avatarBox.textContent="👤";
-    };
-
+    img.onerror=()=>{ avatarBox.textContent="👤"; };
     avatarBox.textContent="";
     avatarBox.appendChild(img);
   }
@@ -729,22 +610,16 @@ async function checkHomeLogin(){
 
 async function logoutUser(){
   await homeSupabase.rpc("record_student_logout");
-
-  const {error}=await homeSupabase.auth.signOut({
-    scope:"local"
-  });
-
+  const {error}=await homeSupabase.auth.signOut({scope:"local"});
   if(error){
     alert("Đăng xuất thất bại: "+error.message);
     return;
   }
-
   await checkHomeLogin();
 }
 
 async function startStudentHeartbeat() {
   const { data: { session } } = await homeSupabase.auth.getSession();
-
   if (!session) return;
 
   const { data: roleData } = await homeSupabase
@@ -756,7 +631,6 @@ async function startStudentHeartbeat() {
   if (roleData?.role === "admin") return;
 
   await homeSupabase.rpc("record_student_heartbeat");
-
   setInterval(async () => {
     if (!document.hidden) {
       await homeSupabase.rpc("record_student_heartbeat");
@@ -767,5 +641,219 @@ async function startStudentHeartbeat() {
 checkHomeLogin();
 startStudentHeartbeat();
 </script>
+
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
+
+const canvas = document.getElementById('ruler3d-canvas');
+if (canvas) {
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x031426, 0.025);
+  const camera = new THREE.PerspectiveCamera(52, window.innerWidth/window.innerHeight, 0.1, 300);
+  camera.position.set(0, 7, 23);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.055;
+  controls.enablePan = true;
+  controls.minDistance = 9;
+  controls.maxDistance = 38;
+  controls.minPolarAngle = 0.22;
+  controls.maxPolarAngle = Math.PI * 0.82;
+  controls.target.set(0, 3.4, 0);
+
+  scene.add(new THREE.AmbientLight(0x70cfff, 1.25));
+  const cyanLight = new THREE.PointLight(0x00cfff, 85, 70);
+  cyanLight.position.set(0, 9, 1);
+  scene.add(cyanLight);
+
+  const blueLight = new THREE.PointLight(0x176bff, 65, 60);
+  blueLight.position.set(-12, 5, -8);
+  scene.add(blueLight);
+
+  const rimLight = new THREE.PointLight(0x00ffd5, 45, 55);
+  rimLight.position.set(12, 4, 8);
+  scene.add(rimLight);
+
+  const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(180,180),
+    new THREE.MeshStandardMaterial({color:0x031323,metalness:.75,roughness:.38})
+  );
+  floor.rotation.x = -Math.PI/2;
+  floor.position.y = -0.15;
+  scene.add(floor);
+
+  const grid = new THREE.GridHelper(180,90,0x00cfff,0x075078);
+  grid.position.y = -0.12;
+  grid.material.transparent = true;
+  grid.material.opacity = .28;
+  scene.add(grid);
+
+  const wallMat = new THREE.MeshStandardMaterial({color:0x061b2d,metalness:.65,roughness:.42});
+  const backWall = new THREE.Mesh(new THREE.PlaneGeometry(100,32),wallMat);
+  backWall.position.set(0,15,-30);
+  scene.add(backWall);
+
+  for(let i=0;i<13;i++){
+    const pillar = new THREE.Mesh(
+      new THREE.BoxGeometry(.18,15,.35),
+      new THREE.MeshBasicMaterial({color:0x00bde8,transparent:true,opacity:.48})
+    );
+    pillar.position.set(-24+i*4,7.4,-29.6);
+    scene.add(pillar);
+  }
+
+  const archMat = new THREE.MeshBasicMaterial({color:0x00dfff,transparent:true,opacity:.42});
+  for(let i=0;i<3;i++){
+    const arch = new THREE.Mesh(new THREE.TorusGeometry(11+i*2,.045,8,120),archMat);
+    arch.position.set(0,5,-10-i*2);
+    arch.rotation.x=Math.PI/2;
+    scene.add(arch);
+  }
+
+  const globeGroup = new THREE.Group();
+  globeGroup.position.set(0,5.2,-1);
+  scene.add(globeGroup);
+
+  const globe = new THREE.Mesh(
+    new THREE.SphereGeometry(3.25,64,48),
+    new THREE.MeshPhongMaterial({
+      color:0x0878a5,
+      emissive:0x003b65,
+      emissiveIntensity:.8,
+      transparent:true,
+      opacity:.42,
+      shininess:90
+    })
+  );
+  globeGroup.add(globe);
+
+  const wire = new THREE.Mesh(
+    new THREE.SphereGeometry(3.29,32,24),
+    new THREE.MeshBasicMaterial({color:0x27eaff,wireframe:true,transparent:true,opacity:.48})
+  );
+  globeGroup.add(wire);
+
+  const inner = new THREE.Mesh(
+    new THREE.SphereGeometry(2.85,24,18),
+    new THREE.MeshBasicMaterial({color:0x00bfff,wireframe:true,transparent:true,opacity:.12})
+  );
+  globeGroup.add(inner);
+
+  for(let i=0;i<3;i++){
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(4.1+i*.48,.025,8,140),
+      new THREE.MeshBasicMaterial({color:i===1?0x178aff:0x00eaff,transparent:true,opacity:.8})
+    );
+    ring.rotation.x=Math.PI/2+i*.35;
+    ring.rotation.y=i*.55;
+    globeGroup.add(ring);
+  }
+
+  const base = new THREE.Mesh(
+    new THREE.CylinderGeometry(4.2,4.8,.32,64),
+    new THREE.MeshStandardMaterial({color:0x06314b,metalness:.9,roughness:.22,emissive:0x003d5c})
+  );
+  base.position.set(0,1.35,0);
+  globeGroup.add(base);
+
+  const baseRing = new THREE.Mesh(
+    new THREE.TorusGeometry(4.35,.09,12,100),
+    new THREE.MeshBasicMaterial({color:0x00eaff})
+  );
+  baseRing.rotation.x=Math.PI/2;
+  baseRing.position.y=1.52;
+  globeGroup.add(baseRing);
+
+  const panelMat = new THREE.MeshBasicMaterial({color:0x00cfff,wireframe:true,transparent:true,opacity:.55});
+  const floatingPanels = [];
+  const panelPositions = [[-9,6,-3],[9,6,-3],[-13,4,-12],[13,4,-12],[0,10,-18]];
+
+  panelPositions.forEach((p,i)=>{
+    const group = new THREE.Group();
+    group.position.set(...p);
+
+    const frame = new THREE.Mesh(
+      new THREE.BoxGeometry(i===4?7:5.5,i===4?3.2:3.6,.12),
+      panelMat
+    );
+    group.add(frame);
+
+    const innerFrame = new THREE.Mesh(
+      new THREE.PlaneGeometry(i===4?6.6:5.1,i===4?2.8:3.2),
+      new THREE.MeshBasicMaterial({color:0x063b58,transparent:true,opacity:.32,side:THREE.DoubleSide})
+    );
+    innerFrame.position.z=.08;
+    group.add(innerFrame);
+
+    for(let n=0;n<5;n++){
+      const bar = new THREE.Mesh(
+        new THREE.BoxGeometry(.12,.22+Math.random()*.9,.08),
+        new THREE.MeshBasicMaterial({color:n%2?0x168bff:0x00eaff,transparent:true,opacity:.85})
+      );
+      bar.position.set(-1.7+n*.8,-.85+Math.random()*.3,.16);
+      group.add(bar);
+    }
+
+    scene.add(group);
+    group.userData.floatOffset=i*.8;
+    floatingPanels.push(group);
+  });
+
+  const particleCount=850;
+  const positions=new Float32Array(particleCount*3);
+  for(let i=0;i<particleCount;i++){
+    positions[i*3]=(Math.random()-.5)*65;
+    positions[i*3+1]=Math.random()*22;
+    positions[i*3+2]=(Math.random()-.5)*65;
+  }
+
+  const particleGeo=new THREE.BufferGeometry();
+  particleGeo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+
+  const particles=new THREE.Points(
+    particleGeo,
+    new THREE.PointsMaterial({color:0x55eaff,size:.055,transparent:true,opacity:.65})
+  );
+  scene.add(particles);
+
+  const clock = new THREE.Clock();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const t=clock.getElapsedTime();
+
+    globeGroup.rotation.y += .0018;
+    globeGroup.rotation.x = Math.sin(t*.18)*.045;
+
+    floatingPanels.forEach((p)=>{
+      p.position.y += Math.sin(t+p.userData.floatOffset)*.0018;
+    });
+
+    particles.rotation.y=t*.003;
+    controls.update();
+    renderer.render(scene,camera);
+  }
+
+  animate();
+
+  function resize(){
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  }
+
+  window.addEventListener('resize',resize);
+}
+</script>
+
 </body>
 </html>
