@@ -207,37 +207,70 @@ async function selectClass(classNumber){
 }
 
 async function loadStudentClass(){
-  const {data,error}=await client.auth.getUser();
 
-  if(error||!data.user){
-    location.href="login.html";
+  // Hiển thị giao diện ngay cả khi chưa đăng nhập
+  renderClasses();
+  renderSubjects();
+
+  const {data,error}=await client.auth.getSession();
+
+  if(error || !data.session){
+    currentUser=null;
     return;
   }
 
-  currentUser=data.user;
+  currentUser=data.session.user;
 
+  // Kiểm tra quyền quản trị
+  const {data:roleData}=await client
+    .from("user_roles")
+    .select("role")
+    .eq("user_id",currentUser.id)
+    .maybeSingle();
+
+  if(roleData?.role==="admin"){
+    location.replace("admin.html");
+    return;
+  }
+
+  // Lấy lớp học đã lưu
   const metadataClass=parseInt(
     currentUser.user_metadata?.class_name,
     10
   );
 
-  if(metadataClass>=1&&metadataClass<=12){
+  if(metadataClass>=1 && metadataClass<=12){
     currentClass=metadataClass;
   }else{
     currentClass=1;
-    alert("Tài khoản chưa có lớp học. Hãy chọn lớp của bạn.");
   }
 
   renderClasses();
   renderSubjects();
+
+  // Cập nhật trạng thái hoạt động
+  await client.rpc("record_student_heartbeat");
+
+  setInterval(async()=>{
+    if(!document.hidden){
+      await client.rpc("record_student_heartbeat");
+    }
+  },30000);
 }
 
 async function logoutUser(){
-  const {error}=await client.auth.signOut({scope:"local"});
+
+  await client.rpc("record_student_logout");
+
+  const {error}=await client.auth.signOut({
+    scope:"local"
+  });
+
   if(error){
     alert("Đăng xuất thất bại: "+error.message);
     return;
   }
+
   location.href="account.html";
 }
 
