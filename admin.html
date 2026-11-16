@@ -3,141 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RULER STUDY - Admin Dashboard</title>
+<title>RULER STUDY — ADMIN V17</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02070d;color:#c9f8ff;font-family:Arial,sans-serif}
-button{font:inherit;cursor:pointer}
-#loading{position:fixed;inset:0;z-index:30;display:grid;place-items:center;background:#02070d;color:#7defff;font:13px Consolas,monospace;letter-spacing:2px;text-align:center;padding:20px}
-#adminArea{display:none;position:fixed;inset:0;background:#02070d}
-#scene{position:absolute;inset:0}
-#scene canvas{display:block}
-#hud{position:absolute;inset:0;pointer-events:none;color:#8deeff;font:11px Consolas,monospace;letter-spacing:1.2px;text-shadow:0 0 9px #18bcd8}
-#hud .brand{position:absolute;top:18px;left:20px;border:1px solid #42d7e677;background:#03151dcc;padding:12px 16px;box-shadow:0 0 22px #0bb8d522}
-#hud .brand b{font-size:15px;letter-spacing:2px}
-#hud .brand small{display:block;margin-top:5px;color:#64aebd}
-#hud .system{position:absolute;left:20px;bottom:20px;color:#65b5c7;font-size:10px}
-#hud .help{position:absolute;right:20px;bottom:20px;border:1px solid #42d7e677;background:#03151dcc;padding:11px 14px}
-#hud .account{position:absolute;right:20px;top:18px;pointer-events:auto;display:flex;align-items:center;gap:10px;background:#03151ddd;border:1px solid #42d7e677;padding:8px 10px;color:#c8faff}
-.admin-avatar-wrap{position:relative;width:38px;height:38px;flex:none}
-.avatar{width:38px;height:38px;border-radius:50%;background:#123b50;display:grid;place-items:center;overflow:hidden;font-size:22px}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02070d;color:#bdefff;font-family:Consolas,monospace}
+#scene{position:fixed;inset:0}
+canvas{display:block}
+#authLoading{position:fixed;inset:0;z-index:100;background:#02070d;display:grid;place-items:center;color:#6de5ee;letter-spacing:3px;font-size:12px}
+#hud{position:fixed;inset:0;pointer-events:none;color:#82eaff;text-shadow:0 0 8px #13a9d4;font-size:10px;letter-spacing:1.5px}
+.brand{position:absolute;top:20px;left:22px;padding:12px 15px;border:1px solid #38b8d455;background:#03131bcc}
+.brand b{font-size:14px;letter-spacing:2px}
+.brand small{display:block;margin-top:5px;color:#478ca0}
+.leftmenu{position:absolute;left:20px;top:24%;padding:12px;width:155px;border:1px solid #40c9db55;background:#03151dcc;line-height:2.5}
+.leftmenu strong{display:block;color:#4ed7e8;font-size:10px}
+.metrics{position:absolute;bottom:17px;left:20px;color:#4b91a6}
+.help{position:absolute;right:20px;bottom:17px;padding:10px;border:1px solid #3eb9d766;background:#041722d9}
+.account{position:absolute;right:20px;top:20px;display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #38b8d455;background:#03131bcc;pointer-events:auto}
+.avatar{width:38px;height:38px;border-radius:50%;overflow:hidden;background:#0a3447;display:grid;place-items:center;font-size:20px}
 .avatar img{width:100%;height:100%;object-fit:cover}
-.admin-avatar-edit{position:absolute;right:-5px;bottom:-4px;width:18px;height:18px;border-radius:50%;background:#d7fbff;color:#06313d;display:grid;place-items:center;font-size:11px;cursor:pointer}
-.logout{pointer-events:auto;background:#082d3a;border:1px solid #48d8e8;color:#caffff;padding:9px 12px;font-size:11px;letter-spacing:1px}
-.leftmenu{position:absolute;top:18%;left:18px;width:155px;padding:12px;border:1px solid #40c9db55;background:#03151dcc;line-height:2;color:#8acbd9}
-.leftmenu strong{display:block;color:#4ed7e8;font-size:10px;margin-bottom:5px}
-.leftmenu small{color:#4d94a5;font-size:9px}
-.focus{position:fixed;z-index:12;inset:0;display:none;align-items:center;justify-content:center;background:#0009;backdrop-filter:blur(5px);padding:18px}
-.focus.show{display:flex}
-.focusbox{width:min(650px,92vw);position:relative;border:1px solid #69dce9;background:linear-gradient(135deg,#0b4859f2,#031b2bf5);box-shadow:0 0 45px #12b8d788,inset 0 0 45px #39d8e522;padding:30px;animation:enlarge .3s ease-out}
-.focusbox:before{content:"";position:absolute;inset:8px;border:1px solid #6be8ed55;pointer-events:none}
-@keyframes enlarge{from{transform:scale(.88);opacity:0}to{transform:scale(1);opacity:1}}
-.focusbox .eyebrow{color:#53d7e5;letter-spacing:3px;font:10px Consolas,monospace}
-.focusbox h1{font:clamp(23px,4vw,36px) Consolas,monospace;letter-spacing:2px;color:#bdfcff;margin:15px 0}
-.focusbox p{color:#a0d5df;line-height:1.7}
-.focusbox .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
-.action,.close{pointer-events:auto;cursor:pointer;background:#062c3a;border:1px solid #6de5ee;color:#bffaff;padding:11px 17px;letter-spacing:1px}
-.close{position:absolute;right:16px;top:14px;background:transparent;padding:6px 10px}
-.module-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:22px}
-.module-grid div{padding:12px 8px;border:1px solid #42c5d355;background:#06314099;text-align:center;color:#b5faff;font-size:12px}
-.module-grid b{display:block;font-size:20px;margin-bottom:7px}
-.hidden-input{display:none}
+.account small{display:block;margin-top:4px;color:#68aebd;font-size:9px}
+.account button,.action,.close{cursor:pointer;background:#062c3a;border:1px solid #6de5ee;color:#bffaff;padding:9px 12px;font-family:Consolas,monospace}
+#focus{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:#0009;backdrop-filter:blur(5px);z-index:10}
+#focus.show{display:flex}
+.focusbox{width:min(650px,88vw);min-height:330px;position:relative;padding:35px;border:1px solid #69dce9;background:linear-gradient(135deg,#0b4859ee,#031b2bee);box-shadow:0 0 35px #12b8d7aa}
+.focusbox h1{font-size:clamp(23px,4vw,38px);font-weight:400;letter-spacing:3px;color:#bdfcff}
+.focusbox p{color:#83cbd8;line-height:1.8}
+.close{position:absolute;right:15px;top:15px}
+.bars{display:flex;align-items:end;gap:12px;height:90px;margin:25px 0}
+.bars i{flex:1;background:linear-gradient(#8efcff,#0c8ba9);box-shadow:0 0 12px #32d9e8;height:var(--h)}
+#intro{position:fixed;inset:0;z-index:90;background:#02070d;display:grid;place-items:center;color:#69dce7;letter-spacing:4px;font-size:11px;transition:opacity .8s}
+#intro.hide{opacity:0;pointer-events:none}
+.loader{width:60px;height:60px;border:1px solid #55dce8;border-radius:50%;margin:0 auto 20px;box-shadow:0 0 24px #0ccce866;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 @media(max-width:700px){
-#hud .brand{top:10px;left:10px;padding:9px}
-#hud .brand b{font-size:11px}
-#hud .account{top:10px;right:10px;padding:5px;gap:6px}
-#hud .account .admin-name{display:none}
-#hud .help{right:10px;bottom:10px;font-size:9px;padding:8px}
-#hud .system{left:10px;bottom:10px;font-size:8px;max-width:48%}
-.leftmenu{top:auto;bottom:58px;left:10px;width:128px;font-size:9px;padding:8px}
-.focusbox{padding:24px 18px}
-.module-grid{grid-template-columns:repeat(2,1fr)}
+ .brand{top:10px;left:10px}
+ .account{top:75px;right:10px}
+ .account span{display:none}
+ .leftmenu{top:auto;bottom:65px;left:10px;width:130px}
+ .help{right:10px;bottom:10px;font-size:8px}
+ .metrics{left:10px;bottom:10px;font-size:8px}
 }
 </style>
 </head>
+
 <body>
 
-<div id="loading">◈ &nbsp; ĐANG XÁC THỰC QUYỀN QUẢN TRỊ RULER STUDY...</div>
+<div id="authLoading">ĐANG XÁC THỰC QUYỀN QUẢN TRỊ...</div>
 
-<div id="adminArea">
-  <div id="scene"></div>
-  <div id="hud">
-    <div class="brand">
-      <b>◈ RULER STUDY</b>
-      <small>ADMIN COMMAND DECK // V17 ORBIT INTERFACE</small>
-    </div>
+<div id="intro">
+ <div style="text-align:center">
+  <div class="loader"></div>
+  INITIALIZING RULER COMMAND DECK
+ </div>
+</div>
 
-    <div class="leftmenu">
-      <strong>▸ TRUNG TÂM ĐIỀU HÀNH</strong>
-      01 &nbsp; TỔNG QUAN<br>
-      02 &nbsp; HỌC TẬP<br>
-      03 &nbsp; TỪ VỰNG<br>
-      04 &nbsp; IELTS<br>
-      05 &nbsp; HỌC SINH<br>
-      06 &nbsp; HỆ THỐNG<br>
-      <small>CHỌN HOLOGRAM ĐỂ MỞ</small>
-    </div>
+<div id="scene"></div>
 
-    <div class="account">
-      <div class="admin-avatar-wrap">
-        <div class="avatar" id="adminAvatar">👨🏻‍💼</div>
-        <label for="adminAvatarFile" class="admin-avatar-edit">📷</label>
-        <input class="hidden-input" type="file" id="adminAvatarFile" accept="image/png,image/jpeg,image/webp">
-      </div>
-      <span class="admin-name">
-        <b id="adminName">Admin</b>
-        <small style="display:block;color:#79b9c7;margin-top:3px">QUẢN TRỊ VIÊN</small>
-      </span>
-      <button class="logout" onclick="logoutAdmin()">⇥ THOÁT</button>
-    </div>
+<div id="hud">
+ <div class="brand">
+  <b>◈ RULER STUDY</b>
+  <small>ADMIN COMMAND DECK // V17 ORBIT INTERFACE</small>
+ </div>
 
-    <div class="system">● SYSTEM ONLINE &nbsp; | &nbsp; RULER STUDY ADMIN &nbsp; | &nbsp; 3D HOLOGRAM ARRAY</div>
-    <div class="help">KÉO CHUỘT: XOAY 360° &nbsp; / &nbsp; LĂN: PHÓNG TO &nbsp; / &nbsp; CHỌN: MỞ MỤC</div>
+ <div class="leftmenu">
+  <strong>▸ TRUNG TÂM ĐIỀU HÀNH</strong>
+  01 &nbsp; TỔNG QUAN<br>
+  02 &nbsp; HỌC SINH<br>
+  03 &nbsp; HỌC TẬP<br>
+  04 &nbsp; TỪ VỰNG<br>
+  05 &nbsp; IELTS<br>
+  <small>CHỌN HOLOGRAM ĐỂ MỞ</small>
+ </div>
+
+ <div class="account">
+  <div class="avatar" id="adminAvatar">👨🏻‍💼</div>
+  <span><b id="adminName">Admin</b><small>QUẢN TRỊ VIÊN</small></span>
+  <label for="avatarFile" style="cursor:pointer">📷</label>
+  <input id="avatarFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+  <button onclick="logoutAdmin()">THOÁT</button>
+ </div>
+
+ <div class="metrics">● SYSTEM ONLINE　|　RULER STUDY ADMIN　|　3D HOLOGRAM ARRAY</div>
+ <div class="help">DRAG: ORBIT　/　SCROLL: ZOOM　/　CLICK: SELECT</div>
+</div>
+
+<div id="focus">
+ <div class="focusbox">
+  <button class="close" id="close">× CLOSE</button>
+  <div style="color:#53d7e5;letter-spacing:3px">HOLOGRAPHIC MODULE / SELECTED</div>
+  <h1 id="moduleTitle">RULER STUDY</h1>
+  <p id="moduleDesc">ADMIN COMMAND INTERFACE</p>
+  <div class="bars">
+   <i style="--h:35%"></i><i style="--h:72%"></i>
+   <i style="--h:55%"></i><i style="--h:92%"></i>
+   <i style="--h:64%"></i><i style="--h:82%"></i>
+   <i style="--h:46%"></i><i style="--h:70%"></i>
   </div>
-
-  <div class="focus" id="focus">
-    <div class="focusbox">
-      <button class="close" id="closeFocus">×</button>
-      <div class="eyebrow">RULER STUDY // ADMIN MODULE SELECTED</div>
-      <h1 id="ftitle">TỔNG QUAN</h1>
-      <p id="fdesc">Trung tâm điều hành hệ thống học tập.</p>
-      <div class="module-grid" id="moduleInfo">
-        <div><b>◈</b>HỆ THỐNG</div>
-        <div><b>✓</b>PHÂN QUYỀN</div>
-        <div><b>5</b>VỆ TINH</div>
-        <div><b>360°</b>ĐIỀU HƯỚNG</div>
-      </div>
-      <div class="actions">
-        <button class="action" id="openModule">MỞ KHU VỰC ↗</button>
-        <button class="action" id="cancelModule">QUAY LẠI 3D</button>
-      </div>
-    </div>
-  </div>
+  <button class="action" id="openModule">OPEN MODULE ↗</button>
+ </div>
 </div>
 
 <script type="importmap">
 {
-  "imports":{
-    "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-  }
+ "imports":{
+  "three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+ }
 }
 </script>
 
 <script type="module">
-import * as THREE from 'three';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import * as THREE from "three";
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-const root=document.querySelector('#scene');
+/* ================= SCENE ================= */
+
+const root=document.querySelector("#scene");
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x02070d);
 scene.fog=new THREE.FogExp2(0x02070d,.018);
 
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
-camera.position.set(0,12,29);
+camera.position.set(0,13,27);
 
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false});
+const renderer=new THREE.WebGLRenderer({antialias:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));
 renderer.setSize(innerWidth,innerHeight);
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
@@ -149,614 +141,735 @@ controls.enableDamping=true;
 controls.dampingFactor=.055;
 controls.rotateSpeed=.72;
 controls.enablePan=false;
-controls.minDistance=12;
+controls.minDistance=10;
 controls.maxDistance=38;
-controls.minPolarAngle=Math.PI*.08;
-controls.maxPolarAngle=Math.PI*.92;
-controls.target.set(0,2.1,0);
-controls.autoRotate=true;
-controls.autoRotateSpeed=.28;
+controls.minPolarAngle=.08;
+controls.maxPolarAngle=Math.PI-.08;
+controls.target.set(0,2,0);
+controls.autoRotate=false;
+controls.autoRotateSpeed=.35;
 
-scene.add(new THREE.AmbientLight(0x6b9eaa,.75));
+/* ================= LIGHT ================= */
 
-const lamp=new THREE.PointLight(0x21d5e8,125,65);
-lamp.position.set(0,8,5);
+scene.add(new THREE.AmbientLight(0x5d9aaa,.7));
+
+const lamp=new THREE.PointLight(0x21d5e8,130,65);
+lamp.position.set(0,8,4);
 scene.add(lamp);
 
-const lamp2=new THREE.PointLight(0x147dff,75,55);
+const lamp2=new THREE.PointLight(0x147dff,80,50);
 lamp2.position.set(-10,4,-8);
 scene.add(lamp2);
 
-const grid=new THREE.GridHelper(80,64,0x17627b,0x12394c);
+/* ================= FLOOR ================= */
+
+const grid=new THREE.GridHelper(90,72,0x17627b,0x12394c);
 grid.position.y=-1.5;
 grid.material.transparent=true;
-grid.material.opacity=.4;
+grid.material.opacity=.48;
 scene.add(grid);
 
-for(let i=0;i<20;i++){
-  const a=i*Math.PI*2/20;
-  const h=THREE.MathUtils.randFloat(2,7);
-  const bar=new THREE.Mesh(
-    new THREE.BoxGeometry(.055,h,.055),
-    new THREE.MeshBasicMaterial({color:0x1a9ab5,transparent:true,opacity:.28})
-  );
-  bar.position.set(Math.cos(a)*13,-1.5+h/2,Math.sin(a)*13);
-  scene.add(bar);
+/* ================= BACKGROUND STRUCTURES ================= */
+
+const buildings=new THREE.Group();
+scene.add(buildings);
+
+function addTower(x,z,height,width=1,depth=1,levels=7){
+ const group=new THREE.Group();
+ group.position.set(x,-1.45,z);
+
+ const corners=[
+  [-width/2,-depth/2],
+  [width/2,-depth/2],
+  [width/2,depth/2],
+  [-width/2,depth/2]
+ ];
+
+ const pts=[];
+
+ for(const [cx,cz] of corners){
+  pts.push(cx,0,cz,cx,height,cz);
+ }
+
+ for(let k=0;k<=levels;k++){
+  const y=height*k/levels;
+  for(let i=0;i<4;i++){
+   const a=corners[i],b=corners[(i+1)%4];
+   pts.push(a[0],y,a[1],b[0],y,b[1]);
+  }
+ }
+
+ for(let k=0;k<levels;k++){
+  const y0=height*k/levels;
+  const y1=height*(k+1)/levels;
+  for(let i=0;i<4;i++){
+   const a=corners[i],b=corners[(i+1)%4];
+   if((k+i)%2===0)
+    pts.push(a[0],y0,a[1],b[0],y1,b[1]);
+   else
+    pts.push(b[0],y0,b[1],a[0],y1,a[1]);
+  }
+ }
+
+ const geo=new THREE.BufferGeometry();
+ geo.setAttribute("position",new THREE.Float32BufferAttribute(pts,3));
+
+ const lines=new THREE.LineSegments(
+  geo,
+  new THREE.LineBasicMaterial({
+   color:0x39b9d2,
+   transparent:true,
+   opacity:.48,
+   depthWrite:false
+  })
+ );
+
+ group.add(lines);
+ buildings.add(group);
 }
 
-// ĐỊA CẦU 3D
+[
+ [-12,-8,8], [12,-8,8],
+ [-11,4,6], [11,4,6],
+ [-7,-14,5], [7,-14,5],
+ [-14,-1,5], [14,-1,5],
+ [-2,-13,11], [2,-14,10]
+].forEach(p=>addTower(...p));
+
+/* ================= AMBIENT SCREENS ================= */
+
+function createScreenTexture(index){
+ const canvas=document.createElement("canvas");
+ canvas.width=512;
+ canvas.height=320;
+ const ctx=canvas.getContext("2d");
+
+ ctx.fillStyle="rgba(2,25,43,.65)";
+ ctx.fillRect(0,0,512,320);
+
+ ctx.strokeStyle="rgba(65,205,226,.8)";
+ ctx.lineWidth=2;
+ ctx.strokeRect(7,7,498,306);
+
+ ctx.fillStyle="#56c8dc";
+ ctx.font="15px Consolas";
+ ctx.fillText("SYSTEM DATA / NODE "+String(index+1).padStart(2,"0"),22,32);
+
+ for(let i=0;i<5;i++){
+  ctx.fillStyle="#3fc5dc";
+  ctx.fillRect(24,65+i*43,180+Math.sin(index+i)*80,5);
+  ctx.fillStyle="#a6edf1";
+  ctx.fillRect(24,78+i*43,70+i*12,3);
+ }
+
+ ctx.strokeStyle="rgba(88,215,226,.8)";
+ ctx.beginPath();
+ ctx.moveTo(340,235);
+ ctx.lineTo(375,185);
+ ctx.lineTo(405,205);
+ ctx.lineTo(438,130);
+ ctx.lineTo(484,150);
+ ctx.stroke();
+
+ return new THREE.CanvasTexture(canvas);
+}
+
+const ambientScreens=[];
+const screenPositions=[
+ [-9,5,-4],[9,5,-4],
+ [-13,3,2],[13,3,2],
+ [-6,7,-10],[6,7,-10],
+ [-9,2,7],[9,2,7]
+];
+
+screenPositions.forEach((p,i)=>{
+ const material=new THREE.MeshBasicMaterial({
+  map:createScreenTexture(i),
+  transparent:true,
+  opacity:.66,
+  side:THREE.DoubleSide,
+  depthWrite:false
+ });
+
+ const panel=new THREE.Mesh(
+  new THREE.PlaneGeometry(2.6,1.6),
+  material
+ );
+
+ panel.position.set(...p);
+ panel.lookAt(0,4,0);
+ buildings.add(panel);
+ ambientScreens.push(panel);
+});
+
+/* ================= EARTH GLOBE ================= */
+
 const globe=new THREE.Group();
+globe.position.set(0,3,0);
 scene.add(globe);
-globe.position.y=2.0;
 
 const earth=new THREE.Mesh(
-  new THREE.SphereGeometry(3.25,48,36),
-  new THREE.MeshStandardMaterial({
-    color:0x07506a,
-    metalness:.55,
-    roughness:.38,
-    emissive:0x032d4a,
-    emissiveIntensity:.8
-  })
+ new THREE.SphereGeometry(3.2,48,48),
+ new THREE.MeshStandardMaterial({
+  color:0x123d66,
+  metalness:.55,
+  roughness:.35,
+  emissive:0x061a3a,
+  emissiveIntensity:.6
+ })
 );
 globe.add(earth);
 
 const wire=new THREE.Mesh(
-  new THREE.SphereGeometry(3.29,24,18),
-  new THREE.MeshBasicMaterial({
-    color:0x38d9ed,
-    wireframe:true,
-    transparent:true,
-    opacity:.23
-  })
+ new THREE.SphereGeometry(3.23,32,24),
+ new THREE.MeshBasicMaterial({
+  color:0x9aeaff,
+  wireframe:true,
+  transparent:true,
+  opacity:.55
+ })
 );
 globe.add(wire);
 
-for(let i=0;i<5;i++){
-  const ring=new THREE.Mesh(
-    new THREE.TorusGeometry(3.35+i*.045,.012,5,120),
-    new THREE.MeshBasicMaterial({
-      color:i%2?0x287fdf:0x38e6ef,
-      transparent:true,
-      opacity:.5
-    })
-  );
-  ring.rotation.x=Math.PI/2+(i-2)*.12;
-  globe.add(ring);
-}
+const atmosphere=new THREE.Mesh(
+ new THREE.SphereGeometry(3.34,40,40),
+ new THREE.MeshBasicMaterial({
+  color:0x168aff,
+  transparent:true,
+  opacity:.055,
+  side:THREE.BackSide
+ })
+);
+globe.add(atmosphere);
 
-// BỆ ĐỠ LỤC GIÁC
-const base=new THREE.Group();
-base.position.y=-.5;
-scene.add(base);
+/* ================= HEXAGON PLATFORM ================= */
 
-const hex=new THREE.Mesh(
-  new THREE.CylinderGeometry(4.1,4.65,.62,6),
+const platform=new THREE.Group();
+platform.position.y=-1.35;
+scene.add(platform);
+
+const base=new THREE.Mesh(
+ new THREE.CylinderGeometry(5.1,5.7,.55,6,1),
+ new THREE.MeshStandardMaterial({
+  color:0x08718c,
+  metalness:.7,
+  roughness:.28,
+  emissive:0x034d68,
+  emissiveIntensity:.6
+ })
+);
+base.rotation.y=Math.PI/6;
+platform.add(base);
+
+const topBase=new THREE.Mesh(
+ new THREE.CylinderGeometry(4.5,4.8,.12,6),
+ new THREE.MeshBasicMaterial({color:0x69e9ef})
+);
+topBase.rotation.y=Math.PI/6;
+topBase.position.y=.32;
+platform.add(topBase);
+
+/* ================= FIVE SATELLITES ================= */
+
+const satelliteOrbit=new THREE.Group();
+satelliteOrbit.position.copy(globe.position);
+scene.add(satelliteOrbit);
+
+const orbitRing=new THREE.Mesh(
+ new THREE.TorusGeometry(4.25,.009,5,180),
+ new THREE.MeshBasicMaterial({
+  color:0x43cde8,
+  transparent:true,
+  opacity:.4
+ })
+);
+orbitRing.rotation.x=Math.PI/2;
+satelliteOrbit.add(orbitRing);
+
+function createSatellite(){
+ const sat=new THREE.Group();
+
+ const body=new THREE.Mesh(
+  new THREE.BoxGeometry(.23,.18,.35),
   new THREE.MeshStandardMaterial({
-    color:0x087c91,
-    metalness:.8,
-    roughness:.22,
-    emissive:0x07576d,
-    emissiveIntensity:.9
+   color:0x9ceaff,
+   metalness:.8,
+   roughness:.2,
+   emissive:0x167dff,
+   emissiveIntensity:.5
   })
-);
-hex.rotation.y=Math.PI/6;
-base.add(hex);
+ );
+ sat.add(body);
 
-const rim=new THREE.Mesh(
-  new THREE.CylinderGeometry(3.65,3.8,.1,6),
-  new THREE.MeshBasicMaterial({
-    color:0x35e7ef,
-    transparent:true,
-    opacity:.8
-  })
-);
-rim.position.y=.36;
-rim.rotation.y=Math.PI/6;
-base.add(rim);
-
-// ĐÚNG 5 VỆ TINH
-const satOrbit=new THREE.Group();
-satOrbit.position.copy(globe.position);
-satOrbit.rotation.x=.42;
-scene.add(satOrbit);
-
-function makeSatellite(scale=1){
-  const g=new THREE.Group();
-
-  const metal=new THREE.MeshStandardMaterial({
-    color:0xb9cbd2,
-    metalness:.85,
-    roughness:.22
-  });
-
-  const gold=new THREE.MeshStandardMaterial({
-    color:0xd0a85d,
-    metalness:.8,
-    roughness:.25
-  });
-
-  const body=new THREE.Mesh(
-    new THREE.BoxGeometry(.34*scale,.3*scale,.42*scale),
-    metal
+ for(const side of [-1,1]){
+  const wing=new THREE.Mesh(
+   new THREE.BoxGeometry(.75,.025,.25),
+   new THREE.MeshBasicMaterial({
+    color:0x197cc4,
+    wireframe:true
+   })
   );
-  g.add(body);
+  wing.position.x=side*.48;
+  sat.add(wing);
 
-  const band=new THREE.Mesh(
-    new THREE.BoxGeometry(.38*scale,.08*scale,.45*scale),
-    gold
+  const light=new THREE.Mesh(
+   new THREE.SphereGeometry(.045,10,10),
+   new THREE.MeshBasicMaterial({color:0x71faff})
   );
-  g.add(band);
+  light.position.x=side*.83;
+  sat.add(light);
+ }
 
-  for(const side of [-1,1]){
-    const panel=new THREE.Mesh(
-      new THREE.BoxGeometry(.72*scale,.035*scale,.48*scale),
-      new THREE.MeshStandardMaterial({
-        color:0x1477b8,
-        metalness:.5,
-        roughness:.3,
-        emissive:0x063b78,
-        emissiveIntensity:.7
-      })
-    );
-
-    panel.position.x=side*.58*scale;
-    g.add(panel);
-
-    for(let k=0;k<4;k++){
-      const line=new THREE.Mesh(
-        new THREE.BoxGeometry(.012*scale,.04*scale,.48*scale),
-        new THREE.MeshBasicMaterial({color:0x65dfff})
-      );
-      line.position.set(side*.58*scale+(k-1.5)*.15*scale,.025*scale,0);
-      g.add(line);
-    }
-  }
-
-  const mast=new THREE.Mesh(
-    new THREE.CylinderGeometry(.012*scale,.012*scale,.38*scale,8),
-    new THREE.MeshBasicMaterial({color:0xe4fbff})
-  );
-  mast.position.y=.34*scale;
-  g.add(mast);
-
-  const beacon=new THREE.Mesh(
-    new THREE.SphereGeometry(.055*scale,12,10),
-    new THREE.MeshBasicMaterial({color:0x7affff})
-  );
-  beacon.position.y=.56*scale;
-  g.add(beacon);
-
-  return g;
+ const glow=new THREE.PointLight(0x28caff,2,2);
+ sat.add(glow);
+ return sat;
 }
-
-const satPositions=[
-  [-4,.6,.6],
-  [3.8,-.8,1.1],
-  [-1.4,2.5,3.1],
-  [1.7,-2.2,-3.2],
-  [4,1.3,-.5]
-];
 
 const satellites=[];
 
-satPositions.forEach((v,i)=>{
-  const sat=makeSatellite(.24);
-  sat.position.set(...v);
-  sat.quaternion.setFromUnitVectors(
-    new THREE.Vector3(0,0,1),
-    new THREE.Vector3(...v).normalize()
-  );
-  sat.userData.phase=i*.8;
-  satOrbit.add(sat);
-  satellites.push(sat);
-});
-
-// CÁC MỤC QUẢN TRỊ
-const modules=[
- ['TỔNG QUAN','Trung tâm điều hành và tình trạng tổng thể của RULER STUDY.','overview'],
- ['QUẢN LÝ MÔN HỌC','Khu vực quản lý môn học của nền tảng.','subjects'],
- ['QUẢN LÝ BÀI HỌC','Khu vực tổ chức và quản lý bài học.','lessons'],
- ['QUẢN LÝ BÀI TẬP','Khu vực quản lý bài tập học tập.','assignments'],
- ['NGÂN HÀNG CÂU HỎI','Khu vực lưu trữ và quản lý câu hỏi.','questions'],
- ['QUẢN LÝ ĐỀ KIỂM TRA','Khu vực quản lý đề kiểm tra.','tests'],
- ['DANH SÁCH TỪ VỰNG','Quản lý danh sách từ vựng học tập.','vocabulary'],
- ['BỘ THẺ TỪ VỰNG','Quản lý các bộ thẻ ghi nhớ từ vựng.','flashcards'],
- ['IELTS LISTENING','Khu vực nội dung và bài luyện Listening.','ielts-listening'],
- ['IELTS READING','Khu vực nội dung và bài luyện Reading.','ielts-reading'],
- ['IELTS WRITING','Khu vực nội dung và bài luyện Writing.','ielts-writing'],
- ['IELTS SPEAKING','Khu vực nội dung và bài luyện Speaking.','ielts-speaking'],
- ['NGÂN HÀNG ĐỀ IELTS','Quản lý ngân hàng đề luyện thi IELTS.','ielts-tests'],
- ['QUẢN LÝ HỌC SINH','Mở danh sách, hồ sơ và khu vực quản lý học sinh.','students'],
- ['KẾT QUẢ HỌC TẬP','Theo dõi kết quả học tập của học sinh.','results'],
- ['TIẾN ĐỘ & THÀNH TÍCH','Theo dõi tiến độ và thành tích học tập.','progress'],
- ['LỊCH SỬ HOẠT ĐỘNG','Theo dõi lịch sử hoạt động trong hệ thống.','history'],
- ['QUẢN LÝ THÔNG BÁO','Khu vực quản lý thông báo của hệ thống.','notifications'],
- ['QUẢN LÝ TÀI LIỆU','Khu vực quản lý tài liệu học tập.','documents'],
- ['CÀI ĐẶT HỆ THỐNG','Thiết lập và cấu hình nền tảng.','settings']
-];
-
-function panelTexture(title,sub){
-  const c=document.createElement('canvas');
-  c.width=512;
-  c.height=300;
-  const x=c.getContext('2d');
-
-  x.fillStyle='rgba(3,36,52,.9)';
-  x.fillRect(0,0,512,300);
-  x.strokeStyle='#59e5ef';
-  x.lineWidth=3;
-  x.strokeRect(8,8,496,284);
-
-  x.fillStyle='#7eefff';
-  x.font='18px monospace';
-  x.fillText('RULER STUDY // ADMIN',25,45);
-
-  x.fillStyle='#e0fdff';
-  x.font='bold 25px Arial';
-  x.fillText(title,25,112,455);
-
-  x.fillStyle='#68cbd8';
-  x.font='17px Arial';
-  x.fillText(sub,25,154,450);
-
-  x.fillStyle='rgba(80,220,235,.65)';
-  for(let i=0;i<5;i++){
-    x.fillRect(25,205+i*13,Math.random()*300+100,3);
-  }
-
-  return new THREE.CanvasTexture(c);
+for(let i=0;i<5;i++){
+ const sat=createSatellite();
+ const angle=i*Math.PI*2/5;
+ sat.position.set(
+  Math.cos(angle)*4.25,
+  Math.sin(angle)*1.7,
+  Math.sin(angle)*4.25
+ );
+ sat.userData.angle=angle;
+ satelliteOrbit.add(sat);
+ satellites.push(sat);
 }
 
-// BỐ TRÍ HOLOGRAM QUANH ĐỊA CẦU
+/* ================= ORBITING MENU HOLOGRAMS ================= */
+
+const modules=[
+ ["TỔNG QUAN","Trung tâm tổng quan hệ thống.","overview"],
+ ["QUẢN LÝ HỌC SINH","Danh sách và thông tin học sinh.","students"],
+ ["MÔN HỌC","Quản lý các môn học.","subjects"],
+ ["BÀI HỌC","Quản lý nội dung bài học.","lessons"],
+ ["BÀI TẬP","Quản lý bài tập học tập.","assignments"],
+ ["NGÂN HÀNG CÂU HỎI","Quản lý câu hỏi.","questions"],
+ ["ĐỀ KIỂM TRA","Quản lý đề kiểm tra.","tests"],
+ ["TỪ VỰNG","Quản lý kho từ vựng.","vocabulary"],
+ ["FLASHCARD","Quản lý thẻ ghi nhớ.","flashcards"],
+ ["IELTS","Quản lý nội dung IELTS.","ielts"],
+ ["KẾT QUẢ","Theo dõi kết quả học tập.","results"],
+ ["TIẾN ĐỘ HỌC TẬP","Theo dõi tiến độ học sinh.","progress"],
+ ["LỊCH SỬ HOẠT ĐỘNG","Lịch sử hoạt động hệ thống.","history"],
+ ["THÔNG BÁO","Quản lý thông báo.","notifications"],
+ ["TÀI LIỆU","Quản lý tài liệu.","documents"],
+ ["CÀI ĐẶT","Cấu hình hệ thống.","settings"],
+ ["THÀNH TÍCH","Quản lý thành tích học tập.","achievements"],
+ ["KHÓA HỌC","Quản lý khóa học.","courses"],
+ ["HỒ SƠ","Thông tin hồ sơ.","profiles"],
+ ["HỆ THỐNG","Trạng thái hệ thống.","system"]
+];
+
+function createPanelTexture(title,index){
+ const canvas=document.createElement("canvas");
+ canvas.width=600;
+ canvas.height=360;
+ const ctx=canvas.getContext("2d");
+
+ ctx.fillStyle="rgba(4,39,57,.88)";
+ ctx.fillRect(0,0,600,360);
+
+ ctx.strokeStyle="#5ce5f2";
+ ctx.lineWidth=4;
+ ctx.strokeRect(7,7,586,346);
+
+ ctx.fillStyle="#b9faff";
+ ctx.font="bold 27px Consolas";
+ ctx.fillText(title,25,55);
+
+ ctx.fillStyle="#55c8dd";
+ ctx.font="17px Consolas";
+ ctx.fillText("RULER STUDY / ADMIN MODULE",25,92);
+
+ ctx.strokeStyle="rgba(79,206,228,.4)";
+ for(let i=0;i<4;i++){
+  ctx.beginPath();
+  ctx.moveTo(25,130+i*48);
+  ctx.lineTo(570,130+i*48);
+  ctx.stroke();
+ }
+
+ ctx.fillStyle="#47d4e8";
+ ctx.fillRect(25,145,200+(index%5)*35,7);
+ ctx.fillRect(25,195,120+(index%4)*42,5);
+ ctx.fillRect(25,245,260+(index%3)*30,5);
+
+ ctx.fillStyle="#a8f8ff";
+ ctx.font="16px Consolas";
+ ctx.fillText("ACCESS NODE  /  "+String(index+1).padStart(2,"0"),25,320);
+
+ return new THREE.CanvasTexture(canvas);
+}
+
 const orbit=new THREE.Group();
 orbit.position.copy(globe.position);
 scene.add(orbit);
 
 const panels=[];
+const panelRadius=9.15;
 
-modules.forEach((m,i)=>{
-  const a=i*Math.PI*2/modules.length;
+modules.forEach((mod,i)=>{
+ const angle=i*Math.PI*2/modules.length;
 
-  const mesh=new THREE.Mesh(
-    new THREE.PlaneGeometry(2.65,1.5),
-    new THREE.MeshBasicMaterial({
-      map:panelTexture(m[0],m[1]),
-      transparent:true,
-      opacity:.9,
-      side:THREE.DoubleSide,
-      depthWrite:false
-    })
-  );
+ const material=new THREE.MeshBasicMaterial({
+  map:createPanelTexture(mod[0],i),
+  transparent:true,
+  opacity:.88,
+  side:THREE.DoubleSide,
+  depthWrite:false
+ });
 
-  mesh.position.set(
-    Math.cos(a)*9.15,
-    Math.sin(a*2)*2.05,
-    Math.sin(a)*9.15
-  );
+ const panel=new THREE.Mesh(
+  new THREE.PlaneGeometry(2.8,1.68),
+  material
+ );
 
-  mesh.lookAt(0,0,0);
-  mesh.userData.module=m;
-  orbit.add(mesh);
-  panels.push(mesh);
+ panel.position.set(
+  Math.cos(angle)*panelRadius,
+  Math.sin(angle)*1.55,
+  Math.sin(angle)*panelRadius
+ );
+
+ panel.lookAt(0,0,0);
+ panel.userData.module=mod;
+ orbit.add(panel);
+ panels.push(panel);
 });
 
-// CHỌN HOLOGRAM
-const ray=new THREE.Raycaster();
+/* ================= SELECT MODULE ================= */
+
+const raycaster=new THREE.Raycaster();
 const mouse=new THREE.Vector2();
 let selected=null;
-const focus=document.querySelector('#focus');
+let pointerDown=null;
 
-renderer.domElement.addEventListener('pointerdown',e=>{
-  const r=renderer.domElement.getBoundingClientRect();
-
-  mouse.set(
-    (e.clientX-r.left)/r.width*2-1,
-    -(e.clientY-r.top)/r.height*2+1
-  );
-
-  ray.setFromCamera(mouse,camera);
-  const hit=ray.intersectObjects(panels)[0];
-
-  if(hit){
-    selected=hit.object.userData.module;
-
-    document.querySelector('#ftitle').textContent=selected[0];
-    document.querySelector('#fdesc').textContent=selected[1];
-
-    document.querySelector('#moduleInfo').innerHTML=
-      '<div><b>◈</b>ADMIN MODULE</div>'+
-      '<div><b>360°</b>ORBIT MENU</div>'+
-      '<div><b>✓</b>ĐÃ CHỌN</div>'+
-      '<div><b>↗</b>MỞ KHU VỰC</div>';
-
-    focus.classList.add('show');
-    controls.autoRotate=false;
-  }
+renderer.domElement.addEventListener("pointerdown",e=>{
+ pointerDown={x:e.clientX,y:e.clientY};
 });
 
-function closeFocus(){
-  focus.classList.remove('show');
-  controls.autoRotate=true;
+renderer.domElement.addEventListener("pointerup",e=>{
+ if(!pointerDown)return;
+
+ const moved=Math.hypot(
+  e.clientX-pointerDown.x,
+  e.clientY-pointerDown.y
+ );
+
+ pointerDown=null;
+ if(moved>5)return;
+
+ const rect=renderer.domElement.getBoundingClientRect();
+
+ mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+ mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+
+ raycaster.setFromCamera(mouse,camera);
+
+ const hits=raycaster.intersectObjects(panels);
+
+ if(!hits.length)return;
+
+ selected=hits[0].object;
+ const mod=selected.userData.module;
+
+ document.querySelector("#moduleTitle").textContent=mod[0];
+ document.querySelector("#moduleDesc").textContent=mod[1];
+
+ document.querySelector("#focus").classList.add("show");
+ controls.autoRotate=false;
+});
+
+/* ================= CAMERA VISIBILITY ================= */
+
+function updatePanels(){
+ const view=new THREE.Vector3();
+ camera.getWorldDirection(view);
+
+ const cameraPosition=camera.position.clone();
+ const center=globe.getWorldPosition(new THREE.Vector3());
+
+ const toCamera=cameraPosition.sub(center);
+ toCamera.y=0;
+ toCamera.normalize();
+
+ panels.forEach(panel=>{
+  const pos=panel.getWorldPosition(new THREE.Vector3());
+  const dir=pos.sub(center);
+  dir.y=0;
+  dir.normalize();
+
+  const dot=toCamera.dot(dir);
+
+  // Bảng ở phía trước camera được ẩn.
+  // Bảng hai bên và phía sau vẫn còn nhìn thấy.
+  panel.visible=dot<.72;
+  panel.lookAt(camera.position);
+ });
+
+ ambientScreens.forEach(p=>p.lookAt(camera.position));
 }
 
-focus.addEventListener('click',e=>{
-  if(e.target===focus)closeFocus();
-});
+/* ================= OPEN / CLOSE ================= */
 
-addEventListener('keydown',e=>{
-  if(e.key==='Escape')closeFocus();
-});
-
-document.querySelector('#closeFocus').onclick=closeFocus;
-document.querySelector('#cancelModule').onclick=closeFocus;
-
-document.querySelector('#openModule').onclick=()=>{
-  if(!selected)return;
-
-  if(selected[2]==='students'){
-    location.href='admin-students.html?v=2';
-    return;
-  }
-
-  if(selected[2]==='overview'){
-    closeFocus();
-    return;
-  }
-
-  document.querySelector('#fdesc').textContent=
-    selected[1]+
-    ' Khu vực này hiện chưa có trang quản trị riêng trong phiên bản Admin cũ, nên được giữ ở trạng thái chờ triển khai; không tạo chức năng giả hoặc thay đổi dữ liệu.';
+document.querySelector("#close").onclick=()=>{
+ document.querySelector("#focus").classList.remove("show");
+ controls.autoRotate=true;
 };
 
-// VÒNG LẶP 3D VÀ ẨN HOLOGRAM PHÍA TRƯỚC CAMERA
+document.querySelector("#openModule").onclick=()=>{
+ if(!selected)return;
+
+ const key=selected.userData.module[2];
+
+ if(key==="students"){
+  location.href="admin-students.html?v=2";
+  return;
+ }
+
+ if(key==="overview"){
+  document.querySelector("#focus").classList.remove("show");
+  controls.autoRotate=true;
+  return;
+ }
+
+ document.querySelector("#moduleDesc").textContent=
+  "Mục này chưa được nối với trang quản trị tương ứng trong mã nguồn hiện tại. Chưa thực hiện thao tác dữ liệu.";
+};
+
+/* ================= ANIMATION ================= */
+
+const clock=new THREE.Clock();
+let introStart=performance.now();
+let introDone=false;
+
+const startCamera=new THREE.Vector3(0,13,27);
+const endCamera=new THREE.Vector3(0,8,23);
+
 function animate(){
-  requestAnimationFrame(animate);
+ requestAnimationFrame(animate);
 
-  globe.rotation.y+=.0012;
-  satOrbit.rotation.y+=.0078;
-  satOrbit.rotation.z+=.0004;
+ const elapsed=performance.now()-introStart;
 
-  satellites.forEach(s=>{
-    s.rotation.y=Math.sin(
-      performance.now()*.0007+s.userData.phase
-    )*.14;
-  });
+ if(!introDone){
+  const t=Math.min(1,elapsed/4200);
+  const smooth=t*t*(3-2*t);
 
-  orbit.rotation.y+=.0016;
-  controls.update();
+  camera.position.copy(startCamera).lerp(endCamera,smooth);
+  controls.target.set(0,2,0);
 
-  const globeWorld=globe.getWorldPosition(new THREE.Vector3());
-
-  const viewDir=camera
-    .getWorldPosition(new THREE.Vector3())
-    .sub(globeWorld);
-
-  viewDir.y=0;
-
-  if(viewDir.lengthSq()>1e-5){
-    viewDir.normalize();
+  if(t>=1){
+   introDone=true;
+   controls.autoRotate=true;
+   document.querySelector("#intro").classList.add("hide");
+   setTimeout(()=>{
+    document.querySelector("#intro")?.remove();
+   },900);
   }
+ }
 
-  panels.forEach(p=>{
-    const panelWorld=p.getWorldPosition(new THREE.Vector3());
-    const panelDir=panelWorld.sub(globeWorld);
+ if(!document.querySelector("#focus").classList.contains("show")){
+  globe.rotation.y+=.001;
+  satelliteOrbit.rotation.y+=.0052;
+  satelliteOrbit.rotation.z+=.00035;
+  orbit.rotation.y+=.0019;
+  buildings.rotation.y+=.00008;
+ }
 
-    panelDir.y=0;
+ satellites.forEach((sat,i)=>{
+  sat.rotation.y=Math.sin(elapsed*.001+i)*.15;
+ });
 
-    if(panelDir.lengthSq()>1e-5){
-      panelDir.normalize();
-    }
-
-    p.visible=viewDir.dot(panelDir)<.60;
-    p.lookAt(camera.position);
-  });
-
-  renderer.render(scene,camera);
+ updatePanels();
+ controls.update();
+ renderer.render(scene,camera);
 }
 
 animate();
 
-addEventListener('resize',()=>{
-  camera.aspect=innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
+window.addEventListener("resize",()=>{
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
 });
 </script>
 
 <script>
-const SUPABASE_URL = "https://svhwozfwuexgiwrdripm.supabase.co";
-const SUPABASE_KEY = "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
+/* ================= SUPABASE AUTH ================= */
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
-    }
+const SUPABASE_URL="https://svhwozfwuexgiwrdripm.supabase.co";
+const SUPABASE_KEY="sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
+
+const supabaseClient=window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY,
+ {
+  auth:{
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
   }
+ }
 );
 
-async function uploadAdminAvatar(file,userId){
-  if(!file)return null;
-
-  const allowedTypes=[
-    "image/jpeg",
-    "image/png",
-    "image/webp"
-  ];
-
-  if(!allowedTypes.includes(file.type)){
-    throw new Error("Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP!");
-  }
-
-  if(file.size>5*1024*1024){
-    throw new Error("Ảnh không được lớn hơn 5MB!");
-  }
-
-  const extension=file.name.split(".").pop().toLowerCase();
-  const filePath=userId+"/admin-"+Date.now()+"."+extension;
-
-  const {error}=await supabaseClient.storage
-    .from("avatars")
-    .upload(filePath,file,{
-      cacheControl:"3600",
-      upsert:false
-    });
-
-  if(error)throw error;
-
-  const {data}=supabaseClient.storage
-    .from("avatars")
-    .getPublicUrl(filePath);
-
-  return data.publicUrl;
-}
+/* ================= ADMIN AVATAR ================= */
 
 async function loadAdminAvatar(userId){
-  const {data,error}=await supabaseClient
-    .from("profiles")
-    .select("avatar_url")
-    .eq("user_id",userId)
-    .maybeSingle();
+ const {data,error}=await supabaseClient
+  .from("profiles")
+  .select("avatar_url")
+  .eq("user_id",userId)
+  .maybeSingle();
 
-  if(error){
-    console.error("Lỗi tải ảnh Admin:",error.message);
-    return;
-  }
+ if(error){
+  console.error("Lỗi tải avatar:",error.message);
+  return;
+ }
 
-  const avatar=document.getElementById("adminAvatar");
+ const avatar=document.querySelector("#adminAvatar");
 
-  if(data?.avatar_url){
-    const img=document.createElement("img");
-    img.src=data.avatar_url;
-    img.alt="Ảnh đại diện Admin";
-
-    img.onerror=()=>{
-      avatar.textContent="👨🏻‍💼";
-    };
-
-    avatar.innerHTML="";
-    avatar.appendChild(img);
-  }
+ if(data?.avatar_url){
+  avatar.innerHTML="";
+  const img=document.createElement("img");
+  img.src=data.avatar_url;
+  img.alt="Admin avatar";
+  avatar.appendChild(img);
+ }
 }
 
-document.getElementById("adminAvatarFile").addEventListener("change",async function(){
-  const file=this.files[0];
-  if(!file)return;
+async function uploadAdminAvatar(file,userId){
+ if(!file)return null;
 
-  const avatar=document.getElementById("adminAvatar");
+ const allowed=["image/jpeg","image/png","image/webp"];
 
-  try{
-    const {data:userData,error:userError}=
-      await supabaseClient.auth.getUser();
+ if(!allowed.includes(file.type)){
+  throw new Error("Chỉ chấp nhận ảnh JPG, PNG hoặc WEBP.");
+ }
 
-    if(userError||!userData.user){
-      throw new Error("Không xác định được tài khoản Admin!");
-    }
+ if(file.size>5*1024*1024){
+  throw new Error("Ảnh không được lớn hơn 5MB.");
+ }
 
-    const user=userData.user;
-    const previewUrl=URL.createObjectURL(file);
+ const extension=file.name.split(".").pop().toLowerCase();
+ const path=userId+"/admin-"+Date.now()+"."+extension;
 
-    avatar.innerHTML="";
-    const preview=document.createElement("img");
-    preview.src=previewUrl;
-    avatar.appendChild(preview);
+ const {error}=await supabaseClient.storage
+  .from("avatars")
+  .upload(path,file,{
+   cacheControl:"3600",
+   upsert:false
+  });
 
-    const avatarUrl=await uploadAdminAvatar(file,user.id);
+ if(error)throw error;
 
-    const {data:saveResult,error:saveError}=await supabaseClient
-      .from("profiles")
-      .update({
-        avatar_url:avatarUrl
-      })
-      .eq("user_id",user.id)
-      .select("user_id,avatar_url")
-      .maybeSingle();
+ const {data}=supabaseClient.storage
+  .from("avatars")
+  .getPublicUrl(path);
 
-    if(saveError){
-      throw new Error("Lỗi lưu ảnh vào hồ sơ: "+saveError.message);
-    }
+ return data.publicUrl;
+}
 
-    if(!saveResult){
-      throw new Error("Không tìm thấy hồ sơ Admin để cập nhật ảnh!");
-    }
+document.querySelector("#avatarFile").addEventListener("change",async function(){
+ const file=this.files[0];
+ if(!file)return;
 
-    await loadAdminAvatar(user.id);
-    alert("Đã cập nhật ảnh đại diện Admin thành công!");
+ try{
+  const {data:userData,error:userError}=await supabaseClient.auth.getUser();
 
-  }catch(error){
-    alert("Không thể cập nhật ảnh: "+error.message);
-    const {data}=await supabaseClient.auth.getUser();
-    if(data?.user)await loadAdminAvatar(data.user.id);
+  if(userError||!userData.user){
+   throw new Error("Không xác định được tài khoản.");
   }
 
+  const user=userData.user;
+  const url=await uploadAdminAvatar(file,user.id);
+
+  const {data:updated,error:updateError}=await supabaseClient
+   .from("profiles")
+   .update({avatar_url:url})
+   .eq("user_id",user.id)
+   .select("user_id,avatar_url")
+   .maybeSingle();
+
+  if(updateError)throw updateError;
+  if(!updated)throw new Error("Không tìm thấy hồ sơ Admin để cập nhật.");
+
+  await loadAdminAvatar(user.id);
+  alert("Đã cập nhật ảnh đại diện.");
+
+ }catch(error){
+  alert("Không thể cập nhật ảnh: "+error.message);
+ }finally{
   this.value="";
+ }
 });
 
+/* ================= CHECK ADMIN ================= */
+
 async function checkAdmin(){
-  const loading=document.getElementById("loading");
+ const loading=document.querySelector("#authLoading");
 
+ try{
   const {data:sessionData,error:sessionError}=
-    await supabaseClient.auth.getSession();
+   await supabaseClient.auth.getSession();
 
-  if(sessionError){
-    loading.textContent="Lỗi kiểm tra phiên: "+sessionError.message;
-    return;
-  }
+  if(sessionError)throw sessionError;
 
   if(!sessionData.session){
-    loading.textContent=
-      "Chưa tìm thấy phiên đăng nhập. Hãy đăng nhập lại từ trang Tài khoản.";
-    return;
+   loading.textContent="Chưa có phiên đăng nhập. Hãy đăng nhập lại.";
+   return;
   }
 
   const {data:userData,error:userError}=
-    await supabaseClient.auth.getUser();
+   await supabaseClient.auth.getUser();
 
   if(userError||!userData.user){
-    loading.textContent="Không xác thực được tài khoản. Vui lòng tải lại trang.";
-    return;
+   loading.textContent="Không xác thực được tài khoản.";
+   return;
   }
+
+  const user=userData.user;
 
   const {data:roleData,error:roleError}=
-    await supabaseClient
-      .from("user_roles")
-      .select("role")
-      .eq("user_id",userData.user.id)
-      .maybeSingle();
+   await supabaseClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id",user.id)
+    .maybeSingle();
 
-  if(roleError){
-    loading.textContent="Lỗi kiểm tra quyền quản trị: "+roleError.message;
-    return;
-  }
+  if(roleError)throw roleError;
 
   if(roleData?.role!=="admin"){
-    location.replace("index.html");
-    return;
+   location.replace("index.html");
+   return;
   }
 
-  const email=userData.user.email||"Admin";
-  document.getElementById("adminName").textContent=email.split("@")[0];
+  document.querySelector("#adminName").textContent=
+   (user.email||"Admin").split("@")[0];
 
-  await loadAdminAvatar(userData.user.id);
+  await loadAdminAvatar(user.id);
 
   loading.style.display="none";
-  document.getElementById("adminArea").style.display="block";
+
+ }catch(error){
+  loading.textContent="LỖI XÁC THỰC: "+error.message;
+ }
 }
 
+/* ================= LOGOUT ================= */
+
 async function logoutAdmin(){
-  const {error}=await supabaseClient.auth.signOut({scope:"local"});
+ const {error}=await supabaseClient.auth.signOut({scope:"local"});
 
-  if(error){
-    alert("Đăng xuất chưa thành công: "+error.message);
-    return;
-  }
+ if(error){
+  alert("Đăng xuất chưa thành công: "+error.message);
+  return;
+ }
 
-  location.href="index.html";
+ location.href="index.html";
 }
 
 checkAdmin();
