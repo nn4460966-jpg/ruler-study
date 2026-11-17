@@ -147,7 +147,7 @@ controls.minPolarAngle=.08;
 controls.maxPolarAngle=Math.PI-.08;
 controls.target.set(0,2,0);
 controls.autoRotate=false;
-controls.autoRotateSpeed=.35;
+controls.autoRotateSpeed=.65;
 
 /* ================= LIGHT ================= */
 
@@ -216,12 +216,12 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
 
  const lines=new THREE.LineSegments(
   geo,
-  new THREE.LineBasicMaterial({
-   color:0x39b9d2,
-   transparent:true,
-   opacity:.48,
-   depthWrite:false
-  })
+ new THREE.LineBasicMaterial({
+ color:0x54cce8,
+ transparent:true,
+ opacity:.32,
+ depthWrite:false
+})
  );
 
  group.add(lines);
@@ -286,7 +286,7 @@ screenPositions.forEach((p,i)=>{
  const material=new THREE.MeshBasicMaterial({
   map:createScreenTexture(i),
   transparent:true,
-  opacity:.66,
+  opacity:.32,
   side:THREE.DoubleSide,
   depthWrite:false
  });
@@ -302,45 +302,95 @@ screenPositions.forEach((p,i)=>{
  ambientScreens.push(panel);
 });
 
-/* ================= EARTH GLOBE ================= */
+/* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
 const globe=new THREE.Group();
 globe.position.set(0,3,0);
 scene.add(globe);
 
+// Lõi địa cầu
 const earth=new THREE.Mesh(
- new THREE.SphereGeometry(3.2,48,48),
+ new THREE.SphereGeometry(3.2,64,64),
  new THREE.MeshStandardMaterial({
-  color:0x123d66,
-  metalness:.55,
-  roughness:.35,
-  emissive:0x061a3a,
-  emissiveIntensity:.6
+  color:0x075078,
+  metalness:.65,
+  roughness:.28,
+  emissive:0x0878a8,
+  emissiveIntensity:.85
  })
 );
 globe.add(earth);
 
+// Lưới kinh tuyến và vĩ tuyến
 const wire=new THREE.Mesh(
- new THREE.SphereGeometry(3.23,32,24),
+ new THREE.SphereGeometry(3.225,48,32),
  new THREE.MeshBasicMaterial({
-  color:0x9aeaff,
+  color:0x8df5ff,
   wireframe:true,
   transparent:true,
-  opacity:.55
+  opacity:.42,
+  depthWrite:false
  })
 );
 globe.add(wire);
 
+// Lớp lưới phát sáng bên ngoài
+const glowWire=new THREE.Mesh(
+ new THREE.SphereGeometry(3.26,32,24),
+ new THREE.MeshBasicMaterial({
+  color:0x20cfff,
+  wireframe:true,
+  transparent:true,
+  opacity:.16,
+  depthWrite:false
+ })
+);
+globe.add(glowWire);
+
+// Lớp khí quyển
 const atmosphere=new THREE.Mesh(
- new THREE.SphereGeometry(3.34,40,40),
+ new THREE.SphereGeometry(3.38,48,48),
  new THREE.MeshBasicMaterial({
   color:0x168aff,
   transparent:true,
-  opacity:.055,
-  side:THREE.BackSide
+  opacity:.10,
+  side:THREE.BackSide,
+  depthWrite:false
  })
 );
 globe.add(atmosphere);
+
+// Quầng sáng hologram bên ngoài
+const outerGlow=new THREE.Mesh(
+ new THREE.SphereGeometry(3.55,48,48),
+ new THREE.MeshBasicMaterial({
+  color:0x13aaff,
+  transparent:true,
+  opacity:.075,
+  side:THREE.BackSide,
+  blending:THREE.AdditiveBlending,
+  depthWrite:false
+ })
+);
+globe.add(outerGlow);
+
+// Ánh sáng xanh phát ra từ địa cầu
+const earthLight=new THREE.PointLight(
+ 0x24bfff,
+ 2.2,
+ 12
+);
+earthLight.position.set(0,0,0);
+globe.add(earthLight);
+
+// Ánh sáng cyan phụ trợ
+const cyanLight=new THREE.PointLight(
+ 0x27eaff,
+ 1.1,
+ 9
+);
+cyanLight.position.set(2,1,1);
+globe.add(cyanLight);
 
 /* ================= HEXAGON PLATFORM ================= */
 
@@ -450,19 +500,7 @@ const modules=[
  ["BÀI TẬP","Quản lý bài tập học tập.","assignments"],
  ["NGÂN HÀNG CÂU HỎI","Quản lý câu hỏi.","questions"],
  ["ĐỀ KIỂM TRA","Quản lý đề kiểm tra.","tests"],
- ["TỪ VỰNG","Quản lý kho từ vựng.","vocabulary"],
- ["FLASHCARD","Quản lý thẻ ghi nhớ.","flashcards"],
- ["IELTS","Quản lý nội dung IELTS.","ielts"],
- ["KẾT QUẢ","Theo dõi kết quả học tập.","results"],
- ["TIẾN ĐỘ HỌC TẬP","Theo dõi tiến độ học sinh.","progress"],
- ["LỊCH SỬ HOẠT ĐỘNG","Lịch sử hoạt động hệ thống.","history"],
- ["THÔNG BÁO","Quản lý thông báo.","notifications"],
- ["TÀI LIỆU","Quản lý tài liệu.","documents"],
- ["CÀI ĐẶT","Cấu hình hệ thống.","settings"],
- ["THÀNH TÍCH","Quản lý thành tích học tập.","achievements"],
- ["KHÓA HỌC","Quản lý khóa học.","courses"],
- ["HỒ SƠ","Thông tin hồ sơ.","profiles"],
- ["HỆ THỐNG","Trạng thái hệ thống.","system"]
+ ["THỐNG KÊ HỌC TẬP","Theo dõi kết quả và tiến độ học sinh.","results"]
 ];
 
 function createPanelTexture(title,index){
@@ -511,15 +549,22 @@ orbit.position.copy(globe.position);
 scene.add(orbit);
 
 const panels=[];
+/* ================= 8 HOLOGRAM ORBIT ================= */
+
 const panelRadius=9.15;
 
 modules.forEach((mod,i)=>{
+
  const angle=i*Math.PI*2/modules.length;
+
+ // 1,3,5,7 cao hơn
+ // 2,4,6,8 thấp hơn
+ const height=(i%2===0)?1.65:-0.75;
 
  const material=new THREE.MeshBasicMaterial({
   map:createPanelTexture(mod[0],i),
   transparent:true,
-  opacity:.88,
+  opacity:.34,
   side:THREE.DoubleSide,
   depthWrite:false
  });
@@ -529,13 +574,17 @@ modules.forEach((mod,i)=>{
   material
  );
 
+ // Xếp thành một vòng tròn quanh địa cầu
+ // Độ cao thay đổi xen kẽ
  panel.position.set(
   Math.cos(angle)*panelRadius,
-  Math.sin(angle)*1.55,
+  height,
   Math.sin(angle)*panelRadius
  );
 
- panel.lookAt(0,0,0);
+ // Hướng mặt bảng vào phía địa cầu
+ panel.lookAt(0,height,0);
+
  panel.userData.module=mod;
  orbit.add(panel);
  panels.push(panel);
@@ -587,12 +636,9 @@ renderer.domElement.addEventListener("pointerup",e=>{
 /* ================= CAMERA VISIBILITY ================= */
 
 function updatePanels(){
- const view=new THREE.Vector3();
- camera.getWorldDirection(view);
-
- const cameraPosition=camera.position.clone();
  const center=globe.getWorldPosition(new THREE.Vector3());
 
+ const cameraPosition=camera.position.clone();
  const toCamera=cameraPosition.sub(center);
  toCamera.y=0;
  toCamera.normalize();
@@ -605,13 +651,13 @@ function updatePanels(){
 
   const dot=toCamera.dot(dir);
 
-  // Bảng ở phía trước camera được ẩn.
-  // Bảng hai bên và phía sau vẫn còn nhìn thấy.
+  // Ẩn bảng nằm ngay phía trước camera
   panel.visible=dot<.72;
-  panel.lookAt(camera.position);
  });
 
- ambientScreens.forEach(p=>p.lookAt(camera.position));
+ ambientScreens.forEach(p=>{
+  p.lookAt(camera.position);
+ });
 }
 
 /* ================= OPEN / CLOSE ================= */
@@ -666,6 +712,7 @@ function animate(){
    introDone=true;
    controls.autoRotate=true;
    document.querySelector("#intro").classList.add("hide");
+
    setTimeout(()=>{
     document.querySelector("#intro")?.remove();
    },900);
@@ -673,10 +720,32 @@ function animate(){
  }
 
  if(!document.querySelector("#focus").classList.contains("show")){
+
+  // Địa cầu tự xoay
   globe.rotation.y+=.001;
-  satelliteOrbit.rotation.y+=.0052;
-  satelliteOrbit.rotation.z+=.00035;
+
+  // Các lớp lưới xoay lệch tốc độ
+  wire.rotation.y-=.0007;
+  glowWire.rotation.y+=.0012;
+
+  // Quầng sáng dao động nhẹ
+  const pulse=1+Math.sin(elapsed*.0015)*.018;
+
+  outerGlow.scale.setScalar(pulse);
+  atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
+
+  // Ánh sáng địa cầu thay đổi nhẹ
+  earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
+  cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
+
+  // Năm vệ tinh quay quanh địa cầu
+  satelliteOrbit.rotation.y+=.0104;
+  satelliteOrbit.rotation.z+=.0007;
+
+  // Tám bảng hologram quay theo quỹ đạo
   orbit.rotation.y+=.0019;
+
+  // Thành phố wireframe chuyển động chậm
   buildings.rotation.y+=.00008;
  }
 
@@ -688,14 +757,6 @@ function animate(){
  controls.update();
  renderer.render(scene,camera);
 }
-
-animate();
-
-window.addEventListener("resize",()=>{
- camera.aspect=innerWidth/innerHeight;
- camera.updateProjectionMatrix();
- renderer.setSize(innerWidth,innerHeight);
-});
 </script>
 
 <script>
