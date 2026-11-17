@@ -10,8 +10,43 @@
 <style>
 *{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02070d;color:#bdefff;font-family:Consolas,monospace}
-#scene{position:fixed;inset:0}
-canvas{display:block}
+/* FULL SCREEN 3D SCENE */
+html,body{
+ width:100%;
+ height:100%;
+ margin:0;
+ padding:0;
+ overflow:hidden;
+}
+ #scene{
+ position:fixed;
+ top:0;
+ left:0;
+ width:100vw;
+ height:100vh;
+ overflow:hidden;
+ z-index:0;
+}
+
+#scene canvas{
+ display:block;
+ position:absolute;
+ top:0;
+ left:0;
+ width:100%!important;
+ height:100%!important;
+}
+
+#hud{
+ position:fixed;
+ inset:0;
+ z-index:5;
+ pointer-events:none;
+ color:#82eaff;
+ text-shadow:0 0 8px #13a9d4;
+ font-size:10px;
+ letter-spacing:1.5px;
+}
 #authLoading{position:fixed;inset:0;z-index:100;background:#02070d;display:grid;place-items:center;color:#6de5ee;letter-spacing:3px;font-size:12px}
 #hud{position:fixed;inset:0;pointer-events:none;color:#82eaff;text-shadow:0 0 8px #13a9d4;font-size:10px;letter-spacing:1.5px}
 .brand{position:absolute;top:20px;left:22px;padding:12px 15px;border:1px solid #38b8d455;background:#03131bcc}
@@ -130,8 +165,17 @@ const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
 camera.position.set(0,13,27);
 
 const renderer=new THREE.WebGLRenderer({antialias:true});
-renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+renderer.setSize(
+ window.innerWidth,
+ window.innerHeight,
+ false
+);
+
+renderer.domElement.style.width="100%";
+renderer.domElement.style.height="100%";
+
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.25;
 root.appendChild(renderer.domElement);
