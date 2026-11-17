@@ -753,10 +753,13 @@ function animate(){
   sat.rotation.y=Math.sin(elapsed*.001+i)*.15;
  });
 
- updatePanels();
+  updatePanels();
  controls.update();
  renderer.render(scene,camera);
 }
+
+animate();
+
 </script>
 
 <script>
