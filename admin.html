@@ -811,43 +811,28 @@ function animate(){
   }
  }
 
- if(!document.querySelector("#focus").classList.contains("show")){
+   if(!document.querySelector("#focus").classList.contains("show")){
 
-  // Địa cầu tự xoay
-  globe.rotation.y+=.001;
+   // Chỉ địa cầu tự xoay
+   globe.rotation.y+=.001;
 
-  // Các lớp lưới xoay lệch tốc độ
-  wire.rotation.y-=.0007;
-  glowWire.rotation.y+=.0012;
+   // Quầng sáng dao động nhẹ
+   const pulse=1+Math.sin(elapsed*.0015)*.018;
+   outerGlow.scale.setScalar(pulse);
+   atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
 
-  // Quầng sáng dao động nhẹ
-  const pulse=1+Math.sin(elapsed*.0015)*.018;
+   // Ánh sáng địa cầu thay đổi nhẹ
+   earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
+   cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
+  }
 
- if(!document.querySelector("#focus").classList.contains("show")){
+  // Hologram giữ nguyên vị trí
+  // Không xoay orbit và không xoay satellite
 
-  // Chỉ địa cầu tự xoay
-  globe.rotation.y+=.001;
-
-  // Quầng sáng dao động nhẹ
-  const pulse=1+Math.sin(elapsed*.0015)*.018;
-  outerGlow.scale.setScalar(pulse);
-  atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
-
-  // Ánh sáng địa cầu thay đổi nhẹ
-  earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
-  cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
-
-}
-
-// Hologram giữ nguyên vị trí
-// Không xoay orbit và không xoay satellite
-
-updatePanels();
-controls.update();
-renderer.render(scene,camera);
   updatePanels();
- controls.update();
- renderer.render(scene,camera);
+  controls.update();
+  renderer.render(scene,camera);
+}
 }
 
 animate();
