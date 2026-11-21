@@ -744,14 +744,11 @@ function updatePanels(){
 
 /* ================= OPEN / CLOSE ================= */
 
-document.querySelector("#close").onclick=()=>{
- document.querySelector("#focus").classList.remove("show");
- controls.autoRotate=true;
-};
+/* ================= OPEN / CLOSE ================= */
 
 document.querySelector("#close").onclick=()=>{
  document.querySelector("#focus").classList.remove("show");
- controls.autoRotate=true;
+ controls.autoRotate=false;
 };
 
 document.querySelector("#openModule").onclick=()=>{
@@ -771,10 +768,10 @@ document.querySelector("#openModule").onclick=()=>{
 
  if(key==="overview"){
   document.querySelector("#focus").classList.remove("show");
-  controls.autoRotate=true;
+  controls.autoRotate=false;
   return;
  }
-
+};
  document.querySelector("#moduleDesc").textContent=
   "Mục này chưa được nối với trang quản trị tương ứng trong mã nguồn hiện tại. Chưa thực hiện thao tác dữ liệu.";
 };
