@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản lý giáo viên | RULER STUDY</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f3f6fc;
+ color:#172554;
+}
+header{
+ background:#101f45;
+ color:white;
+ padding:24px 35px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+header h2{margin:0}
+header a{color:white;text-decoration:none}
+.container{padding:30px;max-width:1200px;margin:auto}
+.heading{display:flex;justify-content:space-between;align-items:center}
+.heading h1{margin:0 0 8px}
+.card{
+ background:white;
+ padding:24px;
+ border-radius:16px;
+ box-shadow:0 5px 25px #15264a12;
+ margin-top:25px;
+}
+input{
+ padding:13px;
+ border:1px solid #dbe3f0;
+ border-radius:9px;
+ width:100%;
+ outline:none;
+}
+button{
+ border:0;
+ border-radius:9px;
+ padding:12px 18px;
+ background:#2458d3;
+ color:white;
+ cursor:pointer;
+}
+.search{max-width:350px}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:15px;text-align:left;border-bottom:1px solid #edf0f6}
+th{color:#64748b;font-size:13px}
+.empty{text-align:center;color:#94a3b8;padding:35px}
+.status{color:#15966b;font-weight:bold}
+@media(max-width:650px){
+ .container{padding:15px}
+ header{padding:18px}
+ .heading{display:block}
+ .search{margin-top:15px}
+ .card{overflow-x:auto}
+ table{min-width:650px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <h2>RULER STUDY / ADMIN</h2>
+ <a href="admin.html">← Quay lại Admin</a>
+</header>
+
+<main class="container">
+
+ <div class="heading">
+  <div>
+   <h1>Quản lý giáo viên</h1>
+   <p>Quản lý danh sách và quyền truy cập giáo viên</p>
+  </div>
+  <div class="search">
+   <input id="searchTeacher" placeholder="Tìm kiếm giáo viên...">
+  </div>
+ </div>
+
+ <section class="card">
+  <h3>Danh sách giáo viên</h3>
+
+  <table>
+   <thead>
+    <tr>
+     <th>STT</th>
+     <th>GMAIL</th>
+     <th>TRẠNG THÁI</th>
+     <th>QUYỀN TRUY CẬP</th>
+    </tr>
+   </thead>
+   <tbody id="teacherList">
+    <tr>
+     <td colspan="4" class="empty">
+      Chưa có dữ liệu giáo viên
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </section>
+
+</main>
+
+<script>
+document.querySelector("#searchTeacher").addEventListener("input",function(){
+ const keyword=this.value.toLowerCase();
+ document.querySelectorAll("#teacherList tr").forEach(row=>{
+  row.style.display=row.textContent.toLowerCase().includes(keyword)?"":"none";
+ });
+});
+</script>
+
+</body>
+</html>
