@@ -800,10 +800,10 @@ function animate(){
   camera.position.copy(startCamera).lerp(endCamera,smooth);
   controls.target.set(0,2,0);
 
-  if(t>=1){
-   introDone=true;
-   controls.autoRotate=true;
-   document.querySelector("#intro").classList.add("hide");
+ if(t>=1){
+ introDone=true;
+ controls.autoRotate=false;
+ document.querySelector("#intro").classList.add("hide");
 
    setTimeout(()=>{
     document.querySelector("#intro")?.remove();
