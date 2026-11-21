@@ -823,6 +823,13 @@ function animate(){
   // Quầng sáng dao động nhẹ
   const pulse=1+Math.sin(elapsed*.0015)*.018;
 
+ if(!document.querySelector("#focus").classList.contains("show")){
+
+  // Chỉ địa cầu tự xoay
+  globe.rotation.y+=.001;
+
+  // Quầng sáng dao động nhẹ
+  const pulse=1+Math.sin(elapsed*.0015)*.018;
   outerGlow.scale.setScalar(pulse);
   atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
 
@@ -830,21 +837,14 @@ function animate(){
   earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
   cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
 
-  // Năm vệ tinh quay quanh địa cầu
-  satelliteOrbit.rotation.y+=.0104;
-  satelliteOrbit.rotation.z+=.0007;
+}
 
-  // Tám bảng hologram quay theo quỹ đạo
-  orbit.rotation.y+=.0019;
+// Hologram giữ nguyên vị trí
+// Không xoay orbit và không xoay satellite
 
-  // Thành phố wireframe chuyển động chậm
-  buildings.rotation.y+=.00008;
- }
-
- satellites.forEach((sat,i)=>{
-  sat.rotation.y=Math.sin(elapsed*.001+i)*.15;
- });
-
+updatePanels();
+controls.update();
+renderer.render(scene,camera);
   updatePanels();
  controls.update();
  renderer.render(scene,camera);
