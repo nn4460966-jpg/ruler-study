@@ -103,15 +103,16 @@ html,body{
   <small>ADMIN COMMAND DECK // V17 ORBIT INTERFACE</small>
  </div>
 
- <div class="leftmenu">
+<div class="leftmenu">
   <strong>▸ TRUNG TÂM ĐIỀU HÀNH</strong>
   01 &nbsp; TỔNG QUAN<br>
   02 &nbsp; HỌC SINH<br>
   03 &nbsp; HỌC TẬP<br>
   04 &nbsp; TỪ VỰNG<br>
   05 &nbsp; IELTS<br>
+  06 &nbsp; QUẢN LÝ GIÁO VIÊN<br>
   <small>CHỌN HOLOGRAM ĐỂ MỞ</small>
- </div>
+</div>
 
  <div class="account">
   <div class="avatar" id="adminAvatar">👨🏻‍💼</div>
@@ -544,7 +545,8 @@ const modules=[
  ["BÀI TẬP","Quản lý bài tập học tập.","assignments"],
  ["NGÂN HÀNG CÂU HỎI","Quản lý câu hỏi.","questions"],
  ["ĐỀ KIỂM TRA","Quản lý đề kiểm tra.","tests"],
- ["THỐNG KÊ HỌC TẬP","Theo dõi kết quả và tiến độ học sinh.","results"]
+ ["THỐNG KÊ HỌC TẬP","Theo dõi kết quả và tiến độ học sinh.","results"],
+ ["QUẢN LÝ GIÁO VIÊN","Quản lý thông tin và quyền truy cập giáo viên.","teachers"]
 ];
 
 function createPanelTexture(title,index){
@@ -711,6 +713,11 @@ document.querySelector("#close").onclick=()=>{
  controls.autoRotate=true;
 };
 
+document.querySelector("#close").onclick=()=>{
+ document.querySelector("#focus").classList.remove("show");
+ controls.autoRotate=true;
+};
+
 document.querySelector("#openModule").onclick=()=>{
  if(!selected)return;
 
@@ -718,6 +725,11 @@ document.querySelector("#openModule").onclick=()=>{
 
  if(key==="students"){
   location.href="admin-students.html?v=2";
+  return;
+ }
+
+ if(key==="teachers"){
+  location.href="admin-teachers.html";
   return;
  }
 
