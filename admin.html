@@ -718,28 +718,28 @@ renderer.domElement.addEventListener("pointerup",e=>{
 /* ================= CAMERA VISIBILITY ================= */
 
 function updatePanels(){
- const center=globe.getWorldPosition(new THREE.Vector3());
+  const center=globe.getWorldPosition(new THREE.Vector3());
 
- const cameraPosition=camera.position.clone();
- const toCamera=cameraPosition.sub(center);
- toCamera.y=0;
- toCamera.normalize();
+  const cameraPosition=camera.position.clone();
+  const toCamera=cameraPosition.sub(center);
+  toCamera.y=0;
+  toCamera.normalize();
 
- panels.forEach(panel=>{
-  const pos=panel.getWorldPosition(new THREE.Vector3());
-  const dir=pos.sub(center);
-  dir.y=0;
-  dir.normalize();
+  panels.forEach(panel=>{
+   const pos=panel.getWorldPosition(new THREE.Vector3());
+   const dir=pos.sub(center);
+   dir.y=0;
+   dir.normalize();
 
-  const dot=toCamera.dot(dir);
+   const dot=toCamera.dot(dir);
 
-  // Ẩn bảng nằm ngay phía trước camera
-  panel.visible=dot<.72;
- });
+   // Chỉ hiện các bảng nằm phía camera
+   panel.visible=dot>.72;
+  });
 
- ambientScreens.forEach(p=>{
-  p.lookAt(camera.position);
- });
+  ambientScreens.forEach(p=>{
+   p.lookAt(camera.position);
+  });
 }
 
 /* ================= OPEN / CLOSE ================= */
