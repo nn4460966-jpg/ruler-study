@@ -6,6 +6,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quản lý giáo viên | RULER STUDY</title>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{
@@ -17,23 +19,44 @@ body{
 header{
  background:#101f45;
  color:white;
- padding:24px 35px;
+ padding:22px 35px;
  display:flex;
  justify-content:space-between;
  align-items:center;
 }
-header h2{margin:0}
+header h2{margin:0;font-size:20px}
 header a{color:white;text-decoration:none}
-.container{padding:30px;max-width:1200px;margin:auto}
-.heading{display:flex;justify-content:space-between;align-items:center}
+.container{padding:30px;max-width:1250px;margin:auto}
+.heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:15px;
+}
 .heading h1{margin:0 0 8px}
+.heading p{color:#64748b;margin:0}
 .card{
  background:white;
  padding:24px;
  border-radius:16px;
  box-shadow:0 5px 25px #15264a12;
+ margin-top:22px;
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:18px;
  margin-top:25px;
 }
+.stat{
+ background:white;
+ padding:23px;
+ border-radius:15px;
+ box-shadow:0 5px 25px #15264a10;
+}
+.stat span{color:#64748b;font-size:14px}
+.stat h2{margin:12px 0 0;font-size:30px}
 input{
  padding:13px;
  border:1px solid #dbe3f0;
@@ -41,6 +64,7 @@ input{
  width:100%;
  outline:none;
 }
+input:focus{border-color:#2458d3}
 button{
  border:0;
  border-radius:9px;
@@ -48,20 +72,56 @@ button{
  background:#2458d3;
  color:white;
  cursor:pointer;
+ font-weight:600;
 }
-.search{max-width:350px}
+button:disabled{opacity:.6;cursor:not-allowed}
+button:hover{filter:brightness(.94)}
+.btn-gray{background:#64748b}
+.btn-red{background:#dc3545}
+.btn-green{background:#15966b}
+.search{max-width:350px;width:100%}
+.form-row{
+ display:flex;
+ gap:12px;
+ margin-top:18px;
+}
+.form-row input{flex:1}
 table{width:100%;border-collapse:collapse;margin-top:20px}
-th,td{padding:15px;text-align:left;border-bottom:1px solid #edf0f6}
-th{color:#64748b;font-size:13px}
+th,td{
+ padding:15px;
+ text-align:left;
+ border-bottom:1px solid #edf0f6;
+ white-space:nowrap;
+}
+th{color:#64748b;font-size:12px}
 .empty{text-align:center;color:#94a3b8;padding:35px}
-.status{color:#15966b;font-weight:bold}
-@media(max-width:650px){
- .container{padding:15px}
+.status{
+ display:inline-block;
+ padding:6px 10px;
+ border-radius:20px;
+ font-size:12px;
+ font-weight:bold;
+}
+.active{background:#dcfce7;color:#15803d}
+.pending{background:#fef3c7;color:#a16207}
+.role{color:#2458d3;font-weight:bold}
+.message{
+ margin-top:15px;
+ padding:12px;
+ border-radius:9px;
+ display:none;
+}
+.message.success{display:block;background:#dcfce7;color:#166534}
+.message.error{display:block;background:#fee2e2;color:#991b1b}
+.table-wrap{overflow-x:auto}
+@media(max-width:750px){
+ .container{padding:16px}
  header{padding:18px}
+ .stats{grid-template-columns:1fr}
+ .form-row{flex-direction:column}
  .heading{display:block}
  .search{margin-top:15px}
- .card{overflow-x:auto}
- table{min-width:650px}
+ .card{padding:18px}
 }
 </style>
 </head>
@@ -80,42 +140,267 @@ th{color:#64748b;font-size:13px}
    <h1>Quản lý giáo viên</h1>
    <p>Quản lý danh sách và quyền truy cập giáo viên</p>
   </div>
-  <div class="search">
-   <input id="searchTeacher" placeholder="Tìm kiếm giáo viên...">
-  </div>
+  <button class="btn-gray" id="refreshBtn">↻ Làm mới</button>
  </div>
 
- <section class="card">
-  <h3>Danh sách giáo viên</h3>
+ <section class="stats">
+  <div class="stat">
+   <span>TỔNG GIÁO VIÊN ĐƯỢC CẤP QUYỀN</span>
+   <h2 id="totalTeachers">0</h2>
+  </div>
+  <div class="stat">
+   <span>ĐÃ ĐĂNG KÝ TÀI KHOẢN</span>
+   <h2 id="registeredTeachers">0</h2>
+  </div>
+  <div class="stat">
+   <span>CHỜ ĐĂNG KÝ</span>
+   <h2 id="pendingTeachers">0</h2>
+  </div>
+ </section>
 
-  <table>
-   <thead>
-    <tr>
-     <th>STT</th>
-     <th>GMAIL</th>
-     <th>TRẠNG THÁI</th>
-     <th>QUYỀN TRUY CẬP</th>
-    </tr>
-   </thead>
-   <tbody id="teacherList">
-    <tr>
-     <td colspan="4" class="empty">
-      Chưa có dữ liệu giáo viên
-     </td>
-    </tr>
-   </tbody>
-  </table>
+ <section class="card">
+  <h3>＋ Cấp quyền giáo viên</h3>
+  <p style="color:#64748b">
+   Nhập Gmail để cấp quyền. Nếu Gmail chưa có tài khoản,
+   quyền giáo viên sẽ được tự động áp dụng khi họ đăng ký.
+  </p>
+
+  <div class="form-row">
+   <input id="teacherEmail" type="email"
+    placeholder="Nhập Gmail giáo viên...">
+   <button id="grantBtn">Cấp quyền</button>
+  </div>
+
+  <div id="grantMessage" class="message"></div>
+ </section>
+
+ <section class="card">
+  <div class="heading">
+   <div>
+    <h3>Danh sách giáo viên</h3>
+    <p>Danh sách các Gmail đã được Admin cấp quyền</p>
+   </div>
+   <div class="search">
+    <input id="searchTeacher" placeholder="Tìm theo tên hoặc Gmail...">
+   </div>
+  </div>
+
+  <div class="table-wrap">
+   <table>
+    <thead>
+     <tr>
+      <th>STT</th>
+      <th>HỌ VÀ TÊN</th>
+      <th>GMAIL</th>
+      <th>TRẠNG THÁI</th>
+      <th>QUYỀN TRUY CẬP</th>
+      <th>THAO TÁC</th>
+     </tr>
+    </thead>
+    <tbody id="teacherList">
+     <tr>
+      <td colspan="6" class="empty">Đang tải dữ liệu...</td>
+     </tr>
+    </tbody>
+   </table>
+  </div>
+
+  <div id="listMessage" class="message"></div>
  </section>
 
 </main>
 
 <script>
-document.querySelector("#searchTeacher").addEventListener("input",function(){
- const keyword=this.value.toLowerCase();
- document.querySelectorAll("#teacherList tr").forEach(row=>{
-  row.style.display=row.textContent.toLowerCase().includes(keyword)?"":"none";
+const SUPABASE_URL="https://svhwozfwuexgiwrdripm.supabase.co";
+const SUPABASE_KEY="sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q";
+
+const db=window.supabase.createClient(
+ SUPABASE_URL,
+ SUPABASE_KEY
+);
+
+let teachers=[];
+
+const $=id=>document.getElementById(id);
+
+function showMessage(id,message,type){
+ const box=$(id);
+ box.textContent=message;
+ box.className="message "+type;
+}
+
+function escapeHTML(value){
+ return String(value??"").replace(/[&<>"']/g,char=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[char]));
+}
+
+async function checkAdmin(){
+ const {data:{session},error}=await db.auth.getSession();
+
+ if(error||!session){
+  alert("Bạn cần đăng nhập Admin để sử dụng chức năng này.");
+  location.href="account.html";
+  return false;
+ }
+
+ const {data:profile,error:roleError}=await db
+  .from("user_roles")
+  .select("role")
+  .eq("user_id",session.user.id)
+  .maybeSingle();
+
+ if(roleError||profile?.role!=="admin"){
+  alert("Tài khoản không có quyền Admin.");
+  location.href="account.html";
+  return false;
+ }
+
+ return true;
+}
+
+function updateStats(){
+ $("totalTeachers").textContent=teachers.length;
+
+ $("registeredTeachers").textContent=
+  teachers.filter(t=>t.registered).length;
+
+ $("pendingTeachers").textContent=
+  teachers.filter(t=>!t.registered).length;
+}
+
+function renderTeachers(){
+ const keyword=$("searchTeacher").value.trim().toLowerCase();
+
+ const filtered=teachers.filter(t=>
+  (t.email||"").toLowerCase().includes(keyword)||
+  (t.full_name||"").toLowerCase().includes(keyword)
+ );
+
+ if(!filtered.length){
+  $("teacherList").innerHTML=`
+   <tr>
+    <td colspan="6" class="empty">
+     ${teachers.length
+      ?"Không tìm thấy giáo viên phù hợp"
+      :"Chưa có giáo viên nào được cấp quyền"}
+    </td>
+   </tr>`;
+  return;
+ }
+
+ $("teacherList").innerHTML=filtered.map((t,index)=>`
+  <tr>
+   <td>${index+1}</td>
+   <td>${escapeHTML(t.full_name||"Chưa cập nhật")}</td>
+   <td>${escapeHTML(t.email)}</td>
+   <td>
+    <span class="status ${t.registered?"active":"pending"}">
+     ${t.registered?"Đã đăng ký":"Chờ đăng ký"}
+    </span>
+   </td>
+   <td>
+    <span class="role">Giáo viên</span>
+   </td>
+   <td>
+    <button class="btn-red revokeBtn"
+     data-email="${escapeHTML(t.email)}">
+     Thu hồi quyền
+    </button>
+   </td>
+  </tr>
+ `).join("");
+}
+
+async function loadTeachers(){
+ $("teacherList").innerHTML=`
+  <tr><td colspan="6" class="empty">Đang tải dữ liệu...</td></tr>`;
+
+ const {data,error}=await db.rpc("admin_list_teachers");
+
+ if(error){
+  $("teacherList").innerHTML=`
+   <tr><td colspan="6" class="empty">
+    Không thể tải danh sách: ${escapeHTML(error.message)}
+   </td></tr>`;
+  return;
+ }
+
+ teachers=data||[];
+ updateStats();
+ renderTeachers();
+}
+
+async function grantTeacher(){
+ const email=$("teacherEmail").value.trim().toLowerCase();
+
+ if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+  showMessage("grantMessage","Vui lòng nhập Gmail hợp lệ.","error");
+  return;
+ }
+
+ const btn=$("grantBtn");
+ btn.disabled=true;
+ btn.textContent="Đang xử lý...";
+
+ const {error}=await db.rpc("admin_grant_teacher",{
+  p_email:email
  });
+
+ btn.disabled=false;
+ btn.textContent="Cấp quyền";
+
+ if(error){
+  showMessage("grantMessage",error.message,"error");
+  return;
+ }
+
+ $("teacherEmail").value="";
+ showMessage("grantMessage","Đã cấp quyền giáo viên cho "+email,"success");
+
+ await loadTeachers();
+}
+
+async function revokeTeacher(email){
+ if(!confirm("Bạn có chắc muốn thu hồi quyền giáo viên của "+email+"?"))return;
+
+ const {error}=await db.rpc("admin_revoke_teacher",{
+  p_email:email
+ });
+
+ if(error){
+  showMessage("listMessage",error.message,"error");
+  return;
+ }
+
+ showMessage("listMessage","Đã thu hồi quyền của "+email,"success");
+
+ await loadTeachers();
+}
+
+$("grantBtn").addEventListener("click",grantTeacher);
+
+$("teacherEmail").addEventListener("keydown",e=>{
+ if(e.key==="Enter")grantTeacher();
 });
+
+$("refreshBtn").addEventListener("click",loadTeachers);
+
+$("searchTeacher").addEventListener("input",renderTeachers);
+
+$("teacherList").addEventListener("click",e=>{
+ const btn=e.target.closest(".revokeBtn");
+ if(btn)revokeTeacher(btn.dataset.email);
+});
+
+(async()=>{
+ const allowed=await checkAdmin();
+ if(allowed)await loadTeachers();
+})();
 </script>
 
 </body>
