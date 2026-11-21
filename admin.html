@@ -551,45 +551,64 @@ const modules=[
 
 function createPanelTexture(title,index){
  const canvas=document.createElement("canvas");
- canvas.width=600;
- canvas.height=360;
+ canvas.width=1200;
+ canvas.height=720;
+
  const ctx=canvas.getContext("2d");
 
- ctx.fillStyle="rgba(4,39,57,.88)";
- ctx.fillRect(0,0,600,360);
+ // Nền kính trong suốt
+ ctx.clearRect(0,0,1200,720);
 
- ctx.strokeStyle="#5ce5f2";
- ctx.lineWidth=4;
- ctx.strokeRect(7,7,586,346);
+ // Viền hologram
+ ctx.strokeStyle="#65efff";
+ ctx.lineWidth=5;
+ ctx.strokeRect(14,14,1172,692);
 
- ctx.fillStyle="#b9faff";
- ctx.font="bold 27px Consolas";
- ctx.fillText(title,25,55);
+ // Đường trang trí
+ ctx.strokeStyle="rgba(79,206,228,.65)";
+ ctx.lineWidth=2;
 
- ctx.fillStyle="#55c8dd";
- ctx.font="17px Consolas";
- ctx.fillText("RULER STUDY / ADMIN MODULE",25,92);
-
- ctx.strokeStyle="rgba(79,206,228,.4)";
  for(let i=0;i<4;i++){
   ctx.beginPath();
-  ctx.moveTo(25,130+i*48);
-  ctx.lineTo(570,130+i*48);
+  ctx.moveTo(50,260+i*90);
+  ctx.lineTo(1150,260+i*90);
   ctx.stroke();
  }
 
- ctx.fillStyle="#47d4e8";
- ctx.fillRect(25,145,200+(index%5)*35,7);
- ctx.fillRect(25,195,120+(index%4)*42,5);
- ctx.fillRect(25,245,260+(index%3)*30,5);
+ // Tiêu đề rõ nét
+ ctx.fillStyle="#ffffff";
+ ctx.font="bold 48px Consolas";
+ ctx.shadowColor="#55edff";
+ ctx.shadowBlur=12;
+ ctx.fillText(title,55,125);
 
- ctx.fillStyle="#a8f8ff";
- ctx.font="16px Consolas";
- ctx.fillText("ACCESS NODE  /  "+String(index+1).padStart(2,"0"),25,320);
+ ctx.shadowBlur=0;
 
- return new THREE.CanvasTexture(canvas);
+ // Nội dung phụ
+ ctx.fillStyle="#8df6ff";
+ ctx.font="30px Consolas";
+ ctx.fillText("RULER STUDY / ADMIN MODULE",55,195);
+
+ // Thanh dữ liệu
+ ctx.fillStyle="#42d9f2";
+ ctx.fillRect(55,300,400+(index%5)*55,12);
+ ctx.fillRect(55,410,260+(index%4)*50,9);
+ ctx.fillRect(55,520,500+(index%3)*45,9);
+
+ // Chân bảng
+ ctx.fillStyle="#ffffff";
+ ctx.font="26px Consolas";
+ ctx.fillText(
+  "ACCESS NODE / "+String(index+1).padStart(2,"0"),
+  55,650
+ );
+
+ const texture=new THREE.CanvasTexture(canvas);
+ texture.colorSpace=THREE.SRGBColorSpace;
+ texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
+
+ return texture;
 }
-
 const orbit=new THREE.Group();
 orbit.position.copy(globe.position);
 scene.add(orbit);
