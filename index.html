@@ -658,8 +658,14 @@ async function checkHomeLogin(){
     return;
   }
 
+  
   if(roleData?.role==="admin"){
     window.location.replace("admin.html");
+    return;
+  }
+
+  if(roleData?.role==="teacher"){
+    window.location.replace("teacher.html");
     return;
   }
 
@@ -667,6 +673,7 @@ async function checkHomeLogin(){
     <a href="account.html">Hồ sơ cá nhân</a>
     <button onclick="logoutUser()">Đăng xuất</button>
   `;
+
 }
 
 async function logoutUser(){
@@ -695,7 +702,10 @@ async function startStudentHeartbeat() {
     .eq("user_id", session.user.id)
     .maybeSingle();
 
-  if (roleData?.role === "admin") return;
+  if (
+  roleData?.role === "admin" ||
+  roleData?.role === "teacher"
+) return;
 
   await homeSupabase.rpc("record_student_heartbeat");
 
