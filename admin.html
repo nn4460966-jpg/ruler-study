@@ -283,15 +283,20 @@ root.appendChild(renderer.domElement);
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 controls.dampingFactor=.055;
-controls.rotateSpeed=.72;
+
+// Khóa xoay toàn bộ góc nhìn
+controls.enableRotate=false;
+
+// Không cho kéo lệch màn hình
 controls.enablePan=false;
+
+// Vẫn cho phép phóng to và thu nhỏ
+controls.enableZoom=true;
 controls.minDistance=10;
 controls.maxDistance=38;
-controls.minPolarAngle=.08;
-controls.maxPolarAngle=Math.PI-.08;
+
 controls.target.set(0,2,0);
 controls.autoRotate=false;
-controls.autoRotateSpeed=.65;
 
 /* ================= LIGHT ================= */
 
