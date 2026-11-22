@@ -711,6 +711,80 @@ for(let i=0;i<6;i++){
  platform.add(line);
 }
 
+/* ================= 11 BỆ LỤC GIÁC CỐ ĐỊNH ================= */
+
+const fixedBases=new THREE.Group();
+fixedBases.position.y=-1.35;
+scene.add(fixedBases);
+
+// Tạo 6 đỉnh của hình lục giác
+const hexRadius=8.2;
+const hexVertices=[];
+
+for(let i=0;i<6;i++){
+ const angle=i*Math.PI/3;
+ hexVertices.push([
+  Math.cos(angle)*hexRadius,
+  Math.sin(angle)*hexRadius
+ ]);
+}
+
+// Tạo 11 bệ phân bố đều trên chu vi lục giác
+for(let i=0;i<11;i++){
+ const t=i*6/11;
+ const side=Math.floor(t);
+ const fraction=t-side;
+
+ const a=hexVertices[side];
+ const b=hexVertices[(side+1)%6];
+
+ const x=a[0]+(b[0]-a[0])*fraction;
+ const z=a[1]+(b[1]-a[1])*fraction;
+
+ const pedestal=new THREE.Group();
+
+ const body=new THREE.Mesh(
+  new THREE.CylinderGeometry(.68,.82,.32,6),
+  new THREE.MeshStandardMaterial({
+   color:0x07516f,
+   metalness:.85,
+   roughness:.22,
+   emissive:0x034d68,
+   emissiveIntensity:.65
+  })
+ );
+ body.position.y=.16;
+ body.rotation.y=Math.PI/6;
+ pedestal.add(body);
+
+ const top=new THREE.Mesh(
+  new THREE.CylinderGeometry(.59,.68,.10,6),
+  new THREE.MeshStandardMaterial({
+   color:0x087b9c,
+   metalness:.8,
+   roughness:.2,
+   emissive:0x08718c,
+   emissiveIntensity:.8
+  })
+ );
+ top.position.y=.37;
+ top.rotation.y=Math.PI/6;
+ pedestal.add(top);
+
+ const ring=new THREE.Mesh(
+  new THREE.TorusGeometry(.62,.025,8,48),
+  new THREE.MeshBasicMaterial({
+   color:0x35eaff
+  })
+ );
+ ring.rotation.x=Math.PI/2;
+ ring.position.y=.43;
+ pedestal.add(ring);
+
+ pedestal.position.set(x,0,z);
+ fixedBases.add(pedestal);
+}
+
 /* ================= SIX MINI SATELLITES ================= */
 
 const satelliteOrbit=new THREE.Group();
@@ -796,6 +870,7 @@ function createSatellite(){
 
  return sat;
 }
+
 // 6 VỆ TINH Ở CÁC VỊ TRÍ VÀ ĐỘ CAO KHÁC NHAU
 const satellites=[];
 
