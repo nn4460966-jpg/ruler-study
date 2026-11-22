@@ -818,19 +818,34 @@ function animate(){
   }
  }
 
- // Chỉ địa cầu chuyển động khi không mở bảng thông tin
- if(!document.querySelector("#focus").classList.contains("show")){
+ // CHUYỂN ĐỘNG ĐỊA CẦU VÀ HỆ THỐNG VỆ TINH
+if(!document.querySelector("#focus").classList.contains("show")){
 
-  globe.rotation.y+=.001;
+ // Địa cầu tự xoay
+ globe.rotation.y+=.001;
 
-  const pulse=1+Math.sin(elapsed*.0015)*.018;
+ // Năm vệ tinh quay quanh địa cầu
+ satelliteOrbit.rotation.y+=.0032;
 
-  outerGlow.scale.setScalar(pulse);
-  atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
+ // Quỹ đạo vệ tinh hơi nghiêng và thay đổi nhẹ
+ satelliteOrbit.rotation.x=
+  .22+Math.sin(elapsed*.00035)*.06;
 
-  earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
-  cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
- }
+ // Từng vệ tinh tự xoay khi đang bay
+ satellites.forEach((sat,i)=>{
+  sat.rotation.y+=.012+(i%2)*.002;
+  sat.rotation.z=Math.sin(elapsed*.001+i)*.12;
+ });
+
+ // Hiệu ứng ánh sáng địa cầu
+ const pulse=1+Math.sin(elapsed*.0015)*.018;
+
+ outerGlow.scale.setScalar(pulse);
+ atmosphere.scale.setScalar(1+Math.sin(elapsed*.0012)*.008);
+
+ earthLight.intensity=2.2+Math.sin(elapsed*.0015)*.25;
+ cyanLight.intensity=1.1+Math.sin(elapsed*.0018)*.15;
+}
 
  // Giữ nguyên vị trí hologram
  updatePanels();
