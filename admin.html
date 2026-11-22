@@ -353,15 +353,21 @@ const globe=new THREE.Group();
 globe.position.set(0,3,0);
 scene.add(globe);
 
-// Lõi địa cầu
+// ĐỊA CẦU HOLOGRAM TRONG SUỐT
 const earth=new THREE.Mesh(
- new THREE.SphereGeometry(3.2,64,64),
- new THREE.MeshStandardMaterial({
-  color:0x075078,
-  metalness:.65,
-  roughness:.28,
-  emissive:0x0878a8,
-  emissiveIntensity:.85
+ new THREE.SphereGeometry(3.2,96,64),
+ new THREE.MeshPhysicalMaterial({
+  color:0x36c9ed,
+  metalness:.35,
+  roughness:.22,
+  transparent:true,
+  opacity:.48,
+  transmission:.25,
+  thickness:.8,
+  emissive:0x0878c8,
+  emissiveIntensity:.8,
+  side:THREE.FrontSide,
+  depthWrite:false
  })
 );
 globe.add(earth);
