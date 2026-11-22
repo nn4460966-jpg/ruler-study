@@ -711,14 +711,13 @@ for(let i=0;i<6;i++){
  platform.add(line);
 }
 
-/* ================= 11 BỆ LỤC GIÁC CỐ ĐỊNH ================= */
+/* ================= 12 BỆ LỤC GIÁC CỐ ĐỊNH ================= */
 
 const fixedBases=new THREE.Group();
 fixedBases.position.y=-1.35;
 scene.add(fixedBases);
 
-// Tạo 6 đỉnh của hình lục giác lớn hơn
-const hexRadius=10.2;
+const hexRadius=9.5;
 const hexVertices=[];
 
 for(let i=0;i<6;i++){
@@ -729,62 +728,61 @@ for(let i=0;i<6;i++){
  ]);
 }
 
-// Tạo 11 bệ phân bố đều trên chu vi lục giác
-for(let i=0;i<11;i++){
- const t=i*6/11;
- const side=Math.floor(t);
- const fraction=t-side;
+// Mỗi cạnh có đúng 2 bục
+for(let side=0;side<6;side++){
 
  const a=hexVertices[side];
  const b=hexVertices[(side+1)%6];
 
- const x=a[0]+(b[0]-a[0])*fraction;
- const z=a[1]+(b[1]-a[1])*fraction;
+ for(const fraction of [.33,.67]){
 
- const pedestal=new THREE.Group();
+  const x=a[0]+(b[0]-a[0])*fraction;
+  const z=a[1]+(b[1]-a[1])*fraction;
 
- const body=new THREE.Mesh(
-  new THREE.CylinderGeometry(.68,.82,.32,6),
-  new THREE.MeshStandardMaterial({
-   color:0x07516f,
-   metalness:.85,
-   roughness:.22,
-   emissive:0x034d68,
-   emissiveIntensity:.65
-  })
- );
- body.position.y=.16;
- body.rotation.y=Math.PI/6;
- pedestal.add(body);
+  const pedestal=new THREE.Group();
 
- const top=new THREE.Mesh(
-  new THREE.CylinderGeometry(.59,.68,.10,6),
-  new THREE.MeshStandardMaterial({
-   color:0x087b9c,
-   metalness:.8,
-   roughness:.2,
-   emissive:0x08718c,
-   emissiveIntensity:.8
-  })
- );
- top.position.y=.37;
- top.rotation.y=Math.PI/6;
- pedestal.add(top);
+  const body=new THREE.Mesh(
+   new THREE.CylinderGeometry(.68,.82,.32,6),
+   new THREE.MeshStandardMaterial({
+    color:0x07516f,
+    metalness:.85,
+    roughness:.22,
+    emissive:0x034d68,
+    emissiveIntensity:.65
+   })
+  );
+  body.position.y=.16;
+  body.rotation.y=Math.PI/6;
+  pedestal.add(body);
 
- const ring=new THREE.Mesh(
-  new THREE.TorusGeometry(.62,.025,8,48),
-  new THREE.MeshBasicMaterial({
-   color:0x35eaff
-  })
- );
- ring.rotation.x=Math.PI/2;
- ring.position.y=.43;
- pedestal.add(ring);
+  const top=new THREE.Mesh(
+   new THREE.CylinderGeometry(.59,.68,.10,6),
+   new THREE.MeshStandardMaterial({
+    color:0x087b9c,
+    metalness:.8,
+    roughness:.2,
+    emissive:0x08718c,
+    emissiveIntensity:.8
+   })
+  );
+  top.position.y=.37;
+  top.rotation.y=Math.PI/6;
+  pedestal.add(top);
 
- pedestal.position.set(x,0,z);
- fixedBases.add(pedestal);
+  const ring=new THREE.Mesh(
+   new THREE.TorusGeometry(.62,.025,8,48),
+   new THREE.MeshBasicMaterial({
+    color:0x35eaff
+   })
+  );
+  ring.rotation.x=Math.PI/2;
+  ring.position.y=.43;
+  pedestal.add(ring);
+
+  pedestal.position.set(x,0,z);
+  fixedBases.add(pedestal);
+ }
 }
-
 /* ================= SIX MINI SATELLITES ================= */
 
 const satelliteOrbit=new THREE.Group();
