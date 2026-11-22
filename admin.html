@@ -1114,18 +1114,18 @@ globe.rotation.y+=.001;
 // Các bảng chức năng quay quanh địa cầu
 orbit.rotation.y+=.00115;
 
- // Năm vệ tinh quay quanh địa cầu
- satelliteOrbit.rotation.y+=.0032;
+ // Sáu vệ tinh bay nhanh quanh địa cầu
+satelliteOrbit.rotation.y+=.006;
 
- // Quỹ đạo vệ tinh hơi nghiêng và thay đổi nhẹ
- satelliteOrbit.rotation.x=
-  .22+Math.sin(elapsed*.00035)*.06;
+// Quỹ đạo vệ tinh hơi nghiêng và thay đổi nhẹ
+satelliteOrbit.rotation.x=
+ .22+Math.sin(elapsed*.0005)*.06;
 
- // Từng vệ tinh tự xoay khi đang bay
- satellites.forEach((sat,i)=>{
-  sat.rotation.y+=.012+(i%2)*.002;
-  sat.rotation.z=Math.sin(elapsed*.001+i)*.12;
- });
+// Từng vệ tinh tự xoay khi đang bay
+satellites.forEach((sat,i)=>{
+ sat.rotation.y+=.018+(i%2)*.003;
+ sat.rotation.z=Math.sin(elapsed*.0015+i)*.12;
+});
 
  // Hiệu ứng ánh sáng địa cầu
  const pulse=1+Math.sin(elapsed*.0015)*.018;
