@@ -1061,6 +1061,21 @@ document.querySelector("#openModule").onclick=()=>{
   return;
  }
 
+ if(key==="lessons"){
+  location.href="admin-content.html?type=lesson";
+  return;
+ }
+
+ if(key==="assignments"){
+  location.href="admin-content.html?type=exercise";
+  return;
+ }
+
+ if(key==="questions"){
+  location.href="admin-content.html?type=question_bank";
+  return;
+ }
+
  if(key==="overview"){
   document.querySelector("#focus").classList.remove("show");
   controls.autoRotate=false;
@@ -1070,7 +1085,6 @@ document.querySelector("#openModule").onclick=()=>{
  document.querySelector("#moduleDesc").textContent=
   "Mục này chưa được nối với trang quản trị tương ứng trong mã nguồn hiện tại. Chưa thực hiện thao tác dữ liệu.";
 };
-
 /* ================= ANIMATION ================= */
 
 /* ================= ANIMATION ================= */
