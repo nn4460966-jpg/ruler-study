@@ -310,13 +310,35 @@ const lamp2=new THREE.PointLight(0x147dff,80,50);
 lamp2.position.set(-10,4,-8);
 scene.add(lamp2);
 
-/* ================= FLOOR ================= */
+/* ================= RULER MINIMAL BACKGROUND ================= */
 
-const grid=new THREE.GridHelper(90,72,0x17627b,0x12394c);
-grid.position.y=-1.5;
-grid.material.transparent=true;
-grid.material.opacity=.48;
-scene.add(grid);
+// Bỏ sàn lưới 3D
+root.style.background=`
+ radial-gradient(
+  ellipse at 52% 45%,
+  rgba(0,145,190,.20) 0%,
+  rgba(5,48,72,.13) 32%,
+  transparent 65%
+ ),
+ radial-gradient(
+  circle at 12% 18%,
+  rgba(0,190,220,.07) 0%,
+  transparent 35%
+ ),
+ radial-gradient(
+  circle at 88% 82%,
+  rgba(20,75,150,.10) 0%,
+  transparent 38%
+ ),
+ linear-gradient(
+  135deg,
+  #020914 0%,
+  #071b2c 48%,
+  #020813 100%
+ )
+`;
+
+// Không tạo thêm vật thể nền 3D
 
 /* ================= CLEAN COMMAND CENTER ================= */
 
