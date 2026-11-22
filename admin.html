@@ -723,48 +723,48 @@ function createSatellite(){
 
  // THÂN VỆ TINH
  const body=new THREE.Mesh(
-  new THREE.BoxGeometry(.075,.065,.12),
+  new THREE.BoxGeometry(.10,.085,.15),
   new THREE.MeshStandardMaterial({
    color:0xc8f5ff,
    metalness:.8,
    roughness:.2,
    emissive:0x168dff,
-   emissiveIntensity:1
+   emissiveIntensity:1.2
   })
  );
  sat.add(body);
 
- // HAI TẤM PIN NHỎ
+ // HAI TẤM PIN
  for(const side of [-1,1]){
   const wing=new THREE.Mesh(
-   new THREE.BoxGeometry(.19,.012,.075),
+   new THREE.BoxGeometry(.24,.016,.09),
    new THREE.MeshBasicMaterial({
     color:0x238edb,
     transparent:true,
-    opacity:.9
+    opacity:1
    })
   );
 
-  wing.position.x=side*.13;
+  wing.position.x=side*.17;
   sat.add(wing);
  }
 
  // ĐÈN XANH
  const light=new THREE.Mesh(
-  new THREE.SphereGeometry(.025,8,8),
+  new THREE.SphereGeometry(.032,10,10),
   new THREE.MeshBasicMaterial({
    color:0x8dfaff
   })
  );
  sat.add(light);
 
- // VỆT SÁNG XANH PHÍA SAU
+ // VỆT SÁNG XANH DÀI VÀ ĐẬM
  const trail=new THREE.Mesh(
-  new THREE.ConeGeometry(.035,.48,8,1,true),
+  new THREE.ConeGeometry(.055,.85,10,1,true),
   new THREE.MeshBasicMaterial({
-   color:0x19bfff,
+   color:0x08aaff,
    transparent:true,
-   opacity:.38,
+   opacity:.68,
    blending:THREE.AdditiveBlending,
    depthWrite:false,
    side:THREE.DoubleSide
@@ -772,31 +772,30 @@ function createSatellite(){
  );
 
  trail.rotation.z=Math.PI/2;
- trail.position.x=-.27;
+ trail.position.x=-.46;
  sat.add(trail);
 
- // VỆT SÁNG MỎNG HƠN
+ // LÕI SÁNG XANH
  const trailCore=new THREE.Mesh(
-  new THREE.CylinderGeometry(.002,.018,.38,6,1,true),
+  new THREE.CylinderGeometry(.004,.025,.72,8,1,true),
   new THREE.MeshBasicMaterial({
-   color:0x83f7ff,
+   color:0x9afaff,
    transparent:true,
-   opacity:.45,
+   opacity:.8,
    blending:THREE.AdditiveBlending,
    depthWrite:false
   })
  );
 
  trailCore.rotation.z=Math.PI/2;
- trailCore.position.x=-.24;
+ trailCore.position.x=-.42;
  sat.add(trailCore);
 
- const glow=new THREE.PointLight(0x28caff,.35,1.2);
+ const glow=new THREE.PointLight(0x28caff,.5,1.5);
  sat.add(glow);
 
  return sat;
 }
-
 // 6 VỆ TINH Ở CÁC VỊ TRÍ VÀ ĐỘ CAO KHÁC NHAU
 const satellites=[];
 
