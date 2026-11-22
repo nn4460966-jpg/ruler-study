@@ -226,172 +226,216 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
  const group=new THREE.Group();
  group.position.set(x,-1.45,z);
 
- // Thân nhà kính xanh
- const body=new THREE.Mesh(
-  new THREE.BoxGeometry(width,height,depth),
-  new THREE.MeshPhysicalMaterial({
-   color:0x087b9c,
-   metalness:.5,
-   roughness:.2,
-   transparent:true,
-   opacity:.3,
-   transmission:.08,
-   emissive:0x03465e,
-   emissiveIntensity:.5,
-   depthWrite:false
-  })
- );
- body.position.y=height/2;
- group.add(body);
-
- // Khung ngoài
- const frame=new THREE.LineSegments(
-  new THREE.EdgesGeometry(
-   new THREE.BoxGeometry(width,height,depth)
-  ),
-  new THREE.LineBasicMaterial({
-   color:0x65eaff,
-   transparent:true,
-   opacity:.9
-  })
- );
- frame.position.y=height/2;
- group.add(frame);
-
- // Vật liệu cửa sổ
- const windowMaterial=new THREE.MeshBasicMaterial({
-  color:0x65eaff,
+ // Vật liệu kính trong suốt
+ const glassMaterial=new THREE.MeshPhysicalMaterial({
+  color:0x28c9e8,
+  metalness:.25,
+  roughness:.12,
   transparent:true,
-  opacity:.8,
+  opacity:.10,
+  transmission:.35,
+  depthWrite:false,
   side:THREE.DoubleSide
  });
 
- // Các tầng và cửa sổ
- for(let k=0;k<levels;k++){
+ // Thân kính
+ const glass=new THREE.Mesh(
+  new THREE.BoxGeometry(width,height,depth),
+  glassMaterial
+ );
+ glass.position.y=height/2;
+ group.add(glass);
 
-  const y=height*(k+.5)/levels;
+ // Vật liệu khung và cột
+ const frameMaterial=new THREE.MeshBasicMaterial({
+  color:0x65eaff,
+  transparent:true,
+  opacity:.9
+ });
 
-  // Viền sàn mỗi tầng
-  const floor=new THREE.Mesh(
-   new THREE.BoxGeometry(width*1.08,.055,depth*1.08),
-   new THREE.MeshBasicMaterial({
-    color:0x36cde9,
-    transparent:true,
-    opacity:.75
-   })
+ // Hàm tạo thanh kiến trúc
+ function addBeam(w,h,d,xp,yp,zp){
+  const beam=new THREE.Mesh(
+   new THREE.BoxGeometry(w,h,d),
+   frameMaterial
   );
+  beam.position.set(xp,yp,zp);
+  group.add(beam);
+ }
 
-  floor.position.y=height*k/levels;
-  group.add(floor);
+ const bar=.045;
 
-  // Cửa sổ mặt trước và mặt sau
-  for(const side of [-1,1]){
-   const windowMesh=new THREE.Mesh(
-    new THREE.BoxGeometry(width*.72,height/levels*.48,.025),
-    windowMaterial
-   );
-
-   windowMesh.position.set(
-    0,
-    y,
-    side*(depth/2+.014)
-   );
-
-   group.add(windowMesh);
-  }
-
-  // Cửa sổ hai mặt bên
-  for(const side of [-1,1]){
-   const sideWindow=new THREE.Mesh(
-    new THREE.BoxGeometry(.025,height/levels*.48,depth*.7),
-    windowMaterial
-   );
-
-   sideWindow.position.set(
-    side*(width/2+.014),
-    y,
-    0
-   );
-
-   group.add(sideWindow);
+ // Cột đứng ở bốn góc và giữa các mặt
+ for(const px of [-width/2,0,width/2]){
+  for(const pz of [-depth/2,depth/2]){
+   addBeam(bar,height,bar,px,height/2,pz);
   }
  }
 
- // Cột kiến trúc ở bốn góc
- const corners=[
-  [-width/2,-depth/2],
-  [width/2,-depth/2],
-  [width/2,depth/2],
-  [-width/2,depth/2]
- ];
+ for(const pz of [-depth/2,0,depth/2]){
+  for(const px of [-width/2,width/2]){
+   addBeam(bar,height,bar,px,height/2,pz);
+  }
+ }
 
- corners.forEach(([cx,cz])=>{
+ // Thanh ngang chia tầng
+ for(let k=0;k<=levels;k++){
 
-  const pillar=new THREE.Mesh(
-   new THREE.BoxGeometry(.065,height,.065),
-   new THREE.MeshBasicMaterial({
-    color:0x8af5ff,
-    transparent:true,
-    opacity:.95
-   })
-  );
+  const y=height*k/levels;
 
-  pillar.position.set(cx,height/2,cz);
-  group.add(pillar);
+  addBeam(width*1.05,bar,bar,0,y,-depth/2);
+  addBeam(width*1.05,bar,bar,0,y,depth/2);
+
+  addBeam(bar,bar,depth*1.05,-width/2,y,0);
+  addBeam(bar,bar,depth*1.05,width/2,y,0);
+ }
+
+ // Các vách kính nhỏ đan xen
+ const panelMaterial=new THREE.MeshBasicMaterial({
+  color:0x38c9e8,
+  transparent:true,
+  opacity:.09,
+  side:THREE.DoubleSide,
+  depthWrite:false
  });
 
- // Mái nhà
+ for(let k=0;k<levels;k++){
+
+  const y=height*(k+.5)/levels;
+  const panelHeight=height/levels*.72;
+
+  for(const side of [-1,1]){
+
+   const frontPanel=new THREE.Mesh(
+    new THREE.PlaneGeometry(width*.43,panelHeight),
+    panelMaterial
+   );
+
+   frontPanel.position.set(
+    side*width*.25,
+    y,
+    depth/2+.006
+   );
+   group.add(frontPanel);
+
+   const backPanel=new THREE.Mesh(
+    new THREE.PlaneGeometry(width*.43,panelHeight),
+    panelMaterial
+   );
+
+   backPanel.position.set(
+    side*width*.25,
+    y,
+    -depth/2-.006
+   );
+   backPanel.rotation.y=Math.PI;
+   group.add(backPanel);
+
+   const sidePanel=new THREE.Mesh(
+    new THREE.PlaneGeometry(depth*.43,panelHeight),
+    panelMaterial
+   );
+
+   sidePanel.position.set(
+    width/2+.006,
+    y,
+    side*depth*.25
+   );
+   sidePanel.rotation.y=Math.PI/2;
+   group.add(sidePanel);
+
+   const otherPanel=new THREE.Mesh(
+    new THREE.PlaneGeometry(depth*.43,panelHeight),
+    panelMaterial
+   );
+
+   otherPanel.position.set(
+    -width/2-.006,
+    y,
+    side*depth*.25
+   );
+   otherPanel.rotation.y=-Math.PI/2;
+   group.add(otherPanel);
+  }
+ }
+
+ // Thanh chéo tạo khung đan xen ở mặt trước và sau
+ for(let k=0;k<levels;k++){
+
+  const y1=height*k/levels;
+  const y2=height*(k+1)/levels;
+  const segmentHeight=y2-y1;
+
+  for(const side of [-1,1]){
+
+   const diagonal=new THREE.Mesh(
+    new THREE.BoxGeometry(
+     width*.9,
+     .035,
+     .035
+    ),
+    frameMaterial
+   );
+
+   diagonal.position.set(
+    0,
+    (y1+y2)/2,
+    side*(depth/2+.025)
+   );
+
+   diagonal.rotation.z=
+    (k%2===0?1:-1)*Math.atan2(segmentHeight,width*.9);
+
+   group.add(diagonal);
+  }
+ }
+
+ // Mái kính mỏng
  const roof=new THREE.Mesh(
-  new THREE.BoxGeometry(width*1.25,.2,depth*1.25),
-  new THREE.MeshStandardMaterial({
-   color:0x087b9c,
-   metalness:.8,
-   roughness:.2,
-   emissive:0x087bff,
-   emissiveIntensity:.7
+  new THREE.BoxGeometry(width*1.08,.045,depth*1.08),
+  new THREE.MeshBasicMaterial({
+   color:0x39dfff,
+   transparent:true,
+   opacity:.3,
+   wireframe:true
   })
  );
-
- roof.position.y=height+.1;
+ roof.position.y=height;
  group.add(roof);
 
- // Trụ phát tín hiệu trên mái
+ // Ăng-ten trên mái
  const antenna=new THREE.Mesh(
-  new THREE.CylinderGeometry(.035,.055,.65,8),
-  new THREE.MeshBasicMaterial({
-   color:0x70faff
-  })
+  new THREE.CylinderGeometry(.025,.04,.55,8),
+  frameMaterial
  );
-
- antenna.position.y=height+.5;
+ antenna.position.y=height+.28;
  group.add(antenna);
 
  // Đèn đỉnh
  const beacon=new THREE.Mesh(
-  new THREE.SphereGeometry(.13,16,16),
+  new THREE.SphereGeometry(.10,12,12),
   new THREE.MeshBasicMaterial({
    color:0x9fffff
   })
  );
-
- beacon.position.y=height+.85;
+ beacon.position.y=height+.58;
  group.add(beacon);
 
- // Bệ chân tòa nhà
+ // Bệ chân phát sáng
  const foundation=new THREE.Mesh(
-  new THREE.BoxGeometry(width*1.2,.18,depth*1.2),
-  new THREE.MeshStandardMaterial({
-   color:0x07516f,
-   metalness:.8,
-   roughness:.25,
-   emissive:0x034d68,
-   emissiveIntensity:.6
+  new THREE.BoxGeometry(width*1.12,.10,depth*1.12),
+  new THREE.MeshBasicMaterial({
+   color:0x087b9c,
+   transparent:true,
+   opacity:.45,
+   wireframe:true
   })
  );
-
- foundation.position.y=.09;
+ foundation.position.y=.05;
  group.add(foundation);
 
+ buildings.add(group);
+}
  buildings.add(group);
 }
  
@@ -399,11 +443,31 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
  
 
 [
- [-14,-10,8], [14,-10,8],
- [-14,6,6], [14,6,6],
- [-9,-16,5], [9,-16,5],
- [-17,-2,5], [17,-2,5],
- [-3,-17,11], [3,-17,10]
+ // Hàng phía sau
+ [-16,-17,7,1.5,1.5,6],
+ [-9,-19,11,1.7,1.6,9],
+ [-2,-18,5,1.3,1.3,4],
+ [6,-19,9,1.6,1.5,8],
+ [15,-17,6,1.4,1.4,5],
+
+ // Cánh trái
+ [-19,-10,10,1.6,1.5,8],
+ [-20,-2,6,1.4,1.4,5],
+ [-19,7,12,1.7,1.6,10],
+ [-15,15,7,1.5,1.5,6],
+
+ // Cánh phải
+ [19,-10,8,1.5,1.5,7],
+ [20,-2,12,1.7,1.6,10],
+ [19,7,5,1.3,1.3,4],
+ [15,15,9,1.6,1.5,8],
+
+ // Hàng phía trước
+ [-10,19,6,1.4,1.4,5],
+ [-3,20,11,1.7,1.6,9],
+ [4,20,7,1.5,1.5,6],
+ [11,19,10,1.6,1.5,8],
+ [0,16,5,1.3,1.3,4]
 ].forEach(p=>addTower(...p));
 
 /* ================= AMBIENT SCREENS ================= */
