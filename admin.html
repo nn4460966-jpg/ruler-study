@@ -219,28 +219,181 @@ scene.add(grid);
 const buildings=new THREE.Group();
 scene.add(buildings);
 
+/* ================= TÒA NHÀ HOLOGRAM CHI TIẾT ================= */
+
 function addTower(x,z,height,width=1,depth=1,levels=7){
+
  const group=new THREE.Group();
  group.position.set(x,-1.45,z);
 
- // Thân tòa nhà bằng kính hologram
+ // Thân nhà kính xanh
  const body=new THREE.Mesh(
   new THREE.BoxGeometry(width,height,depth),
   new THREE.MeshPhysicalMaterial({
    color:0x087b9c,
-   metalness:.45,
-   roughness:.22,
+   metalness:.5,
+   roughness:.2,
    transparent:true,
-   opacity:.24,
-   transmission:.12,
+   opacity:.3,
+   transmission:.08,
    emissive:0x03465e,
-   emissiveIntensity:.45,
+   emissiveIntensity:.5,
    depthWrite:false
   })
  );
  body.position.y=height/2;
  group.add(body);
 
+ // Khung ngoài
+ const frame=new THREE.LineSegments(
+  new THREE.EdgesGeometry(
+   new THREE.BoxGeometry(width,height,depth)
+  ),
+  new THREE.LineBasicMaterial({
+   color:0x65eaff,
+   transparent:true,
+   opacity:.9
+  })
+ );
+ frame.position.y=height/2;
+ group.add(frame);
+
+ // Vật liệu cửa sổ
+ const windowMaterial=new THREE.MeshBasicMaterial({
+  color:0x65eaff,
+  transparent:true,
+  opacity:.8,
+  side:THREE.DoubleSide
+ });
+
+ // Các tầng và cửa sổ
+ for(let k=0;k<levels;k++){
+
+  const y=height*(k+.5)/levels;
+
+  // Viền sàn mỗi tầng
+  const floor=new THREE.Mesh(
+   new THREE.BoxGeometry(width*1.08,.055,depth*1.08),
+   new THREE.MeshBasicMaterial({
+    color:0x36cde9,
+    transparent:true,
+    opacity:.75
+   })
+  );
+
+  floor.position.y=height*k/levels;
+  group.add(floor);
+
+  // Cửa sổ mặt trước và mặt sau
+  for(const side of [-1,1]){
+   const windowMesh=new THREE.Mesh(
+    new THREE.BoxGeometry(width*.72,height/levels*.48,.025),
+    windowMaterial
+   );
+
+   windowMesh.position.set(
+    0,
+    y,
+    side*(depth/2+.014)
+   );
+
+   group.add(windowMesh);
+  }
+
+  // Cửa sổ hai mặt bên
+  for(const side of [-1,1]){
+   const sideWindow=new THREE.Mesh(
+    new THREE.BoxGeometry(.025,height/levels*.48,depth*.7),
+    windowMaterial
+   );
+
+   sideWindow.position.set(
+    side*(width/2+.014),
+    y,
+    0
+   );
+
+   group.add(sideWindow);
+  }
+ }
+
+ // Cột kiến trúc ở bốn góc
+ const corners=[
+  [-width/2,-depth/2],
+  [width/2,-depth/2],
+  [width/2,depth/2],
+  [-width/2,depth/2]
+ ];
+
+ corners.forEach(([cx,cz])=>{
+
+  const pillar=new THREE.Mesh(
+   new THREE.BoxGeometry(.065,height,.065),
+   new THREE.MeshBasicMaterial({
+    color:0x8af5ff,
+    transparent:true,
+    opacity:.95
+   })
+  );
+
+  pillar.position.set(cx,height/2,cz);
+  group.add(pillar);
+ });
+
+ // Mái nhà
+ const roof=new THREE.Mesh(
+  new THREE.BoxGeometry(width*1.25,.2,depth*1.25),
+  new THREE.MeshStandardMaterial({
+   color:0x087b9c,
+   metalness:.8,
+   roughness:.2,
+   emissive:0x087bff,
+   emissiveIntensity:.7
+  })
+ );
+
+ roof.position.y=height+.1;
+ group.add(roof);
+
+ // Trụ phát tín hiệu trên mái
+ const antenna=new THREE.Mesh(
+  new THREE.CylinderGeometry(.035,.055,.65,8),
+  new THREE.MeshBasicMaterial({
+   color:0x70faff
+  })
+ );
+
+ antenna.position.y=height+.5;
+ group.add(antenna);
+
+ // Đèn đỉnh
+ const beacon=new THREE.Mesh(
+  new THREE.SphereGeometry(.13,16,16),
+  new THREE.MeshBasicMaterial({
+   color:0x9fffff
+  })
+ );
+
+ beacon.position.y=height+.85;
+ group.add(beacon);
+
+ // Bệ chân tòa nhà
+ const foundation=new THREE.Mesh(
+  new THREE.BoxGeometry(width*1.2,.18,depth*1.2),
+  new THREE.MeshStandardMaterial({
+   color:0x07516f,
+   metalness:.8,
+   roughness:.25,
+   emissive:0x034d68,
+   emissiveIntensity:.6
+  })
+ );
+
+ foundation.position.y=.09;
+ group.add(foundation);
+
+ buildings.add(group);
+}
  // Khung kiến trúc và các tầng
  const edges=new THREE.EdgesGeometry(
   new THREE.BoxGeometry(width,height,depth)
