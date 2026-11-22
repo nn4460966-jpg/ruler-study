@@ -52,8 +52,44 @@ html,body{
 .brand{position:absolute;top:20px;left:22px;padding:12px 15px;border:1px solid #38b8d455;background:#03131bcc}
 .brand b{font-size:14px;letter-spacing:2px}
 .brand small{display:block;margin-top:5px;color:#478ca0}
-.leftmenu{position:absolute;left:20px;top:24%;padding:12px;width:155px;border:1px solid #40c9db55;background:#03151dcc;line-height:2.5}
-.leftmenu strong{display:block;color:#4ed7e8;font-size:10px}
+..leftmenu{
+ position:absolute;
+ left:28px;
+ top:50%;
+ transform:translateY(-50%);
+ width:245px;
+ padding:22px 17px;
+ border:1px solid rgba(75,225,255,.65);
+ background:linear-gradient(145deg,rgba(3,30,48,.94),rgba(2,10,25,.86));
+ box-shadow:0 0 25px rgba(0,190,255,.2),inset 0 0 22px rgba(0,190,255,.06);
+ backdrop-filter:blur(14px);
+ line-height:2.5;
+}
+.leftmenu strong{
+ display:block;
+ color:#73efff;
+ font-size:12px;
+ letter-spacing:2px;
+ padding-bottom:13px;
+ margin-bottom:12px;
+ border-bottom:1px solid #42cce655;
+}
+.leftmenu .menuitem{
+ display:block;
+ padding:5px 9px;
+ margin:5px 0;
+ border-left:2px solid #28c9e8;
+ color:#c4f5ff;
+ font-size:11px;
+ letter-spacing:1px;
+ background:linear-gradient(90deg,rgba(20,170,210,.14),transparent);
+}
+.leftmenu small{
+ display:block;
+ margin-top:14px;
+ color:#5caabd;
+ font-size:9px;
+}
 .metrics{position:absolute;bottom:17px;left:20px;color:#4b91a6}
 .help{position:absolute;right:20px;bottom:17px;padding:10px;border:1px solid #3eb9d766;background:#041722d9}
 .account{position:absolute;right:20px;top:20px;display:flex;align-items:center;gap:10px;padding:9px;border:1px solid #38b8d455;background:#03131bcc;pointer-events:auto}
@@ -104,14 +140,21 @@ html,body{
  </div>
 
 <div class="leftmenu">
-  <strong>▸ TRUNG TÂM ĐIỀU HÀNH</strong>
-  01 &nbsp; TỔNG QUAN<br>
-  02 &nbsp; HỌC SINH<br>
-  03 &nbsp; HỌC TẬP<br>
-  04 &nbsp; TỪ VỰNG<br>
-  05 &nbsp; IELTS<br>
-  06 &nbsp; QUẢN LÝ GIÁO VIÊN<br>
-  <small>CHỌN HOLOGRAM ĐỂ MỞ</small>
+ <strong>◈ TRUNG TÂM ĐIỀU HÀNH</strong>
+
+ <span class="menuitem">01　TỔNG QUAN HỆ THỐNG</span>
+ <span class="menuitem">02　QUẢN LÝ HỌC SINH</span>
+ <span class="menuitem">03　QUẢN LÝ GIÁO VIÊN</span>
+ <span class="menuitem">04　QUẢN LÝ LỚP HỌC</span>
+ <span class="menuitem">05　QUẢN LÝ MÔN HỌC</span>
+ <span class="menuitem">06　QUẢN LÝ BÀI HỌC</span>
+ <span class="menuitem">07　QUẢN LÝ BÀI TẬP</span>
+ <span class="menuitem">08　NGÂN HÀNG CÂU HỎI</span>
+ <span class="menuitem">09　KẾT QUẢ HỌC TẬP</span>
+ <span class="menuitem">10　THÔNG BÁO HỆ THỐNG</span>
+ <span class="menuitem">11　PHÂN QUYỀN VÀ BẢO MẬT</span>
+
+ <small>RULER ADMIN CONTROL CENTER</small>
 </div>
 
  <div class="account">
