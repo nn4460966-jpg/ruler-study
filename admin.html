@@ -264,7 +264,11 @@ root.style.background=`
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
 camera.position.set(0,13,27);
 
-const renderer=new THREE.WebGLRenderer({antialias:true});
+const renderer=new THREE.WebGLRenderer({
+ antialias:true,
+ alpha:true
+});
+
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
 
 renderer.setSize(
@@ -273,11 +277,15 @@ renderer.setSize(
  false
 );
 
+renderer.setClearColor(0x000000,0);
+
 renderer.domElement.style.width="100%";
 renderer.domElement.style.height="100%";
+renderer.domElement.style.background="transparent";
 
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.25;
+
 root.appendChild(renderer.domElement);
 
 const controls=new OrbitControls(camera,renderer.domElement);
