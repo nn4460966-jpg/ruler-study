@@ -508,30 +508,114 @@ globe.add(cyanLight);
 
 /* ================= HEXAGON PLATFORM ================= */
 
+/* ================= BỆ TRUNG TÂM CÔNG NGHỆ ================= */
+
 const platform=new THREE.Group();
 platform.position.y=-1.35;
 scene.add(platform);
 
+// Tầng đế chính
 const base=new THREE.Mesh(
  new THREE.CylinderGeometry(5.1,5.7,.55,6,1),
  new THREE.MeshStandardMaterial({
-  color:0x08718c,
-  metalness:.7,
-  roughness:.28,
+  color:0x07516f,
+  metalness:.85,
+  roughness:.22,
   emissive:0x034d68,
-  emissiveIntensity:.6
+  emissiveIntensity:.8
  })
 );
 base.rotation.y=Math.PI/6;
 platform.add(base);
 
+// Mặt sàn phía trên
 const topBase=new THREE.Mesh(
- new THREE.CylinderGeometry(4.5,4.8,.12,6),
- new THREE.MeshBasicMaterial({color:0x69e9ef})
+ new THREE.CylinderGeometry(4.5,4.8,.16,6),
+ new THREE.MeshStandardMaterial({
+  color:0x087b9c,
+  metalness:.8,
+  roughness:.2,
+  emissive:0x08718c,
+  emissiveIntensity:.9
+ })
 );
 topBase.rotation.y=Math.PI/6;
 topBase.position.y=.32;
 platform.add(topBase);
+
+// Vòng sáng bao quanh bệ
+function addPlatformRing(radius,tube,y,color,opacity){
+ const ring=new THREE.Mesh(
+  new THREE.TorusGeometry(radius,tube,8,160),
+  new THREE.MeshBasicMaterial({
+   color:color,
+   transparent:true,
+   opacity:opacity
+  })
+ );
+
+ ring.rotation.x=Math.PI/2;
+ ring.position.y=y;
+ platform.add(ring);
+}
+
+addPlatformRing(5.85,.045,.02,0x24dfff,.9);
+addPlatformRing(5.35,.025,.34,0x65f4ff,.85);
+addPlatformRing(4.65,.035,.43,0x168eff,.8);
+addPlatformRing(3.9,.018,.43,0x65f4ff,.65);
+
+// Các trụ công nghệ quanh bệ
+for(let i=0;i<6;i++){
+ const angle=i*Math.PI*2/6;
+ const x=Math.cos(angle)*5.05;
+ const z=Math.sin(angle)*5.05;
+
+ const support=new THREE.Mesh(
+  new THREE.CylinderGeometry(.13,.2,.42,8),
+  new THREE.MeshStandardMaterial({
+   color:0x087b9c,
+   metalness:.85,
+   roughness:.2,
+   emissive:0x087bff,
+   emissiveIntensity:.8
+  })
+ );
+
+ support.position.set(x,.39,z);
+ platform.add(support);
+
+ const light=new THREE.Mesh(
+  new THREE.SphereGeometry(.11,12,12),
+  new THREE.MeshBasicMaterial({
+   color:0x75faff
+  })
+ );
+
+ light.position.set(x,.63,z);
+ platform.add(light);
+}
+
+// Các đường chia tầng trên mặt bệ
+for(let i=0;i<6;i++){
+ const angle=i*Math.PI*2/6;
+ const line=new THREE.Mesh(
+  new THREE.BoxGeometry(2.1,.018,.025),
+  new THREE.MeshBasicMaterial({
+   color:0x65eaff,
+   transparent:true,
+   opacity:.8
+  })
+ );
+
+ line.position.set(
+  Math.cos(angle)*3.35,
+  .425,
+  Math.sin(angle)*3.35
+ );
+
+ line.rotation.y=-angle;
+ platform.add(line);
+}
 
 /* ================= FIVE SATELLITES ================= */
 
