@@ -585,19 +585,223 @@ distantRows.forEach((b,index)=>{
  }
 });
 
-// Mặt đường thành phố ở phía xa
+// ================= REALISTIC CITY ROAD =================
+
+// Mặt đường nhựa
+const roadMaterial=new THREE.MeshStandardMaterial({
+ color:0x252b35,
+ roughness:.96,
+ metalness:.02
+});
+
 const cityRoad=new THREE.Mesh(
- new THREE.PlaneGeometry(70,18),
- new THREE.MeshStandardMaterial({
-  color:0x101a2b,
-  roughness:.95,
-  metalness:.05
- })
+ new THREE.PlaneGeometry(70,10),
+ roadMaterial
 );
 
 cityRoad.rotation.x=-Math.PI/2;
-cityRoad.position.set(0,-2.78,-39);
+cityRoad.position.set(0,-2.72,-8.5);
 animeCity.add(cityRoad);
+
+// Vỉa hè hai bên đường
+const sidewalkMaterial=new THREE.MeshStandardMaterial({
+ color:0x777d85,
+ roughness:.95
+});
+
+function addSidewalk(z){
+
+ const sidewalk=new THREE.Mesh(
+  new THREE.BoxGeometry(70,.22,1.8),
+  sidewalkMaterial
+ );
+
+ sidewalk.position.set(0,-2.62,z);
+ animeCity.add(sidewalk);
+
+ // Các đường ghép tấm lát vỉa hè
+ for(let x=-33;x<=33;x+=2.5){
+
+  const joint=new THREE.Mesh(
+   new THREE.BoxGeometry(.035,.012,1.65),
+   new THREE.MeshBasicMaterial({
+    color:0x424b57
+   })
+  );
+
+  joint.position.set(x,-2.5,z);
+  animeCity.add(joint);
+ }
+}
+
+addSidewalk(-3.2);
+addSidewalk(-13.8);
+
+// Bó vỉa bê tông
+const curbMaterial=new THREE.MeshStandardMaterial({
+ color:0xb2b5b8,
+ roughness:.9
+});
+
+function addCurb(z){
+
+ const curb=new THREE.Mesh(
+  new THREE.BoxGeometry(70,.3,.28),
+  curbMaterial
+ );
+
+ curb.position.set(0,-2.57,z);
+ animeCity.add(curb);
+}
+
+addCurb(-4.15);
+addCurb(-12.85);
+
+// Vạch phân làn giữa đường
+const laneMaterial=new THREE.MeshBasicMaterial({
+ color:0xe7e2c9
+});
+
+for(let x=-32;x<32;x+=4){
+
+ const dash=new THREE.Mesh(
+  new THREE.BoxGeometry(2,.025,.12),
+  laneMaterial
+ );
+
+ dash.rotation.x=-Math.PI/2;
+ dash.position.set(x,-2.705,-8.5);
+ animeCity.add(dash);
+}
+
+// Vạch mép đường
+const edgeMaterial=new THREE.MeshBasicMaterial({
+ color:0xd5d2c6
+});
+
+[-12.3,-4.7].forEach(z=>{
+
+ const line=new THREE.Mesh(
+  new THREE.PlaneGeometry(70,.09),
+  edgeMaterial
+ );
+
+ line.rotation.x=-Math.PI/2;
+ line.position.set(0,-2.705,z);
+ animeCity.add(line);
+});
+
+// Vạch qua đường ở hai đầu
+function addCrosswalk(x){
+
+ for(let i=0;i<9;i++){
+
+  const stripe=new THREE.Mesh(
+   new THREE.BoxGeometry(.48,.025,4.2),
+   new THREE.MeshBasicMaterial({
+    color:0xf1f0e9
+   })
+  );
+
+  stripe.position.set(
+   x-2.1+i*.52,
+   -2.695,
+   -8.5
+  );
+
+  animeCity.add(stripe);
+ }
+}
+
+addCrosswalk(-23);
+addCrosswalk(23);
+
+// Nắp cống ven đường
+const manholeMaterial=new THREE.MeshStandardMaterial({
+ color:0x555c65,
+ metalness:.65,
+ roughness:.55
+});
+
+[-17,15].forEach(x=>{
+
+ const cover=new THREE.Mesh(
+  new THREE.CylinderGeometry(.42,.42,.035,24),
+  manholeMaterial
+ );
+
+ cover.position.set(x,-2.68,-10.9);
+ animeCity.add(cover);
+});
+
+// Các vạch nhỏ trên nắp cống
+for(let x=-17;x<=15;x+=32){
+
+ for(let i=0;i<5;i++){
+
+  const mark=new THREE.Mesh(
+   new THREE.BoxGeometry(.48,.015,.025),
+   new THREE.MeshBasicMaterial({
+    color:0x9ba2aa
+   })
+  );
+
+  mark.position.set(x,-2.655,-11.2+i*.13);
+  animeCity.add(mark);
+ }
+}
+
+// Đèn đường hai bên
+const lampMetal=new THREE.MeshStandardMaterial({
+ color:0x303b4a,
+ metalness:.7,
+ roughness:.35
+});
+
+const lampLight=new THREE.MeshBasicMaterial({
+ color:0xffe2a3
+});
+
+function addStreetLamp(x,z){
+
+ const pole=new THREE.Mesh(
+  new THREE.CylinderGeometry(.065,.09,4.3,10),
+  lampMetal
+ );
+
+ pole.position.set(x,-.48,z);
+ animeCity.add(pole);
+
+ const arm=new THREE.Mesh(
+  new THREE.BoxGeometry(.9,.07,.07),
+  lampMetal
+ );
+
+ arm.position.set(x+.38,1.55,z);
+ animeCity.add(arm);
+
+ const head=new THREE.Mesh(
+  new THREE.BoxGeometry(.65,.13,.28),
+  lampMetal
+ );
+
+ head.position.set(x+.72,1.48,z);
+ animeCity.add(head);
+
+ const bulb=new THREE.Mesh(
+  new THREE.BoxGeometry(.48,.035,.18),
+  lampLight
+ );
+
+ bulb.position.set(x+.72,1.39,z);
+ animeCity.add(bulb);
+}
+
+for(let x=-29;x<=29;x+=9){
+
+ addStreetLamp(x,-5.1);
+ addStreetLamp(x,-11.8);
+}
 
 // Dải đèn đường chân trời
 const skylineGlow=new THREE.Mesh(
