@@ -252,8 +252,14 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 const root=document.querySelector("#scene");
 const scene=new THREE.Scene();
-scene.background=new THREE.Color(0x02070d);
-scene.fog=new THREE.FogExp2(0x02070d,.018);
+
+// Nền 2D cố định phía sau địa cầu 3D
+scene.background=null;
+scene.fog=null;
+
+root.style.background=`
+ radial-gradient(ellipse at 50% 48%, #082b40 0%, #041522 42%, #02070d 100%)
+`;
 
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
 camera.position.set(0,13,27);
