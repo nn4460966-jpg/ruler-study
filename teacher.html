@@ -408,15 +408,22 @@ body{
 
  <section class="workspace" id="view-history">
   <div class="section-head">
-   <div><h2>Lịch sử bài tập</h2><p>Lịch sử chỉ hiển thị bài tập thuộc tài khoản giáo viên đang đăng nhập</p></div>
+   <div>
+    <h2>Lịch sử bài tập</h2>
+    <p>Các bài tập do tài khoản giáo viên này tạo</p>
+   </div>
+   <button class="secondary" id="refreshHistory">↻ Làm mới</button>
   </div>
+
   <div class="panel">
-   <div class="empty">
-    <div class="empty-icon">🕘</div>
-    <strong>Chưa có lịch sử bài tập</strong>
-    <span>Các bài tập đã giao sẽ được lưu và hiển thị tại đây khi kết nối cơ sở dữ liệu.</span>
+   <div id="assignmentHistory">
+    <div class="empty">
+     <div class="empty-icon">🕘</div>
+     <strong>Đang tải lịch sử...</strong>
+    </div>
    </div>
   </div>
+ </section>
  </section>
 
  <section class="workspace" id="view-profile">
@@ -578,11 +585,75 @@ document.getElementById("publishAssignment").addEventListener("click",async()=>{
 
  alert("Đã giao bài tập thành công!");
 
- document.getElementById("assignmentTitle").value="";
- document.getElementById("manualContent").value="";
- document.getElementById("pasteContent").value="";
- document.getElementById("draftPreview").style.display="none";
+await loadAssignmentHistory();
+
+document.getElementById("assignmentTitle").value="";
+document.getElementById("manualContent").value="";
+document.getElementById("pasteContent").value="";
+document.getElementById("draftPreview").style.display="none";
 });
+
+async function loadAssignmentHistory(){
+ const box=document.getElementById("assignmentHistory");
+ if(!box) return;
+
+ box.innerHTML=`
+  <div class="empty">
+   <strong>Đang tải lịch sử...</strong>
+  </div>
+ `;
+
+ const {data:{user},error:userError}=await db.auth.getUser();
+
+ if(userError||!user){
+  box.textContent="Không xác minh được tài khoản.";
+  return;
+ }
+
+ const {data,error}=await db
+  .from("teacher_assignments")
+  .select("id,title,created_at")
+  .eq("teacher_id",user.id)
+  .order("created_at",{ascending:false});
+
+ if(error){
+  box.textContent="Không tải được lịch sử: "+error.message;
+  return;
+ }
+
+ if(!data||data.length===0){
+  box.innerHTML=`
+   <div class="empty">
+    <div class="empty-icon">🕘</div>
+    <strong>Chưa có bài tập nào</strong>
+    <span>Các bài tập bạn đã giao sẽ xuất hiện tại đây.</span>
+   </div>
+  `;
+  return;
+ }
+
+ box.innerHTML=data.map(item=>`
+  <div class="history-item">
+   <strong>${escapeHtml(item.title)}</strong>
+   <span>${new Date(item.created_at).toLocaleString("vi-VN")}</span>
+  </div>
+ `).join("");
+}
+
+function escapeHtml(value){
+ return String(value).replace(/[&<>"']/g,char=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[char]));
+}
+
+const refreshHistory=document.getElementById("refreshHistory");
+if(refreshHistory){
+ refreshHistory.addEventListener("click",loadAssignmentHistory);
+}
 
 guardTeacher();
 </script>
