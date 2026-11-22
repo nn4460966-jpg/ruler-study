@@ -478,62 +478,91 @@ const globe=new THREE.Group();
 globe.position.set(0,3,0);
 scene.add(globe);
 
-// BẢN ĐỒ BỀ MẶT TRÁI ĐẤT
+// TẢI BẢN ĐỒ TRÁI ĐẤT
 const earthTexture=new THREE.TextureLoader().load(
- "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+ "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",
+ (texture)=>{
+  const image=texture.image;
+  const canvas=document.createElement("canvas");
+  canvas.width=image.width;
+  canvas.height=image.height;
+
+  const ctx=canvas.getContext("2d");
+  ctx.drawImage(image,0,0);
+
+  const width=canvas.width;
+  const height=canvas.height;
+  const pixels=ctx.getImageData(0,0,width,height);
+  const data=pixels.data;
+  const land=new Uint8Array(width*height);
+
+  // PHÂN BIỆT BIỂN VÀ ĐẤT LIỀN
+  for(let i=0;i<width*height;i++){
+   const p=i*4;
+   const r=data[p];
+   const g=data[p+1];
+   const b=data[p+2];
+
+   const ocean=b>r*1.12 && b>g*.92 && b>75;
+
+   land[i]=ocean?0:1;
+   data[p+3]=ocean?0:230;
+  }
+
+  // TẠO ĐƯỜNG VIỀN CHỈ TRÊN ĐẤT LIỀN
+  for(let y=1;y<height-1;y++){
+   for(let x=0;x<width;x++){
+    const i=y*width+x;
+    if(!land[i]) continue;
+
+    const left=y*width+(x-1+width)%width;
+    const right=y*width+(x+1)%width;
+    const up=(y-1)*width+x;
+    const down=(y+1)*width+x;
+
+    if(!land[left]||!land[right]||!land[up]||!land[down]){
+     const p=i*4;
+     data[p]=95;
+     data[p+1]=225;
+     data[p+2]=255;
+     data[p+3]=255;
+    }
+   }
+  }
+
+  ctx.putImageData(pixels,0,0);
+
+  texture.image=canvas;
+  texture.colorSpace=THREE.SRGBColorSpace;
+  texture.needsUpdate=true;
+ }
 );
 
-// ĐỊA CẦU CÓ BỀ MẶT TỰ NHIÊN VÀ TRONG SUỐT
+// BỀ MẶT ĐỊA CẦU
 const earth=new THREE.Mesh(
  new THREE.SphereGeometry(3.2,96,64),
  new THREE.MeshStandardMaterial({
   map:earthTexture,
-  color:0xb8eaff,
-  metalness:.08,
-  roughness:.82,
+  color:0xffffff,
+  metalness:.05,
+  roughness:.85,
   transparent:true,
-  opacity:.78,
+  opacity:.95,
   emissive:0x061b35,
-  emissiveIntensity:.2,
+  emissiveIntensity:.12,
   side:THREE.FrontSide,
   depthWrite:false
  })
 );
 globe.add(earth);
 
-// LƯỚI KINH TUYẾN VÀ VĨ TUYẾN
-const wire=new THREE.Mesh(
- new THREE.SphereGeometry(3.225,48,32),
- new THREE.MeshBasicMaterial({
-  color:0x7deaff,
-  wireframe:true,
-  transparent:true,
-  opacity:.13,
-  depthWrite:false
- })
-);
-globe.add(wire);
-
-// LỚP LƯỚI HOLOGRAM BÊN NGOÀI
-const glowWire=new THREE.Mesh(
- new THREE.SphereGeometry(3.26,32,24),
- new THREE.MeshBasicMaterial({
-  color:0x20cfff,
-  wireframe:true,
-  transparent:true,
-  opacity:.07,
-  depthWrite:false
- })
-);
-globe.add(glowWire);
-
-// KHÍ QUYỂN XANH
+// KHÍ QUYỂN
 const atmosphere=new THREE.Mesh(
  new THREE.SphereGeometry(3.38,48,48),
  new THREE.MeshBasicMaterial({
   color:0x168aff,
   transparent:true,
-  opacity:.085,
+  opacity:.065,
   side:THREE.BackSide,
   depthWrite:false
  })
@@ -546,7 +575,7 @@ const outerGlow=new THREE.Mesh(
  new THREE.MeshBasicMaterial({
   color:0x13aaff,
   transparent:true,
-  opacity:.055,
+  opacity:.04,
   side:THREE.BackSide,
   blending:THREE.AdditiveBlending,
   depthWrite:false
@@ -557,7 +586,7 @@ globe.add(outerGlow);
 // ÁNH SÁNG ĐỊA CẦU
 const earthLight=new THREE.PointLight(
  0x24bfff,
- .65,
+ .45,
  12
 );
 earthLight.position.set(0,0,0);
@@ -566,12 +595,11 @@ globe.add(earthLight);
 // ÁNH SÁNG CYAN PHỤ
 const cyanLight=new THREE.PointLight(
  0x27eaff,
- .35,
+ .25,
  9
 );
 cyanLight.position.set(2,1,1);
 globe.add(cyanLight);
-
 /* ================= HEXAGON PLATFORM ================= */
 
 /* ================= BỆ TRUNG TÂM CÔNG NGHỆ ================= */
