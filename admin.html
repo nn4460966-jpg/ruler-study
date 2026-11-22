@@ -583,7 +583,7 @@ function createPanelTexture(title,index){
 
  // Tiêu đề rõ nét
  ctx.fillStyle="#ffffff";
- ctx.font="bold 48px Consolas";
+ ctx.font="bold 60px Consolas";
  ctx.shadowColor="#55edff";
  ctx.shadowBlur=12;
  ctx.fillText(title,55,125);
@@ -592,7 +592,7 @@ function createPanelTexture(title,index){
 
  // Nội dung phụ
  ctx.fillStyle="#8df6ff";
- ctx.font="30px Consolas";
+ ctx.font="36px Consolas";
  ctx.fillText("RULER STUDY / ADMIN MODULE",55,195);
 
  // Thanh dữ liệu
@@ -623,7 +623,7 @@ const panels=[];
 
 /* ================= HOLOGRAM MODULES ================= */
 
-const panelRadius=9.15;
+const panelRadius=10.2;
 
 modules.forEach((mod,i)=>{
 
@@ -641,9 +641,9 @@ modules.forEach((mod,i)=>{
  });
 
  const glass=new THREE.Mesh(
-  new THREE.PlaneGeometry(3.6,2.16),
+  new THREE.PlaneGeometry(4.8,2.9),
   glassMaterial
- );
+);
 
  // Lớp chữ hologram riêng biệt
  const textMaterial=new THREE.MeshBasicMaterial({
@@ -656,9 +656,9 @@ modules.forEach((mod,i)=>{
  });
 
  const textPanel=new THREE.Mesh(
-  new THREE.PlaneGeometry(3.6,2.16),
+  new THREE.PlaneGeometry(4.8,2.9),
   textMaterial
- );
+);
 
  textPanel.position.z=0.015;
 
@@ -822,7 +822,10 @@ function animate(){
 if(!document.querySelector("#focus").classList.contains("show")){
 
  // Địa cầu tự xoay
- globe.rotation.y+=.001;
+globe.rotation.y+=.001;
+
+// Các bảng chức năng quay quanh địa cầu
+orbit.rotation.y+=.00115;
 
  // Năm vệ tinh quay quanh địa cầu
  satelliteOrbit.rotation.y+=.0032;
