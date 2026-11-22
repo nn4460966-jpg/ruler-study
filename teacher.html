@@ -367,17 +367,28 @@ body{
    <div><h2>Tạo bài tập mới</h2><p>Soạn nội dung bài tập trước khi giao cho học sinh</p></div>
   </div>
   <div class="panel">
+   <input
+    id="assignmentTitle"
+    type="text"
+    placeholder="Nhập tên bài tập..."
+    style="width:100%;padding:15px;border:1px solid #d8e2f7;border-radius:12px;margin-bottom:15px;font:13px 'Be Vietnam Pro';"
+   >
+
    <div class="editor-grid">
     <textarea id="manualContent" placeholder="Nhập nội dung bài tập tại đây..."></textarea>
     <textarea id="pasteContent" placeholder="Dán nội dung bài tập vào đây..."></textarea>
    </div>
+
    <div class="form-actions">
     <button class="secondary" id="clearDraft">Xóa nội dung</button>
-    <button class="primary" id="previewDraft">Xem nội dung</button>
+    <button class="secondary" id="previewDraft">Xem nội dung</button>
+    <button class="primary" id="publishAssignment">Giao bài tập</button>
    </div>
+
    <div class="notice">
-    Đây là giao diện soạn và xem trước. Chức năng lưu bài, giao cho học sinh và chấm kết quả sẽ được kết nối sau khi thiết lập bảng dữ liệu và chính sách bảo mật Supabase.
+    Bài tập sẽ được lưu vào tài khoản giáo viên và công bố cho học sinh sau khi bạn bấm Giao bài tập.
    </div>
+
    <div id="draftPreview" class="panel" style="display:none;margin-top:16px;white-space:pre-wrap;line-height:1.8"></div>
   </div>
  </section>
@@ -503,11 +514,15 @@ document.getElementById("clearDraft").addEventListener("click",()=>{
  document.getElementById("draftPreview").style.display="none";
 });
 
-document.getElementById("previewDraft").addEventListener("click",()=>{
- const content=[
+function getAssignmentContent(){
+ return [
   document.getElementById("manualContent").value.trim(),
   document.getElementById("pasteContent").value.trim()
  ].filter(Boolean).join("\n\n");
+}
+
+document.getElementById("previewDraft").addEventListener("click",()=>{
+ const content=getAssignmentContent();
 
  if(!content){
   alert("Bạn hãy nhập hoặc dán nội dung bài tập trước.");
@@ -517,6 +532,56 @@ document.getElementById("previewDraft").addEventListener("click",()=>{
  const preview=document.getElementById("draftPreview");
  preview.textContent=content;
  preview.style.display="block";
+});
+
+document.getElementById("publishAssignment").addEventListener("click",async()=>{
+ const title=document.getElementById("assignmentTitle").value.trim();
+ const content=getAssignmentContent();
+ const btn=document.getElementById("publishAssignment");
+
+ if(!title){
+  alert("Bạn hãy nhập tên bài tập.");
+  return;
+ }
+
+ if(!content){
+  alert("Bạn hãy nhập hoặc dán nội dung bài tập.");
+  return;
+ }
+
+ const {data:{user},error:userError}=await db.auth.getUser();
+
+ if(userError||!user){
+  alert("Phiên đăng nhập không hợp lệ. Hãy đăng nhập lại.");
+  return;
+ }
+
+ btn.disabled=true;
+ btn.textContent="Đang giao bài...";
+
+ const {error}=await db
+  .from("teacher_assignments")
+  .insert({
+   teacher_id:user.id,
+   title:title,
+   content:content,
+   is_published:true
+  });
+
+ btn.disabled=false;
+ btn.textContent="Giao bài tập";
+
+ if(error){
+  alert("Không giao được bài tập: "+error.message);
+  return;
+ }
+
+ alert("Đã giao bài tập thành công!");
+
+ document.getElementById("assignmentTitle").value="";
+ document.getElementById("manualContent").value="";
+ document.getElementById("pasteContent").value="";
+ document.getElementById("draftPreview").style.display="none";
 });
 
 guardTeacher();
