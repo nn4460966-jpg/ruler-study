@@ -394,20 +394,7 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
 
  buildings.add(group);
 }
- // Khung kiến trúc và các tầng
- const edges=new THREE.EdgesGeometry(
-  new THREE.BoxGeometry(width,height,depth)
- );
- const frame=new THREE.LineSegments(
-  edges,
-  new THREE.LineBasicMaterial({
-   color:0x65eaff,
-   transparent:true,
-   opacity:.8
-  })
- );
- frame.position.y=height/2;
- group.add(frame);
+ 
 
  // Sàn phân tầng
  for(let k=1;k<levels;k++){
