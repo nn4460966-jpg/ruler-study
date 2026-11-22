@@ -223,6 +223,57 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
  const group=new THREE.Group();
  group.position.set(x,-1.45,z);
 
+ // Thân tòa nhà bằng kính hologram
+ const body=new THREE.Mesh(
+  new THREE.BoxGeometry(width,height,depth),
+  new THREE.MeshPhysicalMaterial({
+   color:0x087b9c,
+   metalness:.45,
+   roughness:.22,
+   transparent:true,
+   opacity:.24,
+   transmission:.12,
+   emissive:0x03465e,
+   emissiveIntensity:.45,
+   depthWrite:false
+  })
+ );
+ body.position.y=height/2;
+ group.add(body);
+
+ // Khung kiến trúc và các tầng
+ const edges=new THREE.EdgesGeometry(
+  new THREE.BoxGeometry(width,height,depth)
+ );
+ const frame=new THREE.LineSegments(
+  edges,
+  new THREE.LineBasicMaterial({
+   color:0x65eaff,
+   transparent:true,
+   opacity:.8
+  })
+ );
+ frame.position.y=height/2;
+ group.add(frame);
+
+ // Sàn phân tầng
+ for(let k=1;k<levels;k++){
+  const y=height*k/levels;
+
+  const floor=new THREE.Mesh(
+   new THREE.BoxGeometry(width*1.04,.045,depth*1.04),
+   new THREE.MeshBasicMaterial({
+    color:0x36cde9,
+    transparent:true,
+    opacity:.65
+   })
+  );
+
+  floor.position.y=y;
+  group.add(floor);
+ }
+
+ // Các cột sáng ở bốn góc
  const corners=[
   [-width/2,-depth/2],
   [width/2,-depth/2],
@@ -230,31 +281,43 @@ function addTower(x,z,height,width=1,depth=1,levels=7){
   [-width/2,depth/2]
  ];
 
- const pts=[];
+ corners.forEach(([cx,cz])=>{
+  const pillar=new THREE.Mesh(
+   new THREE.BoxGeometry(.055,height,.055),
+   new THREE.MeshBasicMaterial({
+    color:0x8af5ff,
+    transparent:true,
+    opacity:.9
+   })
+  );
+  pillar.position.set(cx,height/2,cz);
+  group.add(pillar);
+ });
 
- for(const [cx,cz] of corners){
-  pts.push(cx,0,cz,cx,height,cz);
- }
+ // Mái tòa nhà
+ const roof=new THREE.Mesh(
+  new THREE.BoxGeometry(width*1.18,.16,depth*1.18),
+  new THREE.MeshBasicMaterial({
+   color:0x42dff5,
+   transparent:true,
+   opacity:.8
+  })
+ );
+ roof.position.y=height+.08;
+ group.add(roof);
 
- for(let k=0;k<=levels;k++){
-  const y=height*k/levels;
-  for(let i=0;i<4;i++){
-   const a=corners[i],b=corners[(i+1)%4];
-   pts.push(a[0],y,a[1],b[0],y,b[1]);
-  }
- }
+ // Đèn đỉnh
+ const beacon=new THREE.Mesh(
+  new THREE.SphereGeometry(.12,12,12),
+  new THREE.MeshBasicMaterial({
+   color:0x9fffff
+  })
+ );
+ beacon.position.y=height+.25;
+ group.add(beacon);
 
- for(let k=0;k<levels;k++){
-  const y0=height*k/levels;
-  const y1=height*(k+1)/levels;
-  for(let i=0;i<4;i++){
-   const a=corners[i],b=corners[(i+1)%4];
-   if((k+i)%2===0)
-    pts.push(a[0],y0,a[1],b[0],y1,b[1]);
-   else
-    pts.push(b[0],y0,b[1],a[0],y1,a[1]);
-  }
- }
+ buildings.add(group);
+}
 
  const geo=new THREE.BufferGeometry();
  geo.setAttribute("position",new THREE.Float32BufferAttribute(pts,3));
