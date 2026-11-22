@@ -640,6 +640,35 @@ adminPanel.innerHTML=`
 
 document.querySelector("#hud").appendChild(adminPanel);
 
+// Thanh cuộn nhỏ, mờ và đồng bộ màu với các nút
+const adminScrollStyle=document.createElement("style");
+
+adminScrollStyle.textContent=`
+ #fixedAdminPanel{
+  scrollbar-width:thin;
+  scrollbar-color:rgba(57,217,245,.42) rgba(3,28,45,.12);
+ }
+
+ #fixedAdminPanel::-webkit-scrollbar{
+  width:4px;
+ }
+
+ #fixedAdminPanel::-webkit-scrollbar-track{
+  background:rgba(3,28,45,.12);
+ }
+
+ #fixedAdminPanel::-webkit-scrollbar-thumb{
+  background:rgba(57,217,245,.42);
+  border-radius:10px;
+ }
+
+ #fixedAdminPanel::-webkit-scrollbar-thumb:hover{
+  background:rgba(57,217,245,.7);
+ }
+`;
+
+document.head.appendChild(adminScrollStyle);
+
 // Tạo 11 nút chức năng
 const adminModuleList=adminPanel.querySelector("#adminModuleList");
 
