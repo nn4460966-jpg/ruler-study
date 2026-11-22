@@ -958,7 +958,8 @@ modules.forEach((mod,i)=>{
   Math.sin(angle)*panelRadius
  );
 
- glass.lookAt(0,height,0);
+ // Hướng mặt bảng ra phía camera để chữ luôn đọc đúng
+ glass.lookAt(camera.position);
 
  glass.userData.module=mod;
 
@@ -1027,8 +1028,11 @@ function updatePanels(){
 
    const dot=toCamera.dot(dir);
 
-   // Chỉ hiện các bảng nằm phía camera
-   panel.visible=dot>.72;
+   // Chỉ ẩn bảng chính diện camera
+   panel.visible=dot<=.72;
+
+   // Giữ chữ luôn hướng về camera, không bị ngược
+   panel.lookAt(camera.position);
   });
 
   ambientScreens.forEach(p=>{
