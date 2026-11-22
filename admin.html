@@ -348,115 +348,270 @@ root.style.background=`
 
 // Thành phố anime sẽ được thêm ở bước tiếp theo
 
-/* ================= ANIME CYBER CITY ================= */
+/* ================= REALISTIC JAPANESE CITY ================= */
 
 // Giữ mảng cũ để không ảnh hưởng updatePanels()
 const ambientScreens=[];
 
-// Nhóm thành phố nằm phía sau địa cầu
 const animeCity=new THREE.Group();
 scene.add(animeCity);
 
-// Màu sắc thành phố anime
-const buildingMaterials=[
+// Vật liệu kiến trúc
+const cityMaterials=[
  new THREE.MeshStandardMaterial({
-  color:0x17264b,
-  metalness:.55,
-  roughness:.4,
-  emissive:0x101d55,
-  emissiveIntensity:.35
+  color:0x45546a,
+  roughness:.78,
+  metalness:.18
  }),
  new THREE.MeshStandardMaterial({
-  color:0x202044,
-  metalness:.5,
-  roughness:.35,
-  emissive:0x30145c,
-  emissiveIntensity:.3
+  color:0x596477,
+  roughness:.72,
+  metalness:.2
  }),
  new THREE.MeshStandardMaterial({
-  color:0x12344c,
-  metalness:.6,
-  roughness:.3,
-  emissive:0x063c62,
-  emissiveIntensity:.4
+  color:0x303d55,
+  roughness:.8,
+  metalness:.15
+ }),
+ new THREE.MeshStandardMaterial({
+  color:0x777d88,
+  roughness:.85
+ }),
+ new THREE.MeshStandardMaterial({
+  color:0x26334a,
+  roughness:.7,
+  metalness:.25
  })
 ];
 
-const neonMaterials=[
- new THREE.MeshBasicMaterial({color:0x35dfff}),
- new THREE.MeshBasicMaterial({color:0xff65cf}),
- new THREE.MeshBasicMaterial({color:0x9b8cff})
+// Kính cửa sổ
+const glassMaterials=[
+ new THREE.MeshBasicMaterial({color:0xffd99a}),
+ new THREE.MeshBasicMaterial({color:0x9bdfff}),
+ new THREE.MeshBasicMaterial({color:0xffb9d9}),
+ new THREE.MeshBasicMaterial({color:0x829cff})
 ];
 
-// Tọa độ hai cụm nhà, chừa khoảng trống chính giữa
-const cityBuildings=[
- [-15,-2.8,-12,3.2,7.5,2.4],
- [-11.5,-2.8,-13,2.5,5.5,2.2],
- [-8.5,-2.8,-11,2.1,4.2,2],
- [-6.3,-2.8,-15,1.5,3.5,1.8],
+const darkGlass=new THREE.MeshStandardMaterial({
+ color:0x15283e,
+ metalness:.55,
+ roughness:.22
+});
 
- [6.3,-2.8,-15,1.5,3.8,1.8],
- [8.5,-2.8,-11,2.1,5,2],
- [11.5,-2.8,-13,2.5,6.5,2.2],
- [15,-2.8,-12,3.2,8.5,2.4]
+// Dữ liệu các khu nhà ở hai bên
+const cityData=[
+ [-22,-2.8,-23,4.2,11,3.8,0],
+ [-17,-2.8,-19,3.4,8,3.2,1],
+ [-13,-2.8,-24,3.8,14,3.5,2],
+ [-9,-2.8,-17,2.8,6,2.8,3],
+ [-7,-2.8,-27,3.2,10,3.1,4],
+
+ [7,-2.8,-27,3.2,9,3.1,1],
+ [9,-2.8,-17,2.8,7,2.8,3],
+ [13,-2.8,-24,3.8,13,3.5,0],
+ [17,-2.8,-19,3.4,9,3.2,2],
+ [22,-2.8,-23,4.2,12,3.8,4],
+
+ [-28,-2.8,-31,4.5,9,4,1],
+ [-23,-2.8,-34,4,7,3.8,3],
+ [-17,-2.8,-32,3.5,8,3.5,0],
+ [17,-2.8,-32,3.5,8,3.5,2],
+ [23,-2.8,-34,4,10,3.8,1],
+ [28,-2.8,-31,4.5,8,4,4]
 ];
 
-cityBuildings.forEach((data,index)=>{
- const [x,y,z,w,h,d]=data;
+// Hàm tạo một tòa nhà hoàn chỉnh
+function createCityBuilding(data,index){
 
- // Thân tòa nhà
+ const [x,y,z,w,h,d,type]=data;
+ const group=new THREE.Group();
+
+ // Thân chính
+ const body=new THREE.Mesh(
+  new THREE.BoxGeometry(w,h,d),
+  cityMaterials[type]
+ );
+ body.position.y=h/2;
+ group.add(body);
+
+ // Lớp kính mặt tiền
+ const facade=new THREE.Mesh(
+  new THREE.BoxGeometry(w*.84,h*.88,.035),
+  darkGlass
+ );
+ facade.position.set(0,h/2,d/2+.025);
+ group.add(facade);
+
+ // Các tầng và cửa sổ
+ const floors=Math.floor(h/1.05);
+ const columns=Math.max(2,Math.floor(w/.8));
+
+ for(let floor=0;floor<floors;floor++){
+
+  const floorY=.55+floor*1.02;
+
+  // Đường phân tầng
+  const line=new THREE.Mesh(
+   new THREE.BoxGeometry(w*.94,.045,d+.035),
+   cityMaterials[3]
+  );
+  line.position.set(0,floorY,d/2+.04);
+  group.add(line);
+
+  for(let col=0;col<columns;col++){
+
+   const windowWidth=(w*.7)/columns;
+   const windowHeight=.42;
+
+   const windowMesh=new THREE.Mesh(
+    new THREE.BoxGeometry(
+     windowWidth*.68,
+     windowHeight,
+     .045
+    ),
+    glassMaterials[
+     (index+floor+col)%glassMaterials.length
+    ]
+   );
+
+   windowMesh.position.set(
+    -w*.35+(col+.5)*windowWidth,
+    floorY+.23,
+    d/2+.065
+   );
+
+   group.add(windowMesh);
+  }
+ }
+
+ // Mái nhà có phần giật cấp
+ const roofWidth=w*.76;
+
+ const roof=new THREE.Mesh(
+  new THREE.BoxGeometry(roofWidth,.35,d*.78),
+  cityMaterials[(type+2)%cityMaterials.length]
+ );
+ roof.position.set(0,h+.17,0);
+ group.add(roof);
+
+ // Khối kỹ thuật trên mái
+ const rooftop=new THREE.Mesh(
+  new THREE.BoxGeometry(w*.35,.65,d*.35),
+  cityMaterials[type]
+ );
+ rooftop.position.set(0,h+.62,0);
+ group.add(rooftop);
+
+ // Một số tòa nhà có cột anten
+ if(index%3===0){
+
+  const antenna=new THREE.Mesh(
+   new THREE.CylinderGeometry(.025,.045,2.1,8),
+   cityMaterials[3]
+  );
+
+  antenna.position.set(0,h+1.95,0);
+  group.add(antenna);
+
+  const warningLight=new THREE.Mesh(
+   new THREE.SphereGeometry(.09,10,8),
+   new THREE.MeshBasicMaterial({color:0xff657f})
+  );
+
+  warningLight.position.set(0,h+3.02,0);
+  group.add(warningLight);
+ }
+
+ // Viền mái nhẹ
+ const roofEdge=new THREE.Mesh(
+  new THREE.BoxGeometry(w+.08,.07,d+.08),
+  new THREE.MeshBasicMaterial({
+   color:0x6b9bbd,
+   transparent:true,
+   opacity:.45
+  })
+ );
+
+ roofEdge.position.set(0,h+.38,0);
+ group.add(roofEdge);
+
+ group.position.set(x,y,z);
+ animeCity.add(group);
+}
+
+// Dựng toàn bộ khu phố
+cityData.forEach((data,index)=>{
+ createCityBuilding(data,index);
+});
+
+// Các dãy nhà thấp phía xa
+const distantMaterial=new THREE.MeshStandardMaterial({
+ color:0x263753,
+ roughness:.9
+});
+
+const distantRows=[
+ [-30,-2.8,-40,5,5,4],
+ [-24,-2.8,-42,5,7,4],
+ [-18,-2.8,-40,4,5,4],
+ [-13,-2.8,-43,4,6,4],
+ [13,-2.8,-43,4,6,4],
+ [18,-2.8,-40,4,5,4],
+ [24,-2.8,-42,5,7,4],
+ [30,-2.8,-40,5,5,4]
+];
+
+distantRows.forEach((b,index)=>{
+
+ const [x,y,z,w,h,d]=b;
+
  const building=new THREE.Mesh(
   new THREE.BoxGeometry(w,h,d),
-  buildingMaterials[index%buildingMaterials.length]
+  distantMaterial
  );
 
  building.position.set(x,y+h/2,z);
  animeCity.add(building);
 
- // Viền neon trên nóc
- const roof=new THREE.Mesh(
-  new THREE.BoxGeometry(w+.08,.055,d+.08),
-  neonMaterials[index%neonMaterials.length]
- );
+ // Dải cửa sổ nhỏ ở xa
+ for(let floor=0;floor<Math.floor(h);floor++){
+  const strip=new THREE.Mesh(
+   new THREE.BoxGeometry(w*.65,.09,.035),
+   glassMaterials[index%glassMaterials.length]
+  );
 
- roof.position.set(x,y+h,z);
- animeCity.add(roof);
-
- // Cửa sổ phát sáng phía trước
- const rows=Math.floor(h/1.05);
-
- for(let row=0;row<rows;row++){
-  for(let col=0;col<3;col++){
-
-   const windowLight=new THREE.Mesh(
-    new THREE.BoxGeometry(.16,.27,.035),
-    neonMaterials[(row+col+index)%3]
-   );
-
-   windowLight.position.set(
-    x-w/2+.45+col*(w-.7)/2,
-    y+.65+row*.85,
-    z+d/2+.025
-   );
-
-   animeCity.add(windowLight);
-  }
+  strip.position.set(x,y+.7+floor*.8,z+d/2+.025);
+  animeCity.add(strip);
  }
 });
 
-// Đường chân trời neon
-const horizon=new THREE.Mesh(
- new THREE.BoxGeometry(34,.045,.08),
- new THREE.MeshBasicMaterial({
-  color:0x35bfff,
-  transparent:true,
-  opacity:.65
+// Mặt đường thành phố ở phía xa
+const cityRoad=new THREE.Mesh(
+ new THREE.PlaneGeometry(70,18),
+ new THREE.MeshStandardMaterial({
+  color:0x101a2b,
+  roughness:.95,
+  metalness:.05
  })
 );
 
-horizon.position.set(0,-2.75,-14);
-animeCity.add(horizon);
+cityRoad.rotation.x=-Math.PI/2;
+cityRoad.position.set(0,-2.78,-39);
+animeCity.add(cityRoad);
 
+// Dải đèn đường chân trời
+const skylineGlow=new THREE.Mesh(
+ new THREE.PlaneGeometry(70,8),
+ new THREE.MeshBasicMaterial({
+  color:0x435a9c,
+  transparent:true,
+  opacity:.16,
+  side:THREE.DoubleSide
+ })
+);
+
+skylineGlow.position.set(0,2,-45);
+animeCity.add(skylineGlow);
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
 const globe=new THREE.Group();
