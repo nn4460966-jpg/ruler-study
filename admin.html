@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+/* ================= HOLOGRAPHIC EARTH GLOBE ================= */<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -478,71 +478,75 @@ const globe=new THREE.Group();
 globe.position.set(0,3,0);
 scene.add(globe);
 
-// ĐỊA CẦU HOLOGRAM TRONG SUỐT
+// BẢN ĐỒ BỀ MẶT TRÁI ĐẤT
+const earthTexture=new THREE.TextureLoader().load(
+ "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+);
+
+// ĐỊA CẦU CÓ BỀ MẶT TỰ NHIÊN VÀ TRONG SUỐT
 const earth=new THREE.Mesh(
  new THREE.SphereGeometry(3.2,96,64),
- new THREE.MeshPhysicalMaterial({
-  color:0x36c9ed,
-  metalness:.35,
-  roughness:.22,
+ new THREE.MeshStandardMaterial({
+  map:earthTexture,
+  color:0xb8eaff,
+  metalness:.08,
+  roughness:.82,
   transparent:true,
-  opacity:.48,
-  transmission:.25,
-  thickness:.8,
-  emissive:0x0878c8,
-  emissiveIntensity:.8,
+  opacity:.78,
+  emissive:0x061b35,
+  emissiveIntensity:.2,
   side:THREE.FrontSide,
   depthWrite:false
  })
 );
 globe.add(earth);
 
-// Lưới kinh tuyến và vĩ tuyến
+// LƯỚI KINH TUYẾN VÀ VĨ TUYẾN
 const wire=new THREE.Mesh(
  new THREE.SphereGeometry(3.225,48,32),
  new THREE.MeshBasicMaterial({
-  color:0x8df5ff,
+  color:0x7deaff,
   wireframe:true,
   transparent:true,
-  opacity:.42,
+  opacity:.13,
   depthWrite:false
  })
 );
 globe.add(wire);
 
-// Lớp lưới phát sáng bên ngoài
+// LỚP LƯỚI HOLOGRAM BÊN NGOÀI
 const glowWire=new THREE.Mesh(
  new THREE.SphereGeometry(3.26,32,24),
  new THREE.MeshBasicMaterial({
   color:0x20cfff,
   wireframe:true,
   transparent:true,
-  opacity:.16,
+  opacity:.07,
   depthWrite:false
  })
 );
 globe.add(glowWire);
 
-// Lớp khí quyển
+// KHÍ QUYỂN XANH
 const atmosphere=new THREE.Mesh(
  new THREE.SphereGeometry(3.38,48,48),
  new THREE.MeshBasicMaterial({
   color:0x168aff,
   transparent:true,
-  opacity:.10,
+  opacity:.085,
   side:THREE.BackSide,
   depthWrite:false
  })
 );
 globe.add(atmosphere);
 
-// Quầng sáng hologram bên ngoài
+// QUẦNG SÁNG HOLOGRAM
 const outerGlow=new THREE.Mesh(
  new THREE.SphereGeometry(3.55,48,48),
  new THREE.MeshBasicMaterial({
   color:0x13aaff,
   transparent:true,
-  opacity:.075,
+  opacity:.055,
   side:THREE.BackSide,
   blending:THREE.AdditiveBlending,
   depthWrite:false
@@ -550,19 +554,19 @@ const outerGlow=new THREE.Mesh(
 );
 globe.add(outerGlow);
 
-// Ánh sáng xanh phát ra từ địa cầu
+// ÁNH SÁNG ĐỊA CẦU
 const earthLight=new THREE.PointLight(
  0x24bfff,
- 2.2,
+ .65,
  12
 );
 earthLight.position.set(0,0,0);
 globe.add(earthLight);
 
-// Ánh sáng cyan phụ trợ
+// ÁNH SÁNG CYAN PHỤ
 const cyanLight=new THREE.PointLight(
  0x27eaff,
- 1.1,
+ .35,
  9
 );
 cyanLight.position.set(2,1,1);
