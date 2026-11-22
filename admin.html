@@ -348,14 +348,114 @@ root.style.background=`
 
 // Thành phố anime sẽ được thêm ở bước tiếp theo
 
-/* ================= CLEAN COMMAND CENTER ================= */
+/* ================= ANIME CYBER CITY ================= */
 
-// Đã loại bỏ các tòa nhà hologram nền cũ.
-// Đã loại bỏ các màn hình dữ liệu nền cũ.
-
-// Giữ mảng rỗng để updatePanels() phía dưới
-// vẫn hoạt động bình thường, không bị lỗi.
+// Giữ mảng cũ để không ảnh hưởng updatePanels()
 const ambientScreens=[];
+
+// Nhóm thành phố nằm phía sau địa cầu
+const animeCity=new THREE.Group();
+scene.add(animeCity);
+
+// Màu sắc thành phố anime
+const buildingMaterials=[
+ new THREE.MeshStandardMaterial({
+  color:0x17264b,
+  metalness:.55,
+  roughness:.4,
+  emissive:0x101d55,
+  emissiveIntensity:.35
+ }),
+ new THREE.MeshStandardMaterial({
+  color:0x202044,
+  metalness:.5,
+  roughness:.35,
+  emissive:0x30145c,
+  emissiveIntensity:.3
+ }),
+ new THREE.MeshStandardMaterial({
+  color:0x12344c,
+  metalness:.6,
+  roughness:.3,
+  emissive:0x063c62,
+  emissiveIntensity:.4
+ })
+];
+
+const neonMaterials=[
+ new THREE.MeshBasicMaterial({color:0x35dfff}),
+ new THREE.MeshBasicMaterial({color:0xff65cf}),
+ new THREE.MeshBasicMaterial({color:0x9b8cff})
+];
+
+// Tọa độ hai cụm nhà, chừa khoảng trống chính giữa
+const cityBuildings=[
+ [-15,-2.8,-12,3.2,7.5,2.4],
+ [-11.5,-2.8,-13,2.5,5.5,2.2],
+ [-8.5,-2.8,-11,2.1,4.2,2],
+ [-6.3,-2.8,-15,1.5,3.5,1.8],
+
+ [6.3,-2.8,-15,1.5,3.8,1.8],
+ [8.5,-2.8,-11,2.1,5,2],
+ [11.5,-2.8,-13,2.5,6.5,2.2],
+ [15,-2.8,-12,3.2,8.5,2.4]
+];
+
+cityBuildings.forEach((data,index)=>{
+ const [x,y,z,w,h,d]=data;
+
+ // Thân tòa nhà
+ const building=new THREE.Mesh(
+  new THREE.BoxGeometry(w,h,d),
+  buildingMaterials[index%buildingMaterials.length]
+ );
+
+ building.position.set(x,y+h/2,z);
+ animeCity.add(building);
+
+ // Viền neon trên nóc
+ const roof=new THREE.Mesh(
+  new THREE.BoxGeometry(w+.08,.055,d+.08),
+  neonMaterials[index%neonMaterials.length]
+ );
+
+ roof.position.set(x,y+h,z);
+ animeCity.add(roof);
+
+ // Cửa sổ phát sáng phía trước
+ const rows=Math.floor(h/1.05);
+
+ for(let row=0;row<rows;row++){
+  for(let col=0;col<3;col++){
+
+   const windowLight=new THREE.Mesh(
+    new THREE.BoxGeometry(.16,.27,.035),
+    neonMaterials[(row+col+index)%3]
+   );
+
+   windowLight.position.set(
+    x-w/2+.45+col*(w-.7)/2,
+    y+.65+row*.85,
+    z+d/2+.025
+   );
+
+   animeCity.add(windowLight);
+  }
+ }
+});
+
+// Đường chân trời neon
+const horizon=new THREE.Mesh(
+ new THREE.BoxGeometry(34,.045,.08),
+ new THREE.MeshBasicMaterial({
+  color:0x35bfff,
+  transparent:true,
+  opacity:.65
+ })
+);
+
+horizon.position.set(0,-2.75,-14);
+animeCity.add(horizon);
 
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
