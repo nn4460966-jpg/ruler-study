@@ -1,0 +1,525 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Không gian giáo viên | RULER STUDY</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+ --navy:#142b59;
+ --blue:#3568e8;
+ --purple:#8175ee;
+ --text:#172554;
+ --muted:#64748b;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:'Be Vietnam Pro',sans-serif;
+ color:var(--text);
+ background:linear-gradient(135deg,#edf3ff,#e9eaff);
+ min-height:100vh;
+}
+.sidebar{
+ position:fixed;
+ inset:0 auto 0 0;
+ width:255px;
+ padding:25px 15px;
+ background:linear-gradient(180deg,#10275a,#19366f);
+ color:white;
+ display:flex;
+ flex-direction:column;
+ z-index:5;
+}
+.brand{text-align:center;padding:5px 0 30px}
+.brand-icon{font-size:42px}
+.brand h2{font-size:21px;margin:8px 0 5px}
+.brand p{font-size:11px;margin:0;color:#d7e4ff}
+.nav{display:grid;gap:8px}
+.nav button{
+ width:100%;
+ border:0;
+ background:transparent;
+ color:#eaf0ff;
+ padding:14px 13px;
+ border-radius:13px;
+ text-align:left;
+ font:600 13px 'Be Vietnam Pro';
+ cursor:pointer;
+ display:flex;
+ gap:12px;
+ align-items:center;
+}
+.nav button:hover,.nav button.active{
+ background:linear-gradient(100deg,#3975e9,#756ce7);
+ color:white;
+ box-shadow:0 7px 18px #071b493d;
+}
+.nav-icon{width:25px;text-align:center;font-size:18px}
+.side-bottom{margin-top:auto}
+.teacher-mini{
+ padding:13px;
+ border:1px solid #ffffff30;
+ border-radius:13px;
+ background:#ffffff12;
+ overflow-wrap:anywhere;
+ font-size:11px;
+ color:#dce7ff;
+}
+.teacher-mini strong{
+ display:block;
+ color:white;
+ font-size:12px;
+ margin-bottom:5px;
+}
+.logout{
+ width:100%;
+ margin-top:12px;
+ padding:13px;
+ border:1px solid #ffffff40;
+ border-radius:12px;
+ background:#ffffff12;
+ color:white;
+ font:700 13px 'Be Vietnam Pro';
+ cursor:pointer;
+}
+.logout:hover{background:#dc3545}
+.main{
+ margin-left:255px;
+ padding:27px 32px 45px;
+ max-width:1600px;
+}
+.topbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ margin-bottom:25px;
+}
+.eyebrow{
+ color:#6174a3;
+ font-size:11px;
+ font-weight:800;
+ letter-spacing:1.4px;
+}
+.topbar h1{margin:5px 0 0;font-size:25px}
+.top-right{display:flex;align-items:center;gap:12px}
+.avatar{
+ width:43px;height:43px;
+ border-radius:50%;
+ display:grid;place-items:center;
+ background:#dbe6ff;
+ font-size:21px;
+}
+.welcome{
+ border-radius:22px;
+ padding:28px 30px;
+ background:linear-gradient(110deg,#a8d5ff,#e1eaff 53%,#b9b0ff);
+ box-shadow:0 8px 24px #4567b51c;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:18px;
+ margin-bottom:23px;
+}
+.welcome h2{margin:0 0 9px;font-size:23px}
+.welcome p{
+ margin:0;
+ color:#334b7b;
+ font-size:13px;
+ line-height:1.8;
+ max-width:650px;
+}
+.welcome-icon{font-size:65px}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:16px;
+ margin:18px 0 26px;
+}
+.stat,.panel{
+ background:#ffffffdf;
+ border:1px solid #dce4ff;
+ border-radius:18px;
+ box-shadow:0 5px 18px #263c7510;
+}
+.stat{
+ padding:20px;
+ display:flex;
+ align-items:center;
+ gap:14px;
+}
+.stat-icon{
+ width:48px;height:48px;
+ border-radius:14px;
+ background:#e7efff;
+ display:grid;place-items:center;
+ font-size:23px;
+}
+.stat strong{font-size:22px;display:block}
+.stat span{font-size:11px;color:var(--muted)}
+.section-head{
+ display:flex;
+ align-items:end;
+ justify-content:space-between;
+ gap:12px;
+ margin:25px 0 14px;
+}
+.section-head h2{font-size:18px;margin:0 0 5px}
+.section-head p{margin:0;color:var(--muted);font-size:12px}
+.panel{padding:21px;margin-bottom:18px}
+.empty{text-align:center;padding:35px 15px;color:#8290ad}
+.empty-icon{font-size:34px;margin-bottom:9px}
+.empty strong{
+ display:block;
+ color:#33456f;
+ font-size:14px;
+ margin-bottom:6px;
+}
+.empty span{font-size:12px;line-height:1.7}
+.workspace{display:none}
+.workspace.active{display:block}
+.editor-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:15px;
+}
+.editor-grid textarea{
+ width:100%;
+ min-height:210px;
+ resize:vertical;
+ border:1px solid #d8e2f7;
+ border-radius:14px;
+ background:#fbfcff;
+ padding:16px;
+ font:13px/1.7 'Be Vietnam Pro';
+ color:var(--text);
+ outline:none;
+}
+.editor-grid textarea:focus{
+ border-color:#6689f0;
+ box-shadow:0 0 0 3px #6689f018;
+}
+.form-actions{
+ display:flex;
+ justify-content:flex-end;
+ gap:10px;
+ margin-top:15px;
+}
+.primary,.secondary{
+ border:0;
+ border-radius:11px;
+ padding:12px 18px;
+ font:700 12px 'Be Vietnam Pro';
+ cursor:pointer;
+}
+.primary{
+ background:linear-gradient(100deg,#3568e8,#8175ee);
+ color:white;
+}
+.secondary{background:#edf2ff;color:#3156a8}
+.notice{
+ padding:13px 15px;
+ border-radius:12px;
+ background:#fff8e6;
+ border:1px solid #f3dfac;
+ color:#8b6514;
+ font-size:12px;
+ line-height:1.7;
+ margin-top:15px;
+}
+.profile-grid{
+ display:grid;
+ grid-template-columns:180px 1fr;
+ gap:20px;
+}
+.profile-avatar{
+ width:110px;height:110px;
+ border-radius:50%;
+ background:#e4ecff;
+ display:grid;place-items:center;
+ font-size:48px;
+ margin:0 auto 12px;
+}
+.profile-card{text-align:center}
+.muted{color:var(--muted);font-size:12px}
+
+@media(max-width:900px){
+ .sidebar{width:78px;padding:16px 8px}
+ .brand h2,.brand p,.nav-label,.teacher-mini{display:none}
+ .brand-icon{font-size:32px}
+ .nav button{justify-content:center;padding:14px 5px}
+ .nav-icon{width:auto}
+ .logout{font-size:0}
+ .logout:after{content:'⇥';font-size:18px}
+ .main{margin-left:78px;padding:20px}
+ .stats{grid-template-columns:1fr}
+ .profile-grid{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+ .main{padding:15px}
+ .topbar h1{font-size:19px}
+ .welcome{padding:20px}
+ .welcome h2{font-size:19px}
+ .welcome-icon{font-size:42px}
+ .editor-grid{grid-template-columns:1fr}
+ .editor-grid textarea{min-height:150px}
+ .section-head{align-items:start;flex-direction:column}
+}
+</style>
+</head>
+
+<body>
+<aside class="sidebar">
+ <div class="brand">
+  <div class="brand-icon">📚⭐</div>
+  <h2>RULER STUDY</h2>
+  <p>KHÔNG GIAN GIÁO VIÊN</p>
+ </div>
+
+ <nav class="nav">
+  <button class="active" data-view="overview">
+   <span class="nav-icon">⌂</span>
+   <span class="nav-label">Tổng quan</span>
+  </button>
+  <button data-view="create">
+   <span class="nav-icon">✍️</span>
+   <span class="nav-label">Giao bài tập</span>
+  </button>
+  <button data-view="results">
+   <span class="nav-icon">📊</span>
+   <span class="nav-label">Kết quả học tập</span>
+  </button>
+  <button data-view="history">
+   <span class="nav-icon">🕘</span>
+   <span class="nav-label">Lịch sử bài tập</span>
+  </button>
+  <button data-view="profile">
+   <span class="nav-icon">👤</span>
+   <span class="nav-label">Hồ sơ giáo viên</span>
+  </button>
+ </nav>
+
+ <div class="side-bottom">
+  <div class="teacher-mini">
+   <strong>TÀI KHOẢN GIÁO VIÊN</strong>
+   <span id="sideEmail">Đang xác minh...</span>
+  </div>
+  <button class="logout" id="logoutBtn">⇥　Đăng xuất</button>
+ </div>
+</aside>
+
+<main class="main">
+ <header class="topbar">
+  <div>
+   <div class="eyebrow">RULER STUDY / TEACHER PORTAL</div>
+   <h1 id="pageTitle">Tổng quan</h1>
+  </div>
+  <div class="top-right">
+   <div class="muted" id="topEmail">Đang xác minh quyền...</div>
+   <div class="avatar">👩‍🏫</div>
+  </div>
+ </header>
+
+ <section class="workspace active" id="view-overview">
+  <div class="welcome">
+   <div>
+    <div class="eyebrow">KHÔNG GIAN LÀM VIỆC</div>
+    <h2>Chào mừng giáo viên đến với RULER STUDY!</h2>
+    <p>Quản lý bài tập đã giao và theo dõi kết quả học tập của học sinh trong một không gian riêng.</p>
+   </div>
+   <div class="welcome-icon">🎓</div>
+  </div>
+
+  <div class="stats">
+   <div class="stat">
+    <div class="stat-icon">📝</div>
+    <div><strong>0</strong><span>BÀI TẬP ĐÃ GIAO</span></div>
+   </div>
+   <div class="stat">
+    <div class="stat-icon">👥</div>
+    <div><strong>0</strong><span>HỌC SINH ĐÃ LÀM</span></div>
+   </div>
+   <div class="stat">
+    <div class="stat-icon">🏆</div>
+    <div><strong>—</strong><span>ĐIỂM TRUNG BÌNH</span></div>
+   </div>
+  </div>
+
+  <div class="section-head">
+   <div><h2>Bài tập gần đây</h2><p>Các bài tập do tài khoản giáo viên này tạo</p></div>
+  </div>
+  <div class="panel">
+   <div class="empty">
+    <div class="empty-icon">📚</div>
+    <strong>Chưa có bài tập nào</strong>
+    <span>Danh sách bài tập sẽ hiển thị sau khi kết nối chức năng lưu và giao bài tập.</span>
+   </div>
+  </div>
+ </section>
+
+ <section class="workspace" id="view-create">
+  <div class="section-head">
+   <div><h2>Tạo bài tập mới</h2><p>Soạn nội dung bài tập trước khi giao cho học sinh</p></div>
+  </div>
+  <div class="panel">
+   <div class="editor-grid">
+    <textarea id="manualContent" placeholder="Nhập nội dung bài tập tại đây..."></textarea>
+    <textarea id="pasteContent" placeholder="Dán nội dung bài tập vào đây..."></textarea>
+   </div>
+   <div class="form-actions">
+    <button class="secondary" id="clearDraft">Xóa nội dung</button>
+    <button class="primary" id="previewDraft">Xem nội dung</button>
+   </div>
+   <div class="notice">
+    Đây là giao diện soạn và xem trước. Chức năng lưu bài, giao cho học sinh và chấm kết quả sẽ được kết nối sau khi thiết lập bảng dữ liệu và chính sách bảo mật Supabase.
+   </div>
+   <div id="draftPreview" class="panel" style="display:none;margin-top:16px;white-space:pre-wrap;line-height:1.8"></div>
+  </div>
+ </section>
+
+ <section class="workspace" id="view-results">
+  <div class="section-head">
+   <div><h2>Kết quả học tập</h2><p>Theo dõi kết quả học sinh theo từng bài tập</p></div>
+  </div>
+  <div class="panel">
+   <div class="empty">
+    <div class="empty-icon">📈</div>
+    <strong>Chưa có dữ liệu kết quả</strong>
+    <span>Kết quả sẽ xuất hiện sau khi bài tập được giao và học sinh hoàn thành.</span>
+   </div>
+  </div>
+ </section>
+
+ <section class="workspace" id="view-history">
+  <div class="section-head">
+   <div><h2>Lịch sử bài tập</h2><p>Lịch sử chỉ hiển thị bài tập thuộc tài khoản giáo viên đang đăng nhập</p></div>
+  </div>
+  <div class="panel">
+   <div class="empty">
+    <div class="empty-icon">🕘</div>
+    <strong>Chưa có lịch sử bài tập</strong>
+    <span>Các bài tập đã giao sẽ được lưu và hiển thị tại đây khi kết nối cơ sở dữ liệu.</span>
+   </div>
+  </div>
+ </section>
+
+ <section class="workspace" id="view-profile">
+  <div class="section-head">
+   <div><h2>Hồ sơ giáo viên</h2><p>Thông tin tài khoản đang được cấp quyền</p></div>
+  </div>
+  <div class="panel profile-grid">
+   <div class="profile-card">
+    <div class="profile-avatar">👩‍🏫</div>
+    <strong>Giáo viên RULER</strong>
+    <p class="muted">Tài khoản được Admin cấp quyền</p>
+   </div>
+   <div>
+    <p class="muted">GMAIL TÀI KHOẢN</p>
+    <strong id="profileEmail">Đang tải...</strong>
+    <hr style="border:0;border-top:1px solid #edf0f7;margin:20px 0">
+    <p class="muted">VAI TRÒ</p>
+    <strong>Giáo viên</strong>
+   </div>
+  </div>
+ </section>
+</main>
+
+<script>
+const db=window.supabase.createClient(
+ "https://svhwozfwuexgiwrdripm.supabase.co",
+ "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
+
+async function guardTeacher(){
+ const {data:{session},error}=await db.auth.getSession();
+
+ if(error||!session){
+  location.replace("login.html");
+  return;
+ }
+
+ const {data:roleData,error:roleError}=await db
+  .from("user_roles")
+  .select("role")
+  .eq("user_id",session.user.id)
+  .maybeSingle();
+
+ if(roleError){
+  document.body.innerHTML=
+   '<main style="font:16px Arial;padding:30px;color:#9b1c1c">Không xác minh được quyền tài khoản. Vui lòng tải lại hoặc liên hệ Admin.</main>';
+  return;
+ }
+
+ if(roleData?.role!=="teacher"){
+  location.replace(roleData?.role==="admin"?"admin.html":"index.html");
+  return;
+ }
+
+ const email=session.user.email||"";
+ document.getElementById("sideEmail").textContent=email;
+ document.getElementById("topEmail").textContent=email;
+ document.getElementById("profileEmail").textContent=email;
+}
+
+document.querySelectorAll(".nav button[data-view]").forEach(button=>{
+ button.addEventListener("click",()=>{
+  document.querySelectorAll(".nav button").forEach(item=>item.classList.remove("active"));
+  document.querySelectorAll(".workspace").forEach(item=>item.classList.remove("active"));
+
+  button.classList.add("active");
+  document.getElementById("view-"+button.dataset.view).classList.add("active");
+
+  const titles={
+   overview:"Tổng quan",
+   create:"Giao bài tập",
+   results:"Kết quả học tập",
+   history:"Lịch sử bài tập",
+   profile:"Hồ sơ giáo viên"
+  };
+
+  document.getElementById("pageTitle").textContent=titles[button.dataset.view];
+ });
+});
+
+document.getElementById("logoutBtn").addEventListener("click",async()=>{
+ const {error}=await db.auth.signOut({scope:"local"});
+
+ if(error){
+  alert("Đăng xuất thất bại: "+error.message);
+  return;
+ }
+
+ location.replace("index.html");
+});
+
+document.getElementById("clearDraft").addEventListener("click",()=>{
+ document.getElementById("manualContent").value="";
+ document.getElementById("pasteContent").value="";
+ document.getElementById("draftPreview").style.display="none";
+});
+
+document.getElementById("previewDraft").addEventListener("click",()=>{
+ const content=[
+  document.getElementById("manualContent").value.trim(),
+  document.getElementById("pasteContent").value.trim()
+ ].filter(Boolean).join("\n\n");
+
+ if(!content){
+  alert("Bạn hãy nhập hoặc dán nội dung bài tập trước.");
+  return;
+ }
+
+ const preview=document.getElementById("draftPreview");
+ preview.textContent=content;
+ preview.style.display="block";
+});
+
+guardTeacher();
+</script>
+</body>
+</html>
