@@ -1026,65 +1026,8 @@ createHoloScreen(7,7,-14.65,5.5,2.8);
 createHoloScreen(-15,5,-5,4.5,2.5,Math.PI/2);
 createHoloScreen(15,5,-5,4.5,2.5,-Math.PI/2);
 
-// BÀN ĐIỀU KHIỂN
-function createControlDesk(x,z,rotationY=0){
-
- const desk = new THREE.Group();
- desk.position.set(x,0,z);
- desk.rotation.y=rotationY;
-
- // Chân bàn
- const legs = new THREE.Mesh(
-  new THREE.BoxGeometry(.18,1.1,.18),
-  roomWallMat
- );
-
- legs.position.set(-1.3,.55,0);
- desk.add(legs);
-
- const legs2 = legs.clone();
- legs2.position.x=1.3;
- desk.add(legs2);
-
- // Mặt bàn
- const top = new THREE.Mesh(
-  new THREE.BoxGeometry(3.1,.18,1.25),
-  new THREE.MeshStandardMaterial({
-   color:0x0a2635,
-   metalness:.85,
-   roughness:.25
-  })
- );
-
- top.position.y=1.15;
- desk.add(top);
-
- // Viền sáng bàn
- const edge = new THREE.Mesh(
-  new THREE.BoxGeometry(3.15,.035,1.3),
-  cyanLineMat
- );
-
- edge.position.y=1.25;
- desk.add(edge);
-
- // Màn hình nhỏ trên bàn
- const monitor = new THREE.Mesh(
-  new THREE.BoxGeometry(1.65,.95,.12),
-  new THREE.MeshStandardMaterial({
-   color:0x087d9c,
-   emissive:0x063c55,
-   emissiveIntensity:1.2,
-   metalness:.5,
-   roughness:.25
-  })
- );
-
- monitor.position.set(0,1.85,-.35);
- desk.add(monitor);
-
- commandRoom.add(desk);
-}
+// Hàm createControlDesk chính thức được khai báo ở phía dưới.
+// Không khai báo lại hàm tại vị trí này.
 
 // BÀN ĐIỀU KHIỂN
 function createControlDesk(x,z,rotationY=0){
