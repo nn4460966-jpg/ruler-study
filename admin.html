@@ -1088,11 +1088,42 @@ createLightColumn(19,7);
 
 // ÁNH SÁNG PHÒNG
 const roomLight = new THREE.PointLight(
- 0x13c9f5,35,35
+  0x13c9f5,35,35
 );
 
 roomLight.position.set(0,8,-8);
 commandRoom.add(roomLight);
+
+// HỆ THỐNG ĐÈN ÂM TRẦN
+const ceilingLightMat = new THREE.MeshStandardMaterial({
+ color:0x9cefff,
+ emissive:0x27cfff,
+ emissiveIntensity:2.2,
+ metalness:.25,
+ roughness:.3
+});
+
+// TẠO CÁC DẢI ĐÈN DỌC TRÊN TRẦN
+function createCeilingLight(x,z,w,d){
+ const lightPanel = new THREE.Mesh(
+  new THREE.BoxGeometry(w,.08,d),
+  ceilingLightMat
+ );
+
+ lightPanel.position.set(x,12.25,z);
+ commandRoom.add(lightPanel);
+}
+
+// DẢI ĐÈN CHÍNH
+createCeilingLight(0,-16,13,.55);
+createCeilingLight(0,-8,13,.55);
+createCeilingLight(0,0,13,.55);
+createCeilingLight(0,8,13,.55);
+createCeilingLight(0,16,13,.55);
+
+// DẢI ĐÈN HAI BÊN
+createCeilingLight(-15,-8,.45,20);
+createCeilingLight(15,-8,.45,20);
 
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
