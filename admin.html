@@ -71,6 +71,8 @@ html,body{
  display:flex;
  flex-direction:column;
  gap:16px;
+ transform:perspective(1000px) rotateY(-12deg);
+ transform-origin:right center;
 }
 
 .rightcard{
@@ -816,12 +818,16 @@ const skylineGlow=new THREE.Mesh(
 
 skylineGlow.position.set(0,2,-45);
 animeCity.add(skylineGlow);
+
+// GỠ TOÀN BỘ NHÀ, ĐƯỜNG VÀ CẢNH THÀNH PHỐ
+scene.remove(animeCity);
+
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
 const globe=new THREE.Group();
 globe.position.set(0,3,0);
+globe.scale.setScalar(1.4);
 scene.add(globe);
-
 // TẢI BẢN ĐỒ TRÁI ĐẤT
 const earthTexture=new THREE.TextureLoader().load(
  "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",
@@ -953,8 +959,8 @@ globe.add(cyanLight);
 
 const satelliteOrbit=new THREE.Group();
 satelliteOrbit.position.copy(globe.position);
+satelliteOrbit.scale.setScalar(1.4);
 scene.add(satelliteOrbit);
-
 // TẠO VỆ TINH SIÊU NHỎ CÓ ĐUÔI SÁNG
 function createSatellite(){
  const sat=new THREE.Group();
@@ -1095,7 +1101,8 @@ adminPanel.style.cssText=`
  position:fixed;
  left:24px;
  top:50%;
- transform:translateY(-50%);
+ transform:translateY(-50%) perspective(1000px) rotateY(12deg);
+ transform-origin:left center;
  width:260px;
  max-height:56vh;
  overflow-y:auto;
