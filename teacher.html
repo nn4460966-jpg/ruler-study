@@ -270,6 +270,194 @@ body{
  .editor-grid textarea{min-height:150px}
  .section-head{align-items:start;flex-direction:column}
 }
+/* ===== DARK STUDIO INTERFACE ===== */
+
+:root{
+ --navy:#111722;
+ --blue:#3478e8;
+ --purple:#795cf0;
+ --text:#e6edf7;
+ --muted:#8b98aa;
+}
+
+body{
+ background:#0b1018;
+ color:#e6edf7;
+}
+
+.sidebar{
+ background:#101722;
+ border-right:1px solid #273244;
+ box-shadow:8px 0 30px #0005;
+}
+
+.brand{
+ border-bottom:1px solid #273244;
+}
+
+.brand p{
+ color:#8eabc9;
+}
+
+.nav button{
+ color:#aebbd0;
+ border-radius:8px;
+}
+
+.nav button:hover,
+.nav button.active{
+ background:linear-gradient(100deg,#263c5b,#26345c);
+ border:1px solid #456b9d;
+ box-shadow:0 0 18px #2878d522;
+}
+
+.teacher-mini{
+ background:#182231;
+ border-color:#344258;
+}
+
+.main{
+ color:#e6edf7;
+}
+
+.eyebrow{
+ color:#7fa8d8;
+}
+
+.topbar{
+ padding:13px 18px;
+ background:#111a27;
+ border:1px solid #28364a;
+ border-radius:10px;
+}
+
+.topbar h1{
+ color:#f1f5fb;
+}
+
+.avatar{
+ background:#25364d;
+}
+
+.welcome{
+ background:linear-gradient(110deg,#17283d,#202b43 55%,#29264b);
+ border:1px solid #354b68;
+ box-shadow:0 10px 30px #0004;
+}
+
+.welcome h2{
+ color:#f2f6ff;
+}
+
+.welcome p{
+ color:#aebdd2;
+}
+
+.stat,
+.panel{
+ background:#141d29;
+ border:1px solid #2b394c;
+ box-shadow:0 8px 25px #0003;
+}
+
+.stat-icon{
+ background:#23344b;
+}
+
+.stat strong{
+ color:#f4f7fc;
+}
+
+.stat span,
+.section-head p,
+.muted{
+ color:#8d9bb0;
+}
+
+.section-head h2{
+ color:#e8eef8;
+}
+
+.empty{
+ color:#8391a5;
+}
+
+.empty strong{
+ color:#dce6f5;
+}
+
+.editor-grid textarea{
+ background:#0e1621;
+ border:1px solid #344258;
+ color:#e8eef8;
+ border-radius:9px;
+}
+
+.editor-grid textarea::placeholder{
+ color:#75869d;
+}
+
+.editor-grid textarea:focus{
+ border-color:#4d8ce8;
+ box-shadow:0 0 0 3px #3478e822;
+}
+
+#assignmentTitle{
+ background:#0e1621 !important;
+ border:1px solid #344258 !important;
+ color:#edf3fc !important;
+ border-radius:9px !important;
+}
+
+#assignmentTitle::placeholder{
+ color:#75869d;
+}
+
+.primary{
+ background:linear-gradient(100deg,#2678d8,#6659d9);
+ color:white;
+ border:1px solid #568ce5;
+}
+
+.primary:hover{
+ filter:brightness(1.15);
+}
+
+.secondary{
+ background:#202d3e;
+ color:#c8d8ee;
+ border:1px solid #35475e;
+}
+
+.secondary:hover{
+ background:#2b3d54;
+}
+
+.notice{
+ background:#282719;
+ border:1px solid #62552b;
+ color:#e5d49a;
+}
+
+.profile-avatar{
+ background:#25364d;
+}
+
+.history-item{
+ background:#1a2635;
+ border:1px solid #344258;
+ color:#e5edf8;
+}
+
+hr{
+ border-color:#344258 !important;
+}
+
+@media(max-width:600px){
+ .topbar{
+  padding:12px;
+ }
+}
 </style>
 </head>
 
