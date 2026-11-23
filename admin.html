@@ -1086,13 +1086,69 @@ function createControlDesk(x,z,rotationY=0){
  commandRoom.add(desk);
 }
 
-// BÀN ĐIỀU KHIỂN BỐ TRÍ QUANH ĐỊA CẦU
-createControlDesk(-9,-2,.25);
-createControlDesk(9,-2,-.25);
-createControlDesk(-7,-8,.15);
-createControlDesk(7,-8,-.15);
+// BÀN ĐIỀU KHIỂN
+function createControlDesk(x,z,rotationY=0){
 
-// GHẾ ĐIỀU KHIỂN CÔNG THÁI HỌC
+ const desk = new THREE.Group();
+
+ // HẠ BÀN XUỐNG ĐÚNG MẶT SÀN
+ desk.position.set(x,-.35,z);
+ desk.rotation.y=rotationY;
+
+ // Chân bàn
+ const legs = new THREE.Mesh(
+  new THREE.BoxGeometry(.18,1.1,.18),
+  roomWallMat
+ );
+
+ legs.position.set(-1.3,.55,0);
+ desk.add(legs);
+
+ const legs2 = legs.clone();
+ legs2.position.x=1.3;
+ desk.add(legs2);
+
+ // Mặt bàn
+ const top = new THREE.Mesh(
+  new THREE.BoxGeometry(3.1,.18,1.25),
+  new THREE.MeshStandardMaterial({
+   color:0x0a2635,
+   metalness:.85,
+   roughness:.25
+  })
+ );
+
+ top.position.y=1.15;
+ desk.add(top);
+
+ // Viền sáng bàn
+ const edge = new THREE.Mesh(
+  new THREE.BoxGeometry(3.15,.035,1.3),
+  cyanLineMat
+ );
+
+ edge.position.y=1.25;
+ desk.add(edge);
+
+ // Màn hình trên bàn
+ const monitor = new THREE.Mesh(
+  new THREE.BoxGeometry(1.65,.95,.12),
+  new THREE.MeshStandardMaterial({
+   color:0x087d9c,
+   emissive:0x063c55,
+   emissiveIntensity:1.2,
+   metalness:.5,
+   roughness:.25
+  })
+ );
+
+ monitor.position.set(0,1.85,-.35);
+ desk.add(monitor);
+
+ commandRoom.add(desk);
+}
+
+// VẬT LIỆU GHẾ
 const chairFrameMat = new THREE.MeshStandardMaterial({
  color:0x102d40,
  metalness:.8,
@@ -1109,10 +1165,13 @@ const chairGlowMat = new THREE.MeshBasicMaterial({
  color:0x19cfff
 });
 
+// TẠO GHẾ ĐIỀU KHIỂN
 function createOperatorChair(x,z,rotationY=0){
 
  const chair = new THREE.Group();
- chair.position.set(x,0,z);
+
+ // ĐẶT GHẾ CHẠM MẶT SÀN
+ chair.position.set(x,-.435,z);
  chair.rotation.y=rotationY;
 
  // Trụ ghế
@@ -1120,6 +1179,7 @@ function createOperatorChair(x,z,rotationY=0){
   new THREE.CylinderGeometry(.09,.13,.65,16),
   chairFrameMat
  );
+
  support.position.y=.42;
  chair.add(support);
 
@@ -1128,6 +1188,7 @@ function createOperatorChair(x,z,rotationY=0){
   new THREE.CylinderGeometry(.48,.48,.09,5),
   chairFrameMat
  );
+
  base.position.y=.13;
  chair.add(base);
 
@@ -1136,6 +1197,7 @@ function createOperatorChair(x,z,rotationY=0){
   new THREE.TorusGeometry(.43,.018,8,32),
   chairGlowMat
  );
+
  baseGlow.rotation.x=Math.PI/2;
  baseGlow.position.y=.19;
  chair.add(baseGlow);
@@ -1145,6 +1207,7 @@ function createOperatorChair(x,z,rotationY=0){
   new THREE.BoxGeometry(1.05,.2,.95),
   chairSeatMat
  );
+
  seat.position.set(0,.82,0);
  chair.add(seat);
 
@@ -1153,20 +1216,22 @@ function createOperatorChair(x,z,rotationY=0){
   new THREE.BoxGeometry(1.02,1.05,.16),
   chairSeatMat
  );
+
  back.position.set(0,1.42,.43);
  back.rotation.x=-.1;
  chair.add(back);
 
- // Khung viền tựa lưng
+ // Khung tựa lưng
  const backFrame = new THREE.Mesh(
   new THREE.BoxGeometry(1.08,1.11,.08),
   chairFrameMat
  );
+
  backFrame.position.set(0,1.42,.49);
  backFrame.rotation.x=-.1;
  chair.add(backFrame);
 
- // Tay vịn hai bên
+ // Tay vịn
  for(const side of [-1,1]){
 
   const arm = new THREE.Mesh(
@@ -1189,11 +1254,17 @@ function createOperatorChair(x,z,rotationY=0){
  commandRoom.add(chair);
 }
 
-// Đặt ghế phía trước mỗi bàn
-createOperatorChair(-9,-.1,.25);
-createOperatorChair(9,-.1,-.25);
-createOperatorChair(-7,-6.1,.15);
-createOperatorChair(7,-6.1,-.15);
+// BỐ TRÍ BÀN
+createControlDesk(-9,-2,.25);
+createControlDesk(9,-2,-.25);
+createControlDesk(-7,-8,.15);
+createControlDesk(7,-8,-.15);
+
+// GHẾ ĐẶT SÁT PHÍA TRƯỚC BÀN
+createOperatorChair(-9,-.9,.25);
+createOperatorChair(9,-.9,-.25);
+createOperatorChair(-7,-6.9,.15);
+createOperatorChair(7,-6.9,-.15);
 
 // CỘT ĐÈN XANH HAI BÊN
 function createLightColumn(x,z){
