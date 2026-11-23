@@ -1197,6 +1197,7 @@ globe.add(cyanLight);
 const satelliteOrbit=new THREE.Group();
 satelliteOrbit.position.copy(globe.position);
 satelliteOrbit.scale.setScalar(1.5);
+satelliteOrbit.visible=false;
 scene.add(satelliteOrbit);
 // TẠO VỆ TINH SIÊU NHỎ CÓ ĐUÔI SÁNG
 function createSatellite(){
