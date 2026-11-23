@@ -264,7 +264,7 @@ root.style.background=`
 `;
 
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
-camera.position.set(0,13,27);
+camera.position.set(0,8,23);
 
 const renderer=new THREE.WebGLRenderer({
  antialias:true,
@@ -1592,8 +1592,7 @@ document.querySelector("#openModule").onclick=()=>{
 const clock=new THREE.Clock();
 let introStart=performance.now();
 let introDone=false;
-
-const startCamera=new THREE.Vector3(0,13,27);
+const startCamera=new THREE.Vector3(0,8,23);
 const endCamera=new THREE.Vector3(0,8,23);
 
 function animate(){
