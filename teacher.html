@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Không gian giáo viên | RULER STUDY</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
@@ -724,6 +725,103 @@ hr{
   min-height:240px;
  }
 }
+/* ===== IMAGE QUESTION RECOGNITION ===== */
+
+.image-drop-zone{
+ padding:22px 12px;
+ border:1px dashed #55749b;
+ border-radius:9px;
+ background:#101b29;
+ text-align:center;
+ color:#dce8f8;
+ transition:.2s;
+}
+
+.image-drop-zone.dragover{
+ border-color:#69aaff;
+ background:#1b3048;
+}
+
+.image-drop-icon{
+ font-size:27px;
+ color:#7dbaff;
+ margin-bottom:8px;
+}
+
+.image-drop-zone strong{
+ display:block;
+ font-size:12px;
+}
+
+.image-drop-zone p{
+ color:#8498b2;
+ font-size:10px;
+ margin:7px 0 13px;
+}
+
+.image-upload-button{
+ display:inline-block;
+ padding:9px 13px;
+ border:1px solid #45668e;
+ border-radius:6px;
+ background:#20334a;
+ color:#dceaff;
+ font-size:11px;
+ cursor:pointer;
+}
+
+.image-preview-wrap{
+ margin-top:12px;
+ padding:10px;
+ border:1px solid #34465c;
+ border-radius:8px;
+ background:#101a27;
+}
+
+.image-preview-wrap[hidden]{
+ display:none;
+}
+
+.image-preview-wrap img{
+ display:block;
+ width:100%;
+ max-height:190px;
+ object-fit:contain;
+ border-radius:5px;
+ margin-bottom:10px;
+ background:#080d14;
+}
+
+.image-preview-wrap button{
+ width:100%;
+}
+
+.recognize-button{
+ width:100%;
+ margin-top:11px;
+}
+
+.recognize-button:disabled{
+ opacity:.45;
+ cursor:not-allowed;
+}
+
+.ocr-status{
+ margin-top:9px;
+ padding:10px;
+ border-radius:7px;
+ background:#192536;
+ color:#9fb4ce;
+ font-size:10px;
+ line-height:1.7;
+ overflow-wrap:anywhere;
+}
+
+@media(max-width:600px){
+ .image-drop-zone{
+  padding:18px 9px;
+ }
+}
 </style>
 </head>
 
@@ -822,7 +920,7 @@ hr{
   <div>
    <div class="eyebrow">RULER STUDIO / ASSIGNMENT EDITOR</div>
    <h2>Không gian soạn bài tập</h2>
-   <p>Soạn nội dung và xuất bản bài tập cho học sinh</p>
+   <p>Nhập nội dung hoặc tải ảnh đề bài để tự nhận diện câu hỏi</p>
   </div>
   <div class="studio-status">
    <span class="status-dot"></span>
@@ -843,17 +941,17 @@ hr{
 
    <div class="editor-caption">
     <span>✍️</span>
-    <strong>Nhập nội dung thủ công</strong>
+    <strong>Nội dung câu hỏi</strong>
    </div>
 
    <textarea
     id="manualContent"
     class="studio-textarea"
-    placeholder="Bắt đầu nhập nội dung bài tập tại đây..."
+    placeholder="Nội dung nhận diện từ ảnh sẽ xuất hiện ở đây. Bạn cũng có thể tự nhập hoặc chỉnh sửa..."
    ></textarea>
 
    <div class="editor-bottom">
-    <span>Vùng soạn thảo nội dung chính</span>
+    <span>Kiểm tra lại nội dung trước khi giao</span>
     <span>RULER STUDY</span>
    </div>
   </div>
@@ -879,14 +977,51 @@ hr{
    <div class="settings-divider"></div>
 
    <div class="editor-caption">
+    <span>🖼️</span>
+    <strong>Nhận diện câu hỏi từ ảnh</strong>
+   </div>
+
+   <div id="imageDropZone" class="image-drop-zone" tabindex="0">
+    <div class="image-drop-icon">⬆</div>
+    <strong>Dán ảnh hoặc chọn ảnh đề bài</strong>
+    <p>Nhấn Ctrl + V hoặc kéo ảnh vào đây</p>
+    <label class="image-upload-button" for="questionImage">
+     Chọn ảnh từ máy tính
+    </label>
+    <input
+     id="questionImage"
+     type="file"
+     accept="image/*"
+     hidden
+    >
+   </div>
+
+   <div id="imagePreviewWrap" class="image-preview-wrap" hidden>
+    <img id="questionImagePreview" alt="Ảnh đề bài đã chọn">
+    <button type="button" id="removeQuestionImage" class="secondary">
+     Xóa ảnh
+    </button>
+   </div>
+
+   <button type="button" id="recognizeImage" class="primary recognize-button" disabled>
+    ✨ Nhận diện câu hỏi
+   </button>
+
+   <div id="ocrStatus" class="ocr-status" aria-live="polite">
+    Chưa có ảnh đề bài.
+   </div>
+
+   <div class="settings-divider"></div>
+
+   <div class="editor-caption">
     <span>📋</span>
-    <strong>Dán nội dung bài tập</strong>
+    <strong>Dán nội dung dạng văn bản</strong>
    </div>
 
    <textarea
     id="pasteContent"
     class="paste-textarea"
-    placeholder="Dán nội dung bài tập vào đây..."
+    placeholder="Bạn cũng có thể dán nội dung văn bản vào đây..."
    ></textarea>
 
    <div class="settings-divider"></div>
@@ -894,8 +1029,8 @@ hr{
    <div class="publish-info">
     <span class="publish-info-icon">ⓘ</span>
     <div>
-     <strong>Sẵn sàng xuất bản?</strong>
-     <p>Bài tập sẽ được lưu vào tài khoản giáo viên và công bố cho học sinh sau khi bạn bấm Giao bài tập.</p>
+     <strong>Kiểm tra trước khi xuất bản</strong>
+     <p>Hãy kiểm tra nội dung nhận diện, sau đó bấm Giao bài tập để công bố cho học sinh.</p>
     </div>
    </div>
 
@@ -972,7 +1107,172 @@ const db=window.supabase.createClient(
  "https://svhwozfwuexgiwrdripm.supabase.co",
  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
 );
+// ===== IMAGE OCR FOR TEACHER ASSIGNMENTS =====
 
+let selectedQuestionImage=null;
+let ocrWorker=null;
+let ocrBusy=false;
+
+const imageInput=document.getElementById("questionImage");
+const imageDropZone=document.getElementById("imageDropZone");
+const imagePreviewWrap=document.getElementById("imagePreviewWrap");
+const imagePreview=document.getElementById("questionImagePreview");
+const recognizeButton=document.getElementById("recognizeImage");
+const ocrStatus=document.getElementById("ocrStatus");
+
+function setQuestionImage(file){
+
+ if(!file||!file.type.startsWith("image/")){
+  ocrStatus.textContent="Vui lòng chọn một tệp hình ảnh hợp lệ.";
+  return;
+ }
+
+ if(file.size>12*1024*1024){
+  ocrStatus.textContent="Ảnh quá lớn. Vui lòng chọn ảnh nhỏ hơn 12 MB.";
+  return;
+ }
+
+ selectedQuestionImage=file;
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  imagePreview.src=reader.result;
+  imagePreviewWrap.hidden=false;
+  recognizeButton.disabled=false;
+  ocrStatus.textContent="Đã nhận ảnh. Bấm Nhận diện câu hỏi để trích xuất văn bản.";
+ };
+
+ reader.onerror=()=>{
+  ocrStatus.textContent="Không đọc được ảnh này. Hãy thử chọn ảnh khác.";
+ };
+
+ reader.readAsDataURL(file);
+}
+
+imageInput.addEventListener("change",()=>{
+ const file=imageInput.files?.[0];
+ if(file) setQuestionImage(file);
+});
+
+imageDropZone.addEventListener("click",event=>{
+ if(event.target.closest("label")) return;
+ imageDropZone.focus();
+});
+
+imageDropZone.addEventListener("dragover",event=>{
+ event.preventDefault();
+ imageDropZone.classList.add("dragover");
+});
+
+imageDropZone.addEventListener("dragleave",()=>{
+ imageDropZone.classList.remove("dragover");
+});
+
+imageDropZone.addEventListener("drop",event=>{
+ event.preventDefault();
+ imageDropZone.classList.remove("dragover");
+
+ const file=event.dataTransfer.files?.[0];
+ if(file) setQuestionImage(file);
+});
+
+document.addEventListener("paste",event=>{
+
+ const createView=document.getElementById("view-create");
+
+ if(!createView.classList.contains("active")) return;
+
+ const items=event.clipboardData?.items;
+ if(!items) return;
+
+ for(const item of items){
+
+  if(item.type.startsWith("image/")){
+   const file=item.getAsFile();
+
+   if(file){
+    event.preventDefault();
+    setQuestionImage(file);
+   }
+
+   return;
+  }
+ }
+});
+
+document.getElementById("removeQuestionImage").addEventListener("click",()=>{
+
+ selectedQuestionImage=null;
+ imageInput.value="";
+ imagePreview.src="";
+ imagePreviewWrap.hidden=true;
+ recognizeButton.disabled=true;
+ ocrStatus.textContent="Đã xóa ảnh. Bạn có thể dán hoặc chọn ảnh khác.";
+});
+
+recognizeButton.addEventListener("click",async()=>{
+
+ if(!selectedQuestionImage||ocrBusy) return;
+
+ if(!window.Tesseract){
+  ocrStatus.textContent="Thư viện nhận diện chưa tải được. Hãy tải lại trang và thử lại.";
+  return;
+ }
+
+ ocrBusy=true;
+ recognizeButton.disabled=true;
+ recognizeButton.textContent="Đang nhận diện...";
+ ocrStatus.textContent="Đang khởi tạo bộ nhận diện tiếng Việt và tiếng Anh...";
+
+ try{
+
+  if(!ocrWorker){
+   ocrWorker=await Tesseract.createWorker(
+    "vie+eng",
+    1,
+    {
+     logger:message=>{
+      if(message.status==="recognizing text"){
+       const percent=Math.round((message.progress||0)*100);
+       ocrStatus.textContent="Đang đọc nội dung ảnh: "+percent+"%";
+      }
+     }
+    }
+   );
+  }
+
+  const result=await ocrWorker.recognize(selectedQuestionImage);
+  const extractedText=(result.data.text||"").trim();
+
+  if(!extractedText){
+   ocrStatus.textContent="Chưa nhận diện được chữ. Hãy thử ảnh rõ hơn, đủ sáng và chụp thẳng.";
+   return;
+  }
+
+  const manual=document.getElementById("manualContent");
+  const current=manual.value.trim();
+
+  manual.value=current
+   ?current+"\n\n"+extractedText
+   :extractedText;
+
+  manual.dispatchEvent(new Event("input",{bubbles:true}));
+
+  ocrStatus.textContent="Đã nhận diện xong. Hãy kiểm tra và sửa lại nội dung trong khung soạn thảo.";
+
+ }catch(error){
+
+  console.error("OCR error:",error);
+  ocrStatus.textContent="Nhận diện thất bại: "+(error.message||"Lỗi không xác định");
+
+ }finally{
+
+  ocrBusy=false;
+  recognizeButton.disabled=!selectedQuestionImage;
+  recognizeButton.textContent="✨ Nhận diện câu hỏi";
+ }
+});
 async function guardTeacher(){
  const {data:{session},error}=await db.auth.getSession();
 
@@ -1039,6 +1339,12 @@ document.getElementById("clearDraft").addEventListener("click",()=>{
  document.getElementById("manualContent").value="";
  document.getElementById("pasteContent").value="";
  document.getElementById("draftPreview").style.display="none";
+ selectedQuestionImage=null;
+imageInput.value="";
+imagePreview.src="";
+imagePreviewWrap.hidden=true;
+recognizeButton.disabled=true;
+ocrStatus.textContent="Đã xóa ảnh và nội dung nhận diện.";
 });
 
 function getAssignmentContent(){
