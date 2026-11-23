@@ -856,13 +856,21 @@ roomFloor.rotation.x=-Math.PI/2;
 roomFloor.position.set(0,-.35,5);
 commandRoom.add(roomFloor);
 
-// LƯỚI SÀN CÔNG NGHỆ
+// LƯỚI SÀN CÔNG NGHỆ - ÁNH SÁNG DỊU HƠN
 const floorGrid = new THREE.GridHelper(
- 60,60,0x087b9c,0x12394b
+ 60,40,0x07536c,0x0b2634
 );
 
 floorGrid.scale.x=.7;
 floorGrid.position.set(0,-.32,5);
+
+// Giảm độ sáng để lưới không lấn át căn phòng
+floorGrid.material.forEach((material)=>{
+ material.transparent=true;
+ material.opacity=.42;
+ material.depthWrite=false;
+});
+
 commandRoom.add(floorGrid);
 
 // VIỀN SÀN PHÁT SÁNG
