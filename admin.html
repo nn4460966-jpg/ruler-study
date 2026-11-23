@@ -1011,6 +1011,9 @@ function createSideWallPanel(x,y,z,height,depth){
  panel.position.set(x,y,z);
  commandRoom.add(panel);
 
+ const faceX = x < 0 ? x + .12 : x - .12;
+
+ // KHUNG VIỀN CYAN
  const frame = new THREE.LineSegments(
   new THREE.EdgesGeometry(
    new THREE.BoxGeometry(.2,height+.22,depth+.22)
@@ -1020,6 +1023,39 @@ function createSideWallPanel(x,y,z,height,depth){
 
  frame.position.set(x,y,z);
  commandRoom.add(frame);
+
+ // HAI THANH CHIA TẦNG PHÁT SÁNG
+ const dividerMaterial = new THREE.MeshBasicMaterial({
+  color:0x16cfff
+ });
+
+ for(let i=-1;i<=1;i+=2){
+
+  const divider = new THREE.Mesh(
+   new THREE.BoxGeometry(.07,.045,depth-.7),
+   dividerMaterial
+  );
+
+  divider.position.set(faceX,y+i*1.65,z);
+  commandRoom.add(divider);
+ }
+
+ // HAI THANH KIM LOẠI DỌC
+ for(let i=-1;i<=1;i+=2){
+
+  const metalRail = new THREE.Mesh(
+   new THREE.BoxGeometry(.08,height-.55,.09),
+   rearPanelMaterial
+  );
+
+  metalRail.position.set(
+   faceX,
+   y,
+   z+i*(depth/2-1.1)
+  );
+
+  commandRoom.add(metalRail);
+ }
 }
 
 // HAI MẢNG ỐP TƯỜNG TRÁI
@@ -1029,7 +1065,6 @@ createSideWallPanel(-20.7,6.2,13,7.4,8.4);
 // HAI MẢNG ỐP TƯỜNG PHẢI
 createSideWallPanel(20.7,6.2,-11,7.4,8.4);
 createSideWallPanel(20.7,6.2,13,7.4,8.4);
-
 // ĐÈN TRANG TRÍ NGANG TRÊN TƯỜNG SAU
 function createHorizontalWallLight(x,y,z,width){
  const light = new THREE.Mesh(
