@@ -458,6 +458,272 @@ hr{
   padding:12px;
  }
 }
+/* ===== ASSIGNMENT STUDIO LAYOUT ===== */
+
+.studio-heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:15px;
+ margin:10px 0 20px;
+}
+
+.studio-heading h2{
+ margin:7px 0;
+ font-size:23px;
+ color:#f1f5fb;
+}
+
+.studio-heading p{
+ margin:0;
+ font-size:12px;
+ color:#8b9bb1;
+}
+
+.studio-status{
+ display:flex;
+ align-items:center;
+ gap:8px;
+ padding:9px 13px;
+ border:1px solid #34475e;
+ border-radius:7px;
+ background:#172434;
+ color:#b8c9df;
+ font-size:11px;
+}
+
+.status-dot{
+ width:7px;
+ height:7px;
+ border-radius:50%;
+ background:#45c98a;
+ box-shadow:0 0 9px #45c98a;
+}
+
+.assignment-studio{
+ display:grid;
+ grid-template-columns:minmax(0,1.5fr) minmax(300px,.85fr);
+ gap:14px;
+ align-items:stretch;
+}
+
+.studio-editor,
+.studio-settings{
+ min-width:0;
+ background:#141d29;
+ border:1px solid #2d3d52;
+ border-radius:10px;
+ overflow:hidden;
+ box-shadow:0 10px 30px #0003;
+}
+
+.studio-toolbar{
+ height:52px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:0 17px;
+ background:#192536;
+ border-bottom:1px solid #2d3d52;
+}
+
+.toolbar-left{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ color:#dce8f8;
+ font-size:11px;
+ letter-spacing:.5px;
+}
+
+.toolbar-icon{
+ color:#7bb8ff;
+ font-size:20px;
+}
+
+.toolbar-hint{
+ color:#74869e;
+ font-size:10px;
+}
+
+.editor-caption{
+ display:flex;
+ align-items:center;
+ gap:9px;
+ padding:16px 17px 10px;
+ color:#cbd9eb;
+ font-size:12px;
+}
+
+.studio-textarea{
+ display:block;
+ width:calc(100% - 34px);
+ min-height:440px;
+ margin:0 17px;
+ padding:17px;
+ resize:vertical;
+ border:1px solid #34465c;
+ border-radius:7px;
+ outline:none;
+ background:#0d1520;
+ color:#e7effa;
+ font:13px/1.8 'Be Vietnam Pro';
+}
+
+.studio-textarea:focus,
+.paste-textarea:focus,
+.studio-input:focus{
+ border-color:#4e91e8;
+ box-shadow:0 0 0 3px #3478e81c;
+}
+
+.studio-textarea::placeholder,
+.paste-textarea::placeholder,
+.studio-input::placeholder{
+ color:#72839a;
+}
+
+.editor-bottom{
+ display:flex;
+ justify-content:space-between;
+ padding:12px 17px;
+ color:#71839a;
+ font-size:10px;
+}
+
+.studio-settings{
+ padding:0 17px 17px;
+}
+
+.settings-heading{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ margin:0 -17px 20px;
+ padding:17px;
+ background:#192536;
+ border-bottom:1px solid #2d3d52;
+ color:#dce8f8;
+ font-size:11px;
+ letter-spacing:.5px;
+}
+
+.settings-heading span{
+ color:#83baff;
+ font-size:18px;
+}
+
+.studio-label{
+ display:block;
+ margin-bottom:9px;
+ color:#aebdd0;
+ font-size:11px;
+ font-weight:700;
+}
+
+.studio-input{
+ width:100%;
+ padding:13px;
+ border:1px solid #34465c;
+ border-radius:7px;
+ outline:none;
+ background:#0d1520;
+ color:#edf4ff;
+ font:12px 'Be Vietnam Pro';
+}
+
+.settings-divider{
+ height:1px;
+ background:#2c394b;
+ margin:19px 0;
+}
+
+.paste-textarea{
+ display:block;
+ width:100%;
+ min-height:155px;
+ padding:13px;
+ resize:vertical;
+ border:1px solid #34465c;
+ border-radius:7px;
+ outline:none;
+ background:#0d1520;
+ color:#e7effa;
+ font:12px/1.7 'Be Vietnam Pro';
+}
+
+.publish-info{
+ display:flex;
+ gap:10px;
+ padding:13px;
+ border:1px solid #46513f;
+ border-radius:7px;
+ background:#20251f;
+}
+
+.publish-info-icon{
+ color:#e5c777;
+ font-size:17px;
+}
+
+.publish-info strong{
+ color:#e8d9a7;
+ font-size:11px;
+}
+
+.publish-info p{
+ margin:6px 0 0;
+ color:#b5b49e;
+ font-size:10px;
+ line-height:1.7;
+}
+
+.studio-actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+ margin-top:17px;
+}
+
+.studio-actions button{
+ padding:12px 8px;
+ font-size:11px;
+}
+
+.studio-actions #publishAssignment{
+ grid-column:1 / -1;
+ padding:14px;
+}
+
+.studio-preview{
+ margin-top:15px;
+ color:#e5edf8;
+}
+
+@media(max-width:1000px){
+ .assignment-studio{
+  grid-template-columns:1fr;
+ }
+ .studio-textarea{
+  min-height:300px;
+ }
+}
+
+@media(max-width:600px){
+ .studio-heading{
+  align-items:flex-start;
+  flex-direction:column;
+ }
+ .studio-heading h2{
+  font-size:19px;
+ }
+ .studio-status{
+  align-self:flex-start;
+ }
+ .studio-textarea{
+  min-height:240px;
+ }
+}
 </style>
 </head>
 
@@ -551,35 +817,101 @@ hr{
  </section>
 
  <section class="workspace" id="view-create">
-  <div class="section-head">
-   <div><h2>Tạo bài tập mới</h2><p>Soạn nội dung bài tập trước khi giao cho học sinh</p></div>
+
+ <div class="studio-heading">
+  <div>
+   <div class="eyebrow">RULER STUDIO / ASSIGNMENT EDITOR</div>
+   <h2>Không gian soạn bài tập</h2>
+   <p>Soạn nội dung và xuất bản bài tập cho học sinh</p>
   </div>
-  <div class="panel">
+  <div class="studio-status">
+   <span class="status-dot"></span>
+   Đang soạn thảo
+  </div>
+ </div>
+
+ <div class="assignment-studio">
+
+  <div class="studio-editor">
+   <div class="studio-toolbar">
+    <div class="toolbar-left">
+     <span class="toolbar-icon">✎</span>
+     <strong>NỘI DUNG BÀI TẬP</strong>
+    </div>
+    <span class="toolbar-hint">Trình soạn thảo</span>
+   </div>
+
+   <div class="editor-caption">
+    <span>✍️</span>
+    <strong>Nhập nội dung thủ công</strong>
+   </div>
+
+   <textarea
+    id="manualContent"
+    class="studio-textarea"
+    placeholder="Bắt đầu nhập nội dung bài tập tại đây..."
+   ></textarea>
+
+   <div class="editor-bottom">
+    <span>Vùng soạn thảo nội dung chính</span>
+    <span>RULER STUDY</span>
+   </div>
+  </div>
+
+  <aside class="studio-settings">
+
+   <div class="settings-heading">
+    <span>⚙</span>
+    <strong>THIẾT LẬP BÀI TẬP</strong>
+   </div>
+
+   <label class="studio-label" for="assignmentTitle">
+    Tên bài tập
+   </label>
+
    <input
     id="assignmentTitle"
     type="text"
     placeholder="Nhập tên bài tập..."
-    style="width:100%;padding:15px;border:1px solid #d8e2f7;border-radius:12px;margin-bottom:15px;font:13px 'Be Vietnam Pro';"
+    class="studio-input"
    >
 
-   <div class="editor-grid">
-    <textarea id="manualContent" placeholder="Nhập nội dung bài tập tại đây..."></textarea>
-    <textarea id="pasteContent" placeholder="Dán nội dung bài tập vào đây..."></textarea>
+   <div class="settings-divider"></div>
+
+   <div class="editor-caption">
+    <span>📋</span>
+    <strong>Dán nội dung bài tập</strong>
    </div>
 
-   <div class="form-actions">
+   <textarea
+    id="pasteContent"
+    class="paste-textarea"
+    placeholder="Dán nội dung bài tập vào đây..."
+   ></textarea>
+
+   <div class="settings-divider"></div>
+
+   <div class="publish-info">
+    <span class="publish-info-icon">ⓘ</span>
+    <div>
+     <strong>Sẵn sàng xuất bản?</strong>
+     <p>Bài tập sẽ được lưu vào tài khoản giáo viên và công bố cho học sinh sau khi bạn bấm Giao bài tập.</p>
+    </div>
+   </div>
+
+   <div class="studio-actions">
     <button class="secondary" id="clearDraft">Xóa nội dung</button>
-    <button class="secondary" id="previewDraft">Xem nội dung</button>
-    <button class="primary" id="publishAssignment">Giao bài tập</button>
+    <button class="secondary" id="previewDraft">Xem trước</button>
+    <button class="primary" id="publishAssignment">⇧ Giao bài tập</button>
    </div>
 
-   <div class="notice">
-    Bài tập sẽ được lưu vào tài khoản giáo viên và công bố cho học sinh sau khi bạn bấm Giao bài tập.
-   </div>
+  </aside>
+ </div>
 
-   <div id="draftPreview" class="panel" style="display:none;margin-top:16px;white-space:pre-wrap;line-height:1.8"></div>
-  </div>
- </section>
+ <div id="draftPreview" class="panel studio-preview"
+  style="display:none;white-space:pre-wrap;line-height:1.8"></div>
+
+</section>
 
  <section class="workspace" id="view-results">
   <div class="section-head">
