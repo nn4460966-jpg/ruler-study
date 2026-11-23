@@ -932,6 +932,31 @@ function addWallLine(x,y,z,w,h){
 
 addWallLine(0,12.2,-24.77,42,.035);
 addWallLine(0,.5,-24.77,42,.035);
+
+// ĐÈN HẮT DỌC HAI BÊN TƯỜNG
+function createSideWallLight(x,y,z){
+ const light = new THREE.Mesh(
+  new THREE.BoxGeometry(.08,7,.12),
+  new THREE.MeshBasicMaterial({
+   color:0x16cfff
+  })
+ );
+
+ light.position.set(x,y,z);
+ commandRoom.add(light);
+}
+
+// TƯỜNG TRÁI
+createSideWallLight(-20.7,6,-17);
+createSideWallLight(-20.7,6,-5);
+createSideWallLight(-20.7,6,7);
+createSideWallLight(-20.7,6,19);
+
+// TƯỜNG PHẢI
+createSideWallLight(20.7,6,-17);
+createSideWallLight(20.7,6,-5);
+createSideWallLight(20.7,6,7);
+createSideWallLight(20.7,6,19);
 // TẠO MÀN HÌNH HOLOGRAM
 function createHoloScreen(x,y,z,w,h,rotationY=0){
 
