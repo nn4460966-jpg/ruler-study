@@ -825,17 +825,19 @@ scene.remove(animeCity);
 const commandRoom = new THREE.Group();
 scene.add(commandRoom);
 
-// VẬT LIỆU PHÒNG ĐIỀU HÀNH
+/// VẬT LIỆU PHÒNG ĐIỀU HÀNH
 const roomFloorMat = new THREE.MeshStandardMaterial({
  color:0x071522,
  metalness:.8,
  roughness:.3
 });
 
+// VẬT LIỆU TƯỜNG HIỂN THỊ ĐƯỢC TỪ BÊN TRONG PHÒNG
 const roomWallMat = new THREE.MeshStandardMaterial({
- color:0x061724,
- metalness:.65,
- roughness:.4
+ color:0x0a2638,
+ metalness:.55,
+ roughness:.48,
+ side:THREE.DoubleSide
 });
 
 const cyanLineMat = new THREE.MeshBasicMaterial({
