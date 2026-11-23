@@ -1000,6 +1000,36 @@ createSideWallLight(20.7,6,-5);
 createSideWallLight(20.7,6,7);
 createSideWallLight(20.7,6,19);
 
+// CÁC MẢNG ỐP TRANG TRÍ HAI TƯỜNG BÊN
+function createSideWallPanel(x,y,z,height,depth){
+
+ const panel = new THREE.Mesh(
+  new THREE.BoxGeometry(.16,height,depth),
+  rearPanelMaterial
+ );
+
+ panel.position.set(x,y,z);
+ commandRoom.add(panel);
+
+ const frame = new THREE.LineSegments(
+  new THREE.EdgesGeometry(
+   new THREE.BoxGeometry(.2,height+.22,depth+.22)
+  ),
+  rearPanelFrameMaterial
+ );
+
+ frame.position.set(x,y,z);
+ commandRoom.add(frame);
+}
+
+// HAI MẢNG ỐP TƯỜNG TRÁI
+createSideWallPanel(-20.7,6.2,-11,7.4,8.4);
+createSideWallPanel(-20.7,6.2,13,7.4,8.4);
+
+// HAI MẢNG ỐP TƯỜNG PHẢI
+createSideWallPanel(20.7,6.2,-11,7.4,8.4);
+createSideWallPanel(20.7,6.2,13,7.4,8.4);
+
 // ĐÈN TRANG TRÍ NGANG TRÊN TƯỜNG SAU
 function createHorizontalWallLight(x,y,z,width){
  const light = new THREE.Mesh(
