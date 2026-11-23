@@ -932,6 +932,49 @@ ceiling.rotation.x=Math.PI/2;
 ceiling.position.set(0,12.5,5);
 commandRoom.add(ceiling);
 
+// TRỤ KẾT CẤU KIM LOẠI Ở CÁC GÓC PHÒNG
+const roomCornerMaterial = new THREE.MeshStandardMaterial({
+ color:0x102d40,
+ emissive:0x06334a,
+ emissiveIntensity:.8,
+ metalness:.85,
+ roughness:.28
+});
+
+const roomCornerGlow = new THREE.MeshBasicMaterial({
+ color:0x16cfff
+});
+
+function createRoomCorner(x,z){
+
+ const pillar = new THREE.Mesh(
+  new THREE.BoxGeometry(.32,12.2,.32),
+  roomCornerMaterial
+ );
+
+ pillar.position.set(x,6.05,z);
+ commandRoom.add(pillar);
+
+ const glow = new THREE.Mesh(
+  new THREE.BoxGeometry(.045,11.8,.045),
+  roomCornerGlow
+ );
+
+ glow.position.set(
+  x+(x<0?.18:-.18),
+  6.05,
+  z+(z<5?.18:-.18)
+ );
+
+ commandRoom.add(glow);
+}
+
+// BỐN GÓC PHÒNG
+createRoomCorner(-20.55,-24.55);
+createRoomCorner(20.55,-24.55);
+createRoomCorner(-20.55,34.55);
+createRoomCorner(20.55,34.55);
+
 // ĐƯỜNG VIỀN PHÁT SÁNG TRÊN TƯỜNG
 function addWallLine(x,y,z,w,h){
  const line = new THREE.Mesh(
