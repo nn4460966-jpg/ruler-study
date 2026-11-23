@@ -263,7 +263,8 @@ root.style.background=`
  radial-gradient(ellipse at 50% 48%, #082b40 0%, #041522 42%, #02070d 100%)
 `;
 
-const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,180);
+// CAMERA GÓC RỘNG CHO PHÒNG ĐIỀU HÀNH
+const camera=new THREE.PerspectiveCamera(64,innerWidth/innerHeight,.1,180);
 camera.position.set(0,8,23);
 
 const renderer=new THREE.WebGLRenderer({
