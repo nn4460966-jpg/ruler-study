@@ -1240,13 +1240,36 @@ createLightColumn(19,-10);
 createLightColumn(-19,7);
 createLightColumn(19,7);
 
-// ÁNH SÁNG PHÒNG
+// ÁNH SÁNG PHÒNG ĐIỀU HÀNH
 const roomLight = new THREE.PointLight(
-  0x13c9f5,35,35
+  0x13c9f5,70,0
 );
 
-roomLight.position.set(0,8,-8);
+roomLight.position.set(0,9,-5);
 commandRoom.add(roomLight);
+
+// ÁNH SÁNG PHỦ KHU VỰC PHÍA TRƯỚC
+const roomFrontLight = new THREE.PointLight(
+  0x168dff,45,0
+);
+
+roomFrontLight.position.set(0,8,15);
+commandRoom.add(roomFrontLight);
+
+// ÁNH SÁNG BỔ SUNG HAI BÊN
+const roomSideLight = new THREE.PointLight(
+  0x087fae,30,0
+);
+
+roomSideLight.position.set(-12,6,2);
+commandRoom.add(roomSideLight);
+
+const roomSideLightRight = new THREE.PointLight(
+  0x087fae,30,0
+);
+
+roomSideLightRight.position.set(12,6,2);
+commandRoom.add(roomSideLightRight);
 
 // HỆ THỐNG ĐÈN ÂM TRẦN
 const ceilingLightMat = new THREE.MeshStandardMaterial({
