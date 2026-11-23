@@ -888,6 +888,46 @@ addFloorLine(0,35,42,.045);
 addFloorLine(-21,5,.045,60);
 addFloorLine(21,5,.045,60);
 
+// CHÂN TƯỜNG KIM LOẠI
+const wallBaseMaterial = new THREE.MeshStandardMaterial({
+ color:0x102d40,
+ emissive:0x062b40,
+ emissiveIntensity:.7,
+ metalness:.9,
+ roughness:.28
+});
+
+const wallBaseGlowMaterial = new THREE.MeshBasicMaterial({
+ color:0x087fae
+});
+
+function createWallBase(x,y,z,w,d){
+
+ const base = new THREE.Mesh(
+  new THREE.BoxGeometry(w,.34,d),
+  wallBaseMaterial
+ );
+
+ base.position.set(x,y,z);
+ commandRoom.add(base);
+
+ const glow = new THREE.Mesh(
+  new THREE.BoxGeometry(w,.035,d+.025),
+  wallBaseGlowMaterial
+ );
+
+ glow.position.set(x,y+.13,z);
+ commandRoom.add(glow);
+}
+
+// CHÂN TƯỜNG SAU VÀ PHÍA TRƯỚC
+createWallBase(0,-.25,-24.72,41.5,.22);
+createWallBase(0,-.25,34.72,41.5,.22);
+
+// CHÂN TƯỜNG HAI BÊN
+createWallBase(-20.72,-.25,5,.22,59.5);
+createWallBase(20.72,-.25,5,.22,59.5);
+
 // TƯỜNG SAU PHÒNG
 const backWall = new THREE.Mesh(
  new THREE.BoxGeometry(42,13,.35),
