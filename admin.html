@@ -865,11 +865,9 @@ floorGrid.scale.x=.7;
 floorGrid.position.set(0,-.32,5);
 
 // Giảm độ sáng để lưới không lấn át căn phòng
-floorGrid.material.forEach((material)=>{
- material.transparent=true;
- material.opacity=.42;
- material.depthWrite=false;
-});
+floorGrid.material.transparent=true;
+floorGrid.material.opacity=.42;
+floorGrid.material.depthWrite=false;
 
 commandRoom.add(floorGrid);
 
