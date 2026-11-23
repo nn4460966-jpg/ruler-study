@@ -1254,17 +1254,24 @@ function createOperatorChair(x,z,rotationY=0){
  commandRoom.add(chair);
 }
 
-// BỐ TRÍ BÀN
-createControlDesk(-9,-2,.25);
-createControlDesk(9,-2,-.25);
-createControlDesk(-7,-8,.15);
-createControlDesk(7,-8,-.15);
+// BỐ TRÍ 4 BÀN THEO VÒNG CUNG QUANH ĐỊA CẦU
 
-// GHẾ ĐẶT SÁT PHÍA TRƯỚC BÀN
-createOperatorChair(-9,-.9,.25);
-createOperatorChair(9,-.9,-.25);
-createOperatorChair(-7,-6.9,.15);
-createOperatorChair(7,-6.9,-.15);
+// CẶP BÀN PHÍA TRƯỚC – HAI BÊN
+createControlDesk(-10,0,-.65);
+createControlDesk(10,0,.65);
+
+// CẶP BÀN PHÍA SAU – HAI BÊN
+createControlDesk(-7.5,-10,-.35);
+createControlDesk(7.5,-10,.35);
+
+// GHẾ ĐẶT PHÍA SAU MỖI BÀN
+// Ghế xoay cùng hướng với bàn
+
+createOperatorChair(-10.67,.875,-.65);
+createOperatorChair(10.67,.875,.65);
+
+createOperatorChair(-7.88,-8.966,-.35);
+createOperatorChair(7.88,-8.966,.35);
 
 // CỘT ĐÈN XANH HAI BÊN
 function createLightColumn(x,z){
