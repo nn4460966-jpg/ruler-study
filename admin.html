@@ -937,6 +937,44 @@ function addWallLine(x,y,z,w,h){
 addWallLine(0,12.2,-24.77,42,.035);
 addWallLine(0,.5,-24.77,42,.035);
 
+// CÁC MẢNG ỐP TRANG TRÍ LỚN TRÊN TƯỜNG SAU
+const rearPanelMaterial = new THREE.MeshStandardMaterial({
+ color:0x0a2638,
+ emissive:0x06283b,
+ emissiveIntensity:.65,
+ metalness:.8,
+ roughness:.3
+});
+
+const rearPanelFrameMaterial = new THREE.MeshBasicMaterial({
+ color:0x16cfff
+});
+
+function createRearWallPanel(x,y,width,height){
+
+ const panel = new THREE.Mesh(
+  new THREE.BoxGeometry(width,height,.16),
+  rearPanelMaterial
+ );
+
+ panel.position.set(x,y,-24.55);
+ commandRoom.add(panel);
+
+ const frame = new THREE.LineSegments(
+  new THREE.EdgesGeometry(
+   new THREE.BoxGeometry(width+.22,height+.22,.2)
+  ),
+  rearPanelFrameMaterial
+ );
+
+ frame.position.set(x,y,-24.43);
+ commandRoom.add(frame);
+}
+
+// Ba mảng ốp lớn chia đều trên tường sau
+createRearWallPanel(-13,6.2,10.5,8.2);
+createRearWallPanel(0,6.2,10.5,8.2);
+createRearWallPanel(13,6.2,10.5,8.2);
 // ĐÈN HẮT DỌC HAI BÊN TƯỜNG
 function createSideWallLight(x,y,z){
  const light = new THREE.Mesh(
