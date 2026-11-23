@@ -1321,6 +1321,36 @@ createCeilingLight(0,16,13,.55);
 createCeilingLight(-15,-8,.45,20);
 createCeilingLight(15,-8,.45,20);
 
+// KHUNG ĐÈN VIỀN TRẦN PHÒNG
+const ceilingFrameMat = new THREE.MeshBasicMaterial({
+ color:0x087fae
+});
+
+// Viền phía trước và phía sau
+const ceilingFrontLine = new THREE.Mesh(
+ new THREE.BoxGeometry(38,.045,.08),
+ ceilingFrameMat
+);
+ceilingFrontLine.position.set(0,12.18,32);
+commandRoom.add(ceilingFrontLine);
+
+const ceilingBackLine = ceilingFrontLine.clone();
+ceilingBackLine.position.z=-22;
+commandRoom.add(ceilingBackLine);
+
+// Viền hai bên
+const ceilingSideGeometry = new THREE.BoxGeometry(.08,.045,54);
+
+const ceilingLeftLine = new THREE.Mesh(
+ ceilingSideGeometry,
+ ceilingFrameMat
+);
+ceilingLeftLine.position.set(-19,12.18,5);
+commandRoom.add(ceilingLeftLine);
+
+const ceilingRightLine = ceilingLeftLine.clone();
+ceilingRightLine.position.x=19;
+commandRoom.add(ceilingRightLine);
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
 const globe=new THREE.Group();
