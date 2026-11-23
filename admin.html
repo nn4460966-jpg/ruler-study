@@ -832,11 +832,13 @@ const roomFloorMat = new THREE.MeshStandardMaterial({
  roughness:.3
 });
 
-// VẬT LIỆU TƯỜNG HIỂN THỊ ĐƯỢC TỪ BÊN TRONG PHÒNG
+// VẬT LIỆU TƯỜNG PHÒNG ĐIỀU HÀNH
 const roomWallMat = new THREE.MeshStandardMaterial({
- color:0x0a2638,
- metalness:.55,
- roughness:.48,
+ color:0x12384d,
+ emissive:0x08283b,
+ emissiveIntensity:1.1,
+ metalness:.45,
+ roughness:.5,
  side:THREE.DoubleSide
 });
 
