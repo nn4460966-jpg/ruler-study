@@ -1509,6 +1509,43 @@ commandRoom.add(ceilingLeftLine);
 const ceilingRightLine = ceilingLeftLine.clone();
 ceilingRightLine.position.x=19;
 commandRoom.add(ceilingRightLine);
+
+// DẦM KẾT CẤU KIM LOẠI SÁT MÉP TRẦN
+const ceilingBeamMaterial = new THREE.MeshStandardMaterial({
+ color:0x12364a,
+ emissive:0x06354c,
+ emissiveIntensity:.65,
+ metalness:.9,
+ roughness:.25
+});
+
+// Dầm trước và sau
+const ceilingFrontBeam = new THREE.Mesh(
+ new THREE.BoxGeometry(41,.28,.38),
+ ceilingBeamMaterial
+);
+ceilingFrontBeam.position.set(0,11.85,34.65);
+commandRoom.add(ceilingFrontBeam);
+
+const ceilingBackBeam = ceilingFrontBeam.clone();
+ceilingBackBeam.position.z=-24.65;
+commandRoom.add(ceilingBackBeam);
+
+// Dầm hai bên
+const ceilingSideBeam = new THREE.Mesh(
+ new THREE.BoxGeometry(.38,.28,59),
+ ceilingBeamMaterial
+);
+ceilingSideBeam.position.set(-20.65,11.85,5);
+commandRoom.add(ceilingSideBeam);
+
+const ceilingRightBeam = ceilingSideBeam.clone();
+ceilingRightBeam.position.x=20.65;
+commandRoom.add(ceilingRightBeam);
+
+const ceilingRightLine = ceilingLeftLine.clone();
+ceilingRightLine.position.x=19;
+commandRoom.add(ceilingRightLine);
 /* ================= HOLOGRAPHIC EARTH GLOBE ================= */
 
 const globe=new THREE.Group();
