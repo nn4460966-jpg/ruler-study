@@ -71,7 +71,7 @@ html,body{
  display:flex;
  flex-direction:column;
  gap:16px;
- transform:perspective(1000px) rotateY(-12deg);
+ transform:perspective(1000px) rotateY(-15deg);
  transform-origin:right center;
 }
 
@@ -826,7 +826,7 @@ scene.remove(animeCity);
 
 const globe=new THREE.Group();
 globe.position.set(0,3,0);
-globe.scale.setScalar(1.4);
+globe.scale.setScalar(1.5);
 scene.add(globe);
 // TẢI BẢN ĐỒ TRÁI ĐẤT
 const earthTexture=new THREE.TextureLoader().load(
@@ -959,7 +959,7 @@ globe.add(cyanLight);
 
 const satelliteOrbit=new THREE.Group();
 satelliteOrbit.position.copy(globe.position);
-satelliteOrbit.scale.setScalar(1.4);
+satelliteOrbit.scale.setScalar(1.5);
 scene.add(satelliteOrbit);
 // TẠO VỆ TINH SIÊU NHỎ CÓ ĐUÔI SÁNG
 function createSatellite(){
@@ -1101,7 +1101,7 @@ adminPanel.style.cssText=`
  position:fixed;
  left:24px;
  top:50%;
- transform:translateY(-50%) perspective(1000px) rotateY(12deg);
+  transform:translateY(-50%) perspective(1000px) rotateY(15deg);
  transform-origin:left center;
  width:260px;
  max-height:56vh;
