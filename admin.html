@@ -1618,6 +1618,22 @@ const ceilingRightBeam = ceilingSideBeam.clone();
 ceilingRightBeam.position.x=20.65;
 commandRoom.add(ceilingRightBeam);
 
+// CÁC DẦM NGANG CHIA KHOANG TRẦN
+function createCeilingCrossBeam(z){
+
+ const beam = new THREE.Mesh(
+  new THREE.BoxGeometry(39,.22,.3),
+  ceilingBeamMaterial
+ );
+
+ beam.position.set(0,11.85,z);
+ commandRoom.add(beam);
+}
+
+createCeilingCrossBeam(-16);
+createCeilingCrossBeam(-4);
+createCeilingCrossBeam(8);
+createCeilingCrossBeam(20);
 const ceilingRightLine = ceilingLeftLine.clone();
 ceilingRightLine.position.x=19;
 commandRoom.add(ceilingRightLine);
