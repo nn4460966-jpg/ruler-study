@@ -1066,6 +1066,41 @@ function createRearWallPanel(x,y,width,height){
 createRearWallPanel(-13,6.2,10.5,8.2);
 createRearWallPanel(0,6.2,10.5,8.2);
 createRearWallPanel(13,6.2,10.5,8.2);
+
+// THANH KHUNG KIM LOẠI NỐI GIỮA CÁC MẢNG ỐP
+const rearWallRibMaterial = new THREE.MeshStandardMaterial({
+ color:0x15394d,
+ emissive:0x07506b,
+ emissiveIntensity:.8,
+ metalness:.92,
+ roughness:.24
+});
+
+const rearWallRibGlow = new THREE.MeshBasicMaterial({
+ color:0x16cfff
+});
+
+function createRearWallRib(x){
+
+ const rib = new THREE.Mesh(
+  new THREE.BoxGeometry(.16,8.5,.24),
+  rearWallRibMaterial
+ );
+
+ rib.position.set(x,6.2,-24.34);
+ commandRoom.add(rib);
+
+ const glow = new THREE.Mesh(
+  new THREE.BoxGeometry(.025,8.1,.035),
+  rearWallRibGlow
+ );
+
+ glow.position.set(x-.1,6.2,-24.19);
+ commandRoom.add(glow);
+}
+
+createRearWallRib(-6.5);
+createRearWallRib(6.5);
 // ĐÈN HẮT DỌC HAI BÊN TƯỜNG
 function createSideWallLight(x,y,z){
  const light = new THREE.Mesh(
