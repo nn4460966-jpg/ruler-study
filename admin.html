@@ -293,18 +293,17 @@ renderer.toneMappingExposure=1.25;
 
 root.appendChild(renderer.domElement);
 
-// KHỞI TẠO ORBIT CONTROLS
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;
 controls.dampingFactor=.055;
 
-// Cho phép xoay góc nhìn 360 độ
-controls.enableRotate=true;
+// KHÓA XOAY TOÀN BỘ GÓC NHÌN NHƯ PHIÊN BẢN TỐI QUA
+controls.enableRotate=false;
 
-// Không cho kéo lệch tâm phòng
+// Không cho kéo lệch màn hình
 controls.enablePan=false;
 
-// Không cho phóng to hoặc thu nhỏ
+// KHÓA PHÓNG TO VÀ THU NHỎ
 controls.enableZoom=false;
 
 controls.target.set(0,2,0);
