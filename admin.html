@@ -2253,10 +2253,10 @@ function createWallRobotEmbrace(){
 const torso=new THREE.Group();
 
 // Thân robot trồi mạnh ra khỏi bức tường sau
-torso.position.set(0,8.8,-3.9);
+torso.position.set(0,9.0,-3.5);
 
-// Thân rộng gần 8 đơn vị, cao hơn rõ rệt
-torso.scale.set(2.1,1.65,1.4);
+// Thân khổng lồ, rộng gần 9 đơn vị
+torso.scale.set(2.3,1.9,1.45);
 
 // NGỰC ROBOT LỚN
 const chest=new THREE.Mesh(
@@ -2462,43 +2462,43 @@ createRobotJoint(
  [side*3.15,4.0,1.05]
 ];
 
-  // Bắp tay và cẳng tay kim loại lớn
+    // Bắp tay và cẳng tay robot cỡ lớn
   for(let i=0;i<path.length-1;i++){
 
    createRobotLink(
      arm,
      path[i],
      path[i+1],
-     i<2?.48:.38
+     i<2?.78:.62
    );
 
    createRobotJoint(
      arm,
      path[i+1],
-     i<2?.38:.30
+     i<2?.58:.48
    );
   }
 
-  // Giáp bọc lớn trên từng đoạn cánh tay
+  // Giáp bọc lớn trên toàn bộ cánh tay
   for(let i=1;i<path.length-1;i++){
 
    const p=path[i];
 
    const armor=new THREE.Mesh(
-     new THREE.SphereGeometry(.48,28,22),
+     new THREE.SphereGeometry(.68,28,22),
      robotArmArmor
    );
 
-   armor.scale.set(1.05,1.0,.9);
+   armor.scale.set(1.1,1.0,.95);
    armor.position.set(p[0],p[1],p[2]+.12);
    arm.add(armor);
 
    const armorLight=new THREE.Mesh(
-    new THREE.BoxGeometry(.16,1.1,.14),
+    new THREE.BoxGeometry(.22,1.35,.18),
     robotArmGlow
    );
 
-   armorLight.position.set(p[0],p[1],p[2]+.86);
+   armorLight.position.set(p[0],p[1],p[2]+.92);
    arm.add(armorLight);
   }
 
@@ -2531,19 +2531,17 @@ createRobotJoint(
 
        // ================= CỔ TAY NỐI THẲNG VỚI CẲNG TAY =================
 
-  createRobotJoint(
+   createRobotJoint(
    arm,
    [side*3.15,4.0,1.05],
-   .42
+   .58
   );
-
   // ================= LÒNG BÀN TAY ÔM ĐỊA CẦU =================
 
-  const palm=new THREE.Mesh(
-   new THREE.BoxGeometry(.62,1.55,1.0),
+   const palm=new THREE.Mesh(
+   new THREE.BoxGeometry(.82,1.8,1.15),
    robotArmArmor
   );
-
   palm.position.set(side*3.15,4.0,1.05);
   palm.rotation.y=-side*Math.PI/2;
   arm.add(palm);
