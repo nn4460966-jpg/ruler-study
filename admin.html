@@ -2230,153 +2230,188 @@ function createWallRobotEmbrace(){
   createRobotJoint(robot,[side*2.1,10.4,-9.0],.72);
  }
 
- // ================= THÂN ROBOT TREO NGƯỢC =================
+// ================= THÂN ROBOT TREO NGƯỢC =================
 
- const torso=new THREE.Group();
- torso.position.set(0,10.1,-8.7);
+const torso=new THREE.Group();
 
- const chest=new THREE.Mesh(
-  new THREE.BoxGeometry(4.8,2.8,1.55),
+// Đưa thân ra gần phía trước để nhìn rõ phía trên địa cầu
+torso.position.set(0,9.15,-4.9);
+
+// NGỰC ROBOT LỚN
+const chest=new THREE.Mesh(
+ new THREE.BoxGeometry(5.0,3.0,1.65),
+ robotArmArmor
+);
+torso.add(chest);
+
+// Giáp ngực nổi khối
+const chestFront=new THREE.Mesh(
+ new THREE.BoxGeometry(4.35,2.45,.28),
+ robotArmMetal
+);
+chestFront.position.set(0,0,.88);
+torso.add(chestFront);
+
+// Lõi năng lượng giữa ngực
+const chestCore=new THREE.Mesh(
+ new THREE.SphereGeometry(1.15,32,24),
+ robotArmMetal
+);
+chestCore.scale.set(1.2,1,.55);
+chestCore.position.set(0,0,1.02);
+torso.add(chestCore);
+
+const reactor=new THREE.Mesh(
+ new THREE.TorusGeometry(.82,.16,16,48),
+ robotArmGlow
+);
+reactor.position.set(0,0,1.42);
+torso.add(reactor);
+
+const reactorGlass=new THREE.Mesh(
+ new THREE.SphereGeometry(.62,24,20),
+ robotArmGlass
+);
+reactorGlass.position.set(0,0,1.4);
+torso.add(reactorGlass);
+
+// Giáp ngực hai bên
+for(const side of [-1,1]){
+
+ const plate=new THREE.Mesh(
+  new THREE.BoxGeometry(1.7,2.25,.38),
   robotArmArmor
  );
- torso.add(chest);
 
- const chestCore=new THREE.Mesh(
+ plate.position.set(side*1.55,0,1.05);
+ plate.rotation.z=-side*.12;
+ torso.add(plate);
+
+ createRobotCable(
+  torso,
+  [
+   [side*2.0,.9,1.12],
+   [side*1.35,.35,1.3],
+   [side*.8,-.45,1.35]
+  ],
+  .065,
+  0x20dfff
+ );
+}
+
+// Giáp bụng nối liền ngực
+const abdomen=new THREE.Mesh(
+ new THREE.BoxGeometry(3.0,.85,1.15),
+ robotArmMetal
+);
+abdomen.position.set(0,-1.65,.05);
+torso.add(abdomen);
+
+robot.add(torso);
+
+// ================= CỔ ROBOT =================
+
+const neckBase=new THREE.Mesh(
+ new THREE.CylinderGeometry(.48,.62,.85,24),
+ robotArmMetal
+);
+neckBase.position.set(0,10.95,-4.65);
+robot.add(neckBase);
+
+createRobotJoint(
+ robot,
+ [0,11.0,-4.55],
+ .52
+);
+
+// ================= ĐẦU ROBOT =================
+
+const head=new THREE.Group();
+head.position.set(0,11.65,-4.05);
+
+// Hộp sọ kim loại
+const skull=new THREE.Mesh(
+ new THREE.SphereGeometry(1.0,32,24),
+ robotArmMetal
+);
+skull.scale.set(1.05,1.05,.9);
+head.add(skull);
+
+// Mũ giáp lớn
+const helmet=new THREE.Mesh(
+ new THREE.SphereGeometry(1.12,32,24),
+ robotArmArmor
+);
+helmet.scale.set(1.12,.62,.98);
+helmet.position.set(0,.58,0);
+head.add(helmet);
+
+// Mặt nạ robot
+const face=new THREE.Mesh(
+ new THREE.BoxGeometry(1.48,.48,.24),
+ robotArmDark
+);
+face.position.set(0,-.05,.88);
+head.add(face);
+
+// Dải mắt phát sáng
+const eyeLine=new THREE.Mesh(
+ new THREE.BoxGeometry(1.22,.11,.1),
+ robotArmGlow
+);
+eyeLine.position.set(0,-.02,1.03);
+head.add(eyeLine);
+
+// Hai khớp thái dương
+for(const side of [-1,1]){
+
+ createRobotJoint(
+  head,
+  [side*.98,-.05,0],
+  .28
+ );
+}
+
+robot.add(head);
+
+// ================= HAI VAI ROBOT KHỔNG LỒ =================
+
+for(const side of [-1,1]){
+
+ const shoulder=new THREE.Mesh(
   new THREE.SphereGeometry(1.45,32,24),
-  robotArmMetal
- );
- chestCore.scale.set(1.35,.9,.65);
- chestCore.position.z=.65;
- torso.add(chestCore);
-
- // Lõi năng lượng lớn giữa ngực
- const reactor=new THREE.Mesh(
-  new THREE.TorusGeometry(.82,.16,16,48),
-  robotArmGlow
- );
- reactor.position.set(0,-.15,1.15);
- torso.add(reactor);
-
- const reactorGlass=new THREE.Mesh(
-  new THREE.SphereGeometry(.62,24,20),
-  robotArmGlass
- );
- reactorGlass.position.set(0,-.15,1.12);
- torso.add(reactorGlass);
-
- // Giáp ngực hai bên
- for(const side of [-1,1]){
-  const plate=new THREE.Mesh(
-   new THREE.BoxGeometry(1.65,2.0,.35),
-   robotArmMetal
-  );
-  plate.position.set(side*1.45,0,.95);
-  plate.rotation.z=-side*.12;
-  torso.add(plate);
-
-  createRobotCable(
-   torso,
-   [
-    [side*1.9,.8,.95],
-    [side*1.25,.35,1.2],
-    [side*.8,-.3,1.25]
-   ],
-   .055,
-   0x20dfff
-  );
- }
- robot.add(torso);
-
- // ================= CỔ VÀ ĐẦU ROBOT =================
- // Đầu nằm thấp hơn thân để tạo tư thế treo ngược
-
- createRobotLink(
-  robot,
-  [0,9.0,-8.0],
-  [0,8.05,-7.6],
-  .62
- );
-
- createRobotJoint(robot,[0,8.55,-7.8],.72);
-
- const head=new THREE.Group();
- head.position.set(0,7.45,-7.25);
-
- const skull=new THREE.Mesh(
-  new THREE.SphereGeometry(1.18,32,24),
-  robotArmMetal
- );
- skull.scale.set(1.05,1.15,.9);
- head.add(skull);
-
- const helmet=new THREE.Mesh(
-  new THREE.SphereGeometry(1.22,32,20),
   robotArmArmor
  );
- helmet.scale.set(1.08,.55,.94);
- helmet.position.y=.72;
- head.add(helmet);
 
- const face=new THREE.Mesh(
-  new THREE.BoxGeometry(1.55,.42,.2),
-  robotArmGlass
+ shoulder.scale.set(1.4,1.12,1.15);
+ shoulder.position.set(side*2.85,9.45,-4.45);
+ robot.add(shoulder);
+
+ // Khớp nối vai với cánh tay
+ createRobotJoint(
+  robot,
+  [side*3.15,9.1,-4.15],
+  .82
  );
- face.position.set(0,.05,.98);
- head.add(face);
 
- const eyeLine=new THREE.Mesh(
-  new THREE.BoxGeometry(1.2,.075,.08),
+ const shoulderRing=new THREE.Mesh(
+  new THREE.TorusGeometry(.88,.13,16,48),
   robotArmGlow
  );
- eyeLine.position.set(0,.05,1.1);
- head.add(eyeLine);
 
- for(const side of [-1,1]){
-  createRobotJoint(
-   head,
-   [side*1.05,-.05,.1],
-   .32
-  );
- }
- robot.add(head);
+ shoulderRing.position.set(side*3.0,9.45,-4.05);
+ robot.add(shoulderRing);
 
-  // ================= HAI VAI ROBOT KHỔNG LỒ =================
+ // Giáp vai lớn
+ const shoulderPlate=new THREE.Mesh(
+  new THREE.BoxGeometry(1.8,1.3,.55),
+  robotArmMetal
+ );
 
- for(const side of [-1,1]){
-
-  const shoulder=new THREE.Mesh(
-   new THREE.SphereGeometry(1.55,32,24),
-   robotArmArmor
-  );
-
-  shoulder.scale.set(1.45,1.15,1.2);
-  shoulder.position.set(side*2.8,9.7,-7.2);
-  robot.add(shoulder);
-
-  createRobotJoint(
-   robot,
-   [side*3.15,9.1,-6.6],
-   .95
-  );
-
-  const shoulderRing=new THREE.Mesh(
-   new THREE.TorusGeometry(.95,.13,16,48),
-   robotArmGlow
-  );
-
-  shoulderRing.position.set(side*3.0,9.7,-6.35);
-  robot.add(shoulderRing);
-
-  // Giáp vai nổi rõ
-  const shoulderPlate=new THREE.Mesh(
-   new THREE.BoxGeometry(1.8,1.25,.5),
-   robotArmMetal
-  );
-
-  shoulderPlate.position.set(side*3.45,9.8,-6.65);
-  shoulderPlate.rotation.z=side*.25;
-  robot.add(shoulderPlate);
- }
+ shoulderPlate.position.set(side*3.45,9.55,-4.05);
+ shoulderPlate.rotation.z=side*.22;
+ robot.add(shoulderPlate);
+}
 
  // ================= HAI CÁNH TAY VÒNG ÔM ĐỊA CẦU =================
 
@@ -2386,15 +2421,15 @@ function createWallRobotEmbrace(){
 
   // Cánh tay đi từ vai, vòng rộng ra ngoài,
   // sau đó cong xuống và hướng vào địa cầu.
-  const path=[
-   [side*3.1,9.15,-6.6],
-   [side*4.25,8.0,-4.7],
-   [side*5.35,6.5,-2.0],
-   [side*5.65,5.0,.2],
-   [side*5.25,3.9,1.8],
-   [side*4.55,3.0,3.0],
-   [side*3.65,2.45,3.75]
-  ];
+ const path=[
+ [side*3.1,9.15,-4.15],
+ [side*4.25,8.0,-4.0],
+ [side*5.35,6.5,-2.0],
+ [side*5.65,5.0,.2],
+ [side*5.25,3.9,1.8],
+ [side*4.55,3.0,3.0],
+ [side*3.65,2.45,3.75]
+];
 
   // Bắp tay và cẳng tay kim loại lớn
   for(let i=0;i<path.length-1;i++){
