@@ -2092,7 +2092,7 @@ document.head.appendChild(adminScrollStyle);
 // Tạo 11 nút chức năng
 const adminModuleList=adminPanel.querySelector("#adminModuleList");
 
-modules.forEach((mod,i)=>{
+ modules.forEach((mod,i)=>{
 
  const button=document.createElement("button");
 
@@ -2139,6 +2139,9 @@ modules.forEach((mod,i)=>{
 
  adminModuleList.appendChild(button);
 });
+
+// ẨN MENU CŨ BÊN TRÁI
+adminPanel.style.display="none";
 /* ================= SELECT MODULE ================= */
 
 const raycaster=new THREE.Raycaster();
