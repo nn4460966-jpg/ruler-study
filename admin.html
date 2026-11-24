@@ -2239,14 +2239,14 @@ torso.position.set(0,9.15,-4.9);
 
 // NGỰC ROBOT LỚN
 const chest=new THREE.Mesh(
- new THREE.BoxGeometry(5.0,3.0,1.65),
+ new THREE.BoxGeometry(3.8,2.35,1.25),
  robotArmArmor
 );
 torso.add(chest);
 
 // Giáp ngực nổi khối
 const chestFront=new THREE.Mesh(
- new THREE.BoxGeometry(4.35,2.45,.28),
+ new THREE.BoxGeometry(3.35,1.9,.22),
  robotArmMetal
 );
 chestFront.position.set(0,0,.88);
@@ -2301,7 +2301,7 @@ for(const side of [-1,1]){
 
 // Giáp bụng nối liền ngực
 const abdomen=new THREE.Mesh(
- new THREE.BoxGeometry(3.0,.85,1.15),
+ new THREE.BoxGeometry(2.35,.62,.9),
  robotArmMetal
 );
 abdomen.position.set(0,-1.65,.05);
@@ -2331,7 +2331,7 @@ head.position.set(0,11.65,-4.05);
 
 // Hộp sọ kim loại
 const skull=new THREE.Mesh(
- new THREE.SphereGeometry(1.0,32,24),
+ new THREE.SphereGeometry(1.18,32,24),
  robotArmMetal
 );
 skull.scale.set(1.05,1.05,.9);
@@ -2339,7 +2339,7 @@ head.add(skull);
 
 // Mũ giáp lớn
 const helmet=new THREE.Mesh(
- new THREE.SphereGeometry(1.12,32,24),
+ new THREE.SphereGeometry(1.28,32,24),
  robotArmArmor
 );
 helmet.scale.set(1.12,.62,.98);
@@ -2378,20 +2378,21 @@ robot.add(head);
 
 for(const side of [-1,1]){
 
+ 
  const shoulder=new THREE.Mesh(
-  new THREE.SphereGeometry(1.45,32,24),
+  new THREE.SphereGeometry(.95,32,24),
   robotArmArmor
  );
 
- shoulder.scale.set(1.4,1.12,1.15);
+ shoulder.scale.set(1.15,1.0,1.0);
  shoulder.position.set(side*2.85,9.45,-4.45);
  robot.add(shoulder);
 
  // Khớp nối vai với cánh tay
- createRobotJoint(
+createRobotJoint(
   robot,
   [side*3.15,9.1,-4.15],
-  .82
+  .48
  );
 
  const shoulderRing=new THREE.Mesh(
@@ -2435,16 +2436,16 @@ for(const side of [-1,1]){
   for(let i=0;i<path.length-1;i++){
 
    createRobotLink(
-    arm,
-    path[i],
-    path[i+1],
-    i<2?.92:.76
+     arm,
+     path[i],
+     path[i+1],
+     i<2?.48:.38
    );
 
    createRobotJoint(
-    arm,
-    path[i+1],
-    i<2?.72:.58
+     arm,
+     path[i+1],
+     i<2?.38:.30
    );
   }
 
@@ -2454,11 +2455,11 @@ for(const side of [-1,1]){
    const p=path[i];
 
    const armor=new THREE.Mesh(
-    new THREE.SphereGeometry(.9,28,22),
-    robotArmArmor
+     new THREE.SphereGeometry(.48,28,22),
+     robotArmArmor
    );
 
-   armor.scale.set(1.2,1.0,1.0);
+   armor.scale.set(1.05,1.0,.9);
    armor.position.set(p[0],p[1],p[2]+.12);
    arm.add(armor);
 
@@ -2488,13 +2489,13 @@ for(const side of [-1,1]){
 
   // Dây năng lượng chạy dọc cánh tay
   createRobotCable(
-   arm,
+      arm,
    path.map(p=>[
-    p[0]+side*.18,
+    p[0]+side*.12,
     p[1],
-    p[2]+.78
+    p[2]+.48
    ]),
-   .075,
+   .045,
    0x20dfff
   );
 
