@@ -2099,23 +2099,68 @@ function createRobotJoint(parent,position,radius){
  parent.add(joint);
 }
 
-// DÂY ĐIỆN VÀ ỐNG DẪN NĂNG LƯỢNG
+// ================= DÂY CƠ KHÍ ĐEN CÓ GÂN =================
+
 function createRobotCable(parent,points,radius,color){
 
  const curve=new THREE.CatmullRomCurve3(
-  points.map(p=>new THREE.Vector3(...p))
+  points.map(p=>new THREE.Vector3(...p)),
+  false,
+  "catmullrom",
+  .35
  );
 
- const cable=new THREE.Mesh(
-  new THREE.TubeGeometry(curve,48,radius,8,false),
-  new THREE.MeshBasicMaterial({
-   color:color,
-   transparent:true,
-   opacity:.9
-  })
+ // Lõi ống cao su đen
+ const hoseMaterial=new THREE.MeshStandardMaterial({
+  color:0x080c13,
+  metalness:.72,
+  roughness:.38
+ });
+
+ const hose=new THREE.Mesh(
+  new THREE.TubeGeometry(curve,64,radius,12,false),
+  hoseMaterial
  );
 
- parent.add(cable);
+ parent.add(hose);
+
+ // Các vòng gân nổi chạy dọc ống
+ const ribMaterial=new THREE.MeshStandardMaterial({
+  color:0x171e29,
+  metalness:.82,
+  roughness:.3
+ });
+
+ const length=curve.getLength();
+ const ribCount=Math.max(10,Math.ceil(length/.105));
+
+ for(let i=0;i<=ribCount;i++){
+
+  const t=i/ribCount;
+  const point=curve.getPointAt(t);
+  const tangent=curve.getTangentAt(t).normalize();
+
+  const rib=new THREE.Mesh(
+   new THREE.TorusGeometry(
+    radius*1.08,
+    Math.max(.018,radius*.24),
+    8,
+    16
+   ),
+   ribMaterial
+  );
+
+  rib.position.copy(point);
+
+  rib.quaternion.setFromUnitVectors(
+   new THREE.Vector3(0,0,1),
+   tangent
+  );
+
+  parent.add(rib);
+ }
+
+ return hose;
 }
 
 // ROBOT KHỔNG LỒ TREO NGƯỢC, CHUI RA TỪ TƯỜNG SAU
@@ -2256,12 +2301,49 @@ function createWallRobotEmbrace(){
  waistCore.position.set(0,-1.45,.98);
  torso.add(waistCore);
 
+ // ================= CỔ ROBOT LỘ BÓ DÂY CƠ KHÍ =================
+
  const neck=new THREE.Mesh(
   new THREE.CylinderGeometry(.72,.9,1.0,32),
-  robotArmMetal
+  robotArmDark
  );
  neck.position.set(0,2.85,.1);
  torso.add(neck);
+
+ // Sáu bó dây đen chạy từ thân lên đầu
+ for(let i=0;i<6;i++){
+
+  const x=-.5+i*.2;
+
+  createRobotCable(
+   torso,
+   [
+    [x*.75,2.05,.72],
+    [x,2.42,.82],
+    [x*.9,2.85,.83],
+    [x*.72,3.25,.72],
+    [x*.65,3.72,.48]
+   ],
+   .075,
+   0x080c13
+  );
+ }
+
+ // Hai bó dây lớn hai bên cổ
+ for(const side of [-1,1]){
+
+  createRobotCable(
+   torso,
+   [
+    [side*.62,2.0,.45],
+    [side*.78,2.45,.58],
+    [side*.72,2.95,.55],
+    [side*.58,3.55,.35]
+   ],
+   .105,
+   0x080c13
+  );
+ }
 
  robot.add(torso);
 
