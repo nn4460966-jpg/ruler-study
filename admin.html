@@ -1878,8 +1878,8 @@ function drawAdminPanelWrappedText(ctx,text,x,y,maxWidth,lineHeight){
  }
 }
 
-// Tạo bảng hologram cho từng chức năng
-modules.forEach((mod,i)=>{
+// Tạm ngừng tạo bảng hologram 3D cho từng chức năng
+if(false) modules.forEach((mod,i)=>{
 
  const canvas=document.createElement("canvas");
  canvas.width=1024;
