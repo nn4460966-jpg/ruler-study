@@ -2340,157 +2340,242 @@ function createWallRobotEmbrace(){
  }
  robot.add(head);
 
- // ================= HAI VAI ROBOT KHỔNG LỒ =================
+  // ================= HAI VAI ROBOT KHỔNG LỒ =================
 
  for(const side of [-1,1]){
 
   const shoulder=new THREE.Mesh(
-   new THREE.SphereGeometry(1.25,28,22),
+   new THREE.SphereGeometry(1.55,32,24),
    robotArmArmor
   );
-  shoulder.scale.set(1.35,1.0,1.1);
-  shoulder.position.set(side*2.55,9.75,-7.6);
+
+  shoulder.scale.set(1.45,1.15,1.2);
+  shoulder.position.set(side*2.8,9.7,-7.2);
   robot.add(shoulder);
 
   createRobotJoint(
    robot,
-   [side*2.9,9.25,-7.0],
-   .82
+   [side*3.15,9.1,-6.6],
+   .95
   );
 
   const shoulderRing=new THREE.Mesh(
-   new THREE.TorusGeometry(.78,.1,12,40),
+   new THREE.TorusGeometry(.95,.13,16,48),
    robotArmGlow
   );
-  shoulderRing.position.set(side*2.75,9.75,-6.75);
+
+  shoulderRing.position.set(side*3.0,9.7,-6.35);
   robot.add(shoulderRing);
+
+  // Giáp vai nổi rõ
+  const shoulderPlate=new THREE.Mesh(
+   new THREE.BoxGeometry(1.8,1.25,.5),
+   robotArmMetal
+  );
+
+  shoulderPlate.position.set(side*3.45,9.8,-6.65);
+  shoulderPlate.rotation.z=side*.25;
+  robot.add(shoulderPlate);
  }
 
- // ================= CÁNH TAY ÔM ĐỊA CẦU =================
+ // ================= HAI CÁNH TAY VÒNG ÔM ĐỊA CẦU =================
 
  for(const side of [-1,1]){
 
   const arm=new THREE.Group();
 
-  // Bắp tay -> khuỷu tay -> cẳng tay -> cổ tay
+  // Cánh tay đi từ vai, vòng rộng ra ngoài,
+  // sau đó cong xuống và hướng vào địa cầu.
   const path=[
-   [side*2.9,9.2,-6.9],
-   [side*3.9,8.0,-4.8],
-   [side*5.0,6.3,-2.0],
-   [side*5.25,4.7,.1],
-   [side*4.85,2.8,2.0],
-   [side*4.15,1.25,3.35],
-   [side*3.25,.45,4.0]
+   [side*3.1,9.15,-6.6],
+   [side*4.25,8.0,-4.7],
+   [side*5.35,6.5,-2.0],
+   [side*5.65,5.0,.2],
+   [side*5.25,3.9,1.8],
+   [side*4.55,3.0,3.0],
+   [side*3.65,2.45,3.75]
   ];
 
+  // Bắp tay và cẳng tay kim loại lớn
   for(let i=0;i<path.length-1;i++){
+
    createRobotLink(
     arm,
     path[i],
     path[i+1],
-    i<2?.76:.62
+    i<2?.92:.76
    );
+
    createRobotJoint(
     arm,
     path[i+1],
-    i<2?.62:.48
+    i<2?.72:.58
    );
   }
 
-  // Giáp lớn trên bắp tay và cẳng tay
+  // Giáp bọc lớn trên từng đoạn cánh tay
   for(let i=1;i<path.length-1;i++){
+
    const p=path[i];
 
    const armor=new THREE.Mesh(
-    new THREE.SphereGeometry(.78,24,18),
+    new THREE.SphereGeometry(.9,28,22),
     robotArmArmor
    );
-   armor.scale.set(1.12,.92,.85);
+
+   armor.scale.set(1.2,1.0,1.0);
    armor.position.set(p[0],p[1],p[2]+.12);
    arm.add(armor);
 
-   const light=new THREE.Mesh(
-    new THREE.BoxGeometry(.12,.9,.12),
+   const armorLight=new THREE.Mesh(
+    new THREE.BoxGeometry(.16,1.1,.14),
     robotArmGlow
    );
-   light.position.set(p[0],p[1],p[2]+.78);
-   arm.add(light);
+
+   armorLight.position.set(p[0],p[1],p[2]+.86);
+   arm.add(armorLight);
   }
 
-  // Piston thủy lực hai bên khuỷu tay
+  // Piston cơ khí ở khuỷu tay
   createRobotLink(
    arm,
-   [side*4.45,7.3,-3.2],
-   [side*5.55,5.5,-.5],
-   .17
+   [side*4.55,7.4,-3.3],
+   [side*5.9,5.8,-.7],
+   .2
   );
 
   createRobotLink(
    arm,
-   [side*5.55,5.5,-.5],
-   [side*5.0,3.5,1.4],
-   .17
+   [side*5.9,5.8,-.7],
+   [side*5.3,4.0,1.5],
+   .2
   );
 
-  // Dây năng lượng dọc cánh tay
+  // Dây năng lượng chạy dọc cánh tay
   createRobotCable(
    arm,
-   path.map(p=>[p[0]+side*.16,p[1],p[2]+.72]),
-   .06,
+   path.map(p=>[
+    p[0]+side*.18,
+    p[1],
+    p[2]+.78
+   ]),
+   .075,
    0x20dfff
   );
 
-  // Cổ tay
+  // Cổ tay lớn
   createRobotJoint(
    arm,
-   [side*3.25,.45,4.0],
-   .58
+   [side*3.65,2.45,3.75],
+   .68
   );
 
-  // Lòng bàn tay lớn, hướng vào địa cầu
+  // ================= BÀN TAY ROBOT KHỔNG LỒ =================
+
   const palm=new THREE.Mesh(
-   new THREE.BoxGeometry(1.35,1.25,.55),
+   new THREE.BoxGeometry(1.65,1.45,.65),
    robotArmArmor
   );
-  palm.position.set(side*2.95,.0,4.25);
-  palm.rotation.z=-side*.22;
+
+  palm.position.set(side*3.35,2.0,4.0);
+  palm.rotation.z=-side*.32;
   arm.add(palm);
 
+  // Lòng bàn tay phát sáng
   const palmLight=new THREE.Mesh(
-   new THREE.BoxGeometry(.95,.82,.08),
+   new THREE.BoxGeometry(1.12,.95,.09),
    robotArmGlass
   );
-  palmLight.position.set(side*2.95,.0,4.56);
+
+  palmLight.position.set(side*3.35,2.0,4.36);
+  palmLight.rotation.z=-side*.32;
   arm.add(palmLight);
 
-  // Bốn ngón tay cong vào phía địa cầu
+  // Khung kim loại quanh lòng bàn tay
+  const palmFrame=new THREE.Mesh(
+   new THREE.TorusGeometry(.62,.09,12,40),
+   robotArmGlow
+  );
+
+  palmFrame.position.set(side*3.35,2.0,4.4);
+  palmFrame.scale.set(1.15,1.0,1);
+  arm.add(palmFrame);
+
+  // Bốn ngón tay lớn cong vào trong ôm địa cầu
   for(let finger=0;finger<4;finger++){
 
-   const startY=.48-finger*.34;
-   const startX=side*(2.65+finger*.16);
+   const startY=2.55-finger*.38;
+
+   const startX=side*(2.78+finger*.22);
+
+   const middleX=side*(2.25+finger*.16);
+   const endX=side*(1.95+finger*.12);
 
    const points=[
-    [startX,startY,4.35],
-    [side*(2.25+finger*.12),startY-.12,4.55],
-    [side*(1.95+finger*.1),startY-.38,4.62]
+    [startX,startY,4.12],
+    [middleX,startY-.18,4.48],
+    [endX,startY-.52,4.55]
    ];
 
-   createRobotLink(arm,points[0],points[1],.19);
-   createRobotJoint(arm,points[1],.16);
-   createRobotLink(arm,points[1],points[2],.15);
-   createRobotJoint(arm,points[2],.13);
+   createRobotLink(
+    arm,
+    points[0],
+    points[1],
+    .23
+   );
+
+   createRobotJoint(
+    arm,
+    points[1],
+    .2
+   );
+
+   createRobotLink(
+    arm,
+    points[1],
+    points[2],
+    .18
+   );
+
+   createRobotJoint(
+    arm,
+    points[2],
+    .15
+   );
   }
 
-  // Ngón cái cong ôm vào phía trong
+  // Ngón cái to, cong vào lòng bàn tay
   const thumb=[
-   [side*3.45,.45,4.3],
-   [side*3.05,.82,4.58],
-   [side*2.55,.7,4.68]
+   [side*4.0,2.35,4.05],
+   [side*3.85,2.95,4.48],
+   [side*3.25,3.05,4.58]
   ];
 
-  createRobotLink(arm,thumb[0],thumb[1],.23);
-  createRobotJoint(arm,thumb[1],.19);
-  createRobotLink(arm,thumb[1],thumb[2],.18);
+  createRobotLink(
+   arm,
+   thumb[0],
+   thumb[1],
+   .27
+  );
+
+  createRobotJoint(
+   arm,
+   thumb[1],
+   .22
+  );
+
+  createRobotLink(
+   arm,
+   thumb[1],
+   thumb[2],
+   .21
+  );
+
+  createRobotJoint(
+   arm,
+   thumb[2],
+   .16
+  );
 
   robot.add(arm);
  }
