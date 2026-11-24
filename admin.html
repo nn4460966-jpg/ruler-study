@@ -320,33 +320,10 @@ const lamp2=new THREE.PointLight(0x147dff,80,50);
 lamp2.position.set(-10,4,-8);
 scene.add(lamp2);
 
-/* ================= ANIME CYBER CITY BACKGROUND ================= */
+/* ================= COMMAND ROOM BACKGROUND ================= */
 
-// Bầu trời anime xanh tím
-root.style.background=`
- radial-gradient(
-  ellipse at 50% 38%,
-  rgba(91,75,190,.38) 0%,
-  transparent 55%
- ),
- radial-gradient(
-  ellipse at 15% 75%,
-  rgba(0,190,255,.22) 0%,
-  transparent 45%
- ),
- radial-gradient(
-  ellipse at 85% 70%,
-  rgba(255,75,180,.18) 0%,
-  transparent 42%
- ),
- linear-gradient(
-  180deg,
-  #10152f 0%,
-  #20264b 38%,
-  #101a38 70%,
-  #050d20 100%
- )
-`;
+// Giữ nền xanh đen thống nhất của phòng điều khiển.
+// Không ghi đè nền bằng hiệu ứng thành phố anime.
 
 // Giữ mảng cũ để không ảnh hưởng updatePanels()
 const ambientScreens=[];
