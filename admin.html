@@ -347,12 +347,13 @@ root.style.background=`
  )
 `;
 
-// Thành phố anime sẽ được thêm ở bước tiếp theo
-
-/* ================= REALISTIC JAPANESE CITY ================= */
-
 // Giữ mảng cũ để không ảnh hưởng updatePanels()
 const ambientScreens=[];
+
+// VÔ HIỆU HÓA TOÀN BỘ CẢNH THÀNH PHỐ CŨ
+if(false){
+
+/* ================= REALISTIC JAPANESE CITY ================= */
 
 const animeCity=new THREE.Group();
 scene.add(animeCity);
@@ -818,10 +819,10 @@ const skylineGlow=new THREE.Mesh(
 skylineGlow.position.set(0,2,-45);
 animeCity.add(skylineGlow);
 
-// GỠ CẢNH THÀNH PHỐ CŨ
-scene.remove(animeCity);
+// KẾT THÚC KHỐI THÀNH PHỐ CŨ
+}
 
-/* ================= RULER HOLOGRAPHIC COMMAND ROOM ================= */
+// ================= RULER HOLOGRAPHIC COMMAND ROOM =================
 
 const commandRoom = new THREE.Group();
 scene.add(commandRoom);
