@@ -265,9 +265,9 @@ root.style.background=`
  radial-gradient(ellipse at 50% 48%, #082b40 0%, #041522 42%, #02070d 100%)
 `;
 
-// CAMERA GÓC RỘNG NHÌN RÕ KHÔNG GIAN PHÒNG
+// CAMERA GÓC RỘNG - GÓC NHÌN CHẾCH NHẸ TỪ TRÊN XUỐNG
 const camera=new THREE.PerspectiveCamera(64,innerWidth/innerHeight,.1,180);
-camera.position.set(0,11,27);
+camera.position.set(0,5.5,23);
 
 const renderer=new THREE.WebGLRenderer({
  antialias:true,
@@ -2262,8 +2262,8 @@ document.querySelector("#openModule").onclick=()=>{
 const clock=new THREE.Clock();
 let introStart=performance.now();
 let introDone=false;
-const startCamera=new THREE.Vector3(0,8,23);
-const endCamera=new THREE.Vector3(0,8,23);
+const startCamera=new THREE.Vector3(0,5.5,23);
+const endCamera=new THREE.Vector3(0,5.5,23);
 
 function animate(){
  requestAnimationFrame(animate);
