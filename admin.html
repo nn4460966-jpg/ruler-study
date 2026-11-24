@@ -2442,16 +2442,11 @@ createRobotJoint(
 
  for(const side of [-1,1]){
 
-  const arm=new THREE.Group();
+   const arm=new THREE.Group();
 
-// Phóng lớn cánh tay quanh đúng vị trí khớp vai
-  arm.scale.setScalar(1.3);
-
-  arm.position.set(
-   -side*.93,
-   -2.745,
-   1.245
-  );
+// Giữ cánh tay cùng hệ tọa độ với vai và thân robot
+  arm.position.set(0,0,0);
+  arm.scale.setScalar(1);
 
   // Cánh tay đi từ vai, vòng rộng ra ngoài,
   // sau đó cong xuống và hướng vào địa cầu.
@@ -2534,7 +2529,7 @@ createRobotJoint(
    0x20dfff
   );
 
-     // ================= CỔ TAY NỐI THẲNG VỚI CẲNG TAY =================
+       // ================= CỔ TAY NỐI THẲNG VỚI CẲNG TAY =================
 
   createRobotJoint(
    arm,
@@ -2550,24 +2545,19 @@ createRobotJoint(
   );
 
   palm.position.set(side*3.15,4.0,1.05);
-
   palm.rotation.y=-side*Math.PI/2;
   arm.add(palm);
 
-  // Xoay lòng bàn tay hướng vào phía tâm địa cầu
-  palm.rotation.y=-side*Math.PI/2;
-  arm.add(palm);
-
-  // Lõi sáng ở lòng bàn tay
+  // Lõi sáng nằm chính giữa lòng bàn tay
   const palmLight=new THREE.Mesh(
    new THREE.BoxGeometry(.32,1.05,.08),
    robotArmGlass
   );
 
   palmLight.position.set(
-   side*2.69,
+   side*2.82,
    4.0,
-   .45
+   1.05
   );
 
   palmLight.rotation.y=-side*Math.PI/2;
@@ -2580,9 +2570,9 @@ createRobotJoint(
   );
 
   palmFrame.position.set(
-   side*2.63,
+   side*2.78,
    4.0,
-   .45
+   1.05
   );
 
   palmFrame.rotation.y=-side*Math.PI/2;
@@ -2630,10 +2620,10 @@ createRobotJoint(
 
   // ================= NGÓN CÁI CONG QUẤN QUANH ĐỊA CẦU =================
 
-  const thumb=[
-   [side*2.95,3.05,.55],
-   [side*2.65,3.0,1.45],
-   [side*1.9,3.45,2.30]
+    const thumb=[
+   [side*3.15,3.05,1.05],
+   [side*2.85,3.0,1.85],
+   [side*2.05,3.45,2.45]
   ];
 
   createRobotLink(
