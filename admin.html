@@ -1975,27 +1975,27 @@ modules.forEach((mod,i)=>{
  texture.colorSpace=THREE.SRGBColorSpace;
  texture.needsUpdate=true;
 
- // Tạo mặt bảng 3D
- const panel=new THREE.Mesh(
-  new THREE.PlaneGeometry(3.8,2.35),
-  new THREE.MeshBasicMaterial({
-   map:texture,
-   transparent:true,
-   opacity:.96,
-   side:THREE.DoubleSide,
-   depthWrite:false
-  })
- );
+  // Tạo mặt bảng 3D kích thước lớn hơn
+  const panel=new THREE.Mesh(
+   new THREE.PlaneGeometry(4.4,2.7),
+   new THREE.MeshBasicMaterial({
+    map:texture,
+    transparent:true,
+    opacity:.96,
+    side:THREE.DoubleSide,
+    depthWrite:false
+   })
+  );
 
- // Bố trí bảng theo vòng tròn quanh địa cầu
- const angle=(i/modules.length)*Math.PI*2;
- const radius=12;
+  // Bố trí bảng theo vòng tròn quanh địa cầu
+  const angle=(i/modules.length)*Math.PI*2;
+  const radius=13.2;
 
- panel.position.set(
-  Math.sin(angle)*radius,
-  6.2+Math.sin(angle*2)*.65,
-  Math.cos(angle)*radius
- );
+  panel.position.set(
+   Math.sin(angle)*radius,
+   6.2+Math.sin(angle*2)*.65,
+   Math.cos(angle)*radius
+  );
 
  // Gắn dữ liệu chức năng để raycaster nhận diện
  panel.userData.module=mod;
