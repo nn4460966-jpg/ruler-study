@@ -941,14 +941,38 @@ const frontWall = new THREE.Mesh(
 frontWall.position.set(0,6,35);
 commandRoom.add(frontWall);
 
-// TRẦN PHÒNG
-const ceiling = new THREE.Mesh(
- new THREE.PlaneGeometry(42,60),
- roomWallMat
-);
-ceiling.rotation.x=Math.PI/2;
-ceiling.position.set(0,12.5,5);
-commandRoom.add(ceiling);
+// TRẦN PHÒNG - CHỪA KHOẢNG MỞ CHO ROBOT TRỒI XUỐNG
+const ceilingPanels = [
+ // Mảng trái
+ {w:18.2,d:60,x:-11.9,z:5},
+
+ // Mảng phải
+ {w:18.2,d:60,x:11.9,z:5},
+
+ // Mảng phía sau cửa mở
+ {w:5.6,d:22.2,x:0,z:-13.9},
+
+ // Mảng phía trước cửa mở
+ {w:5.6,d:32.2,x:0,z:18.9}
+];
+
+ceilingPanels.forEach(panel=>{
+
+ const ceilingPiece=new THREE.Mesh(
+  new THREE.PlaneGeometry(panel.w,panel.d),
+  roomWallMat
+ );
+
+ ceilingPiece.rotation.x=Math.PI/2;
+
+ ceilingPiece.position.set(
+  panel.x,
+  12.5,
+  panel.z
+ );
+
+ commandRoom.add(ceilingPiece);
+});
 
 // TRỤ KẾT CẤU KIM LOẠI Ở CÁC GÓC PHÒNG
 const roomCornerMaterial = new THREE.MeshStandardMaterial({
@@ -1818,7 +1842,11 @@ function createCeilingLight(x,z,w,d){
 // DẢI ĐÈN CHÍNH
 createCeilingLight(0,-16,13,.55);
 createCeilingLight(0,-8,13,.55);
-createCeilingLight(0,0,13,.55);
+
+// Chia đèn thành hai đoạn, chừa cửa robot ở giữa
+createCeilingLight(-4.65,0,3.7,.55);
+createCeilingLight(4.65,0,3.7,.55);
+
 createCeilingLight(0,8,13,.55);
 createCeilingLight(0,16,13,.55);
 
@@ -2177,7 +2205,7 @@ function createCeilingRobotEmbrace(){
  // ================= CỬA TRẦN CƠ KHÍ =================
 
  const ceilingGate=new THREE.Group();
- ceilingGate.position.set(0,12.15,0);
+ceilingGate.position.set(0,12.45,0);
 
  const gateOuter=new THREE.Mesh(
   new THREE.TorusGeometry(2.25,.22,16,96),
