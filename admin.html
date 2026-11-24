@@ -1996,140 +1996,191 @@ for(let i=0;i<8;i++){
 }
 
 
-// ================= BÀN TAY HOLOGRAM ĐỠ ĐỊA CẦU =================
-
-const hologramHand = new THREE.Group();
+// ================= HAI BÀN TAY HOLOGRAM TỪ TRẦN NHÀ =================
 
 const handMaterial = new THREE.MeshStandardMaterial({
  color:0x35dfff,
  emissive:0x079bdc,
- emissiveIntensity:2.2,
+ emissiveIntensity:2.5,
  transparent:true,
- opacity:.78,
+ opacity:.82,
  metalness:.25,
- roughness:.2
+ roughness:.2,
+ depthWrite:false
 });
 
 const handGlowMaterial = new THREE.MeshBasicMaterial({
- color:0x56eaff,
+ color:0x70f5ff,
  transparent:true,
- opacity:.7
+ opacity:.9,
+ depthWrite:false
 });
 
-// Lòng bàn tay mở ngửa
-const palm = new THREE.Mesh(
- new THREE.SphereGeometry(1,32,24),
- handMaterial
-);
+// Tạo một đoạn cánh tay hoặc ngón tay nối giữa hai điểm
+function createHandSegment(parent,start,end,radius){
 
-palm.scale.set(1.55,.22,.88);
-palm.position.set(0,.12,.1);
-hologramHand.add(palm);
+ const a=new THREE.Vector3(...start);
+ const b=new THREE.Vector3(...end);
 
-// Tạo từng đoạn ngón tay cong lên
-function createHandFinger(points,radius){
+ const direction=new THREE.Vector3().subVectors(b,a);
 
- for(let i=0;i<points.length-1;i++){
+ const segment=new THREE.Mesh(
+  new THREE.CylinderGeometry(
+   radius*.78,
+   radius,
+   direction.length(),
+   16
+  ),
+  handMaterial
+ );
 
-  const start=new THREE.Vector3(...points[i]);
-  const end=new THREE.Vector3(...points[i+1]);
+ segment.position.copy(a).add(b).multiplyScalar(.5);
 
-  const direction=new THREE.Vector3().subVectors(end,start);
+ segment.quaternion.setFromUnitVectors(
+  new THREE.Vector3(0,1,0),
+  direction.clone().normalize()
+ );
 
-  const segment=new THREE.Mesh(
-   new THREE.CylinderGeometry(
-    radius*.78,
-    radius,
-    direction.length(),
-    12
-   ),
-   handMaterial
-  );
+ parent.add(segment);
 
-  segment.position.copy(start).add(end).multiplyScalar(.5);
+ const joint=new THREE.Mesh(
+  new THREE.SphereGeometry(radius*.92,16,12),
+  handGlowMaterial
+ );
 
-  segment.quaternion.setFromUnitVectors(
-   new THREE.Vector3(0,1,0),
-   direction.clone().normalize()
-  );
-
-  hologramHand.add(segment);
-
-  const joint=new THREE.Mesh(
-   new THREE.SphereGeometry(radius,12,10),
-   handGlowMaterial
-  );
-
-  joint.position.copy(end);
-  hologramHand.add(joint);
- }
-
+ joint.position.copy(b);
+ parent.add(joint);
 }
 
-// Bốn ngón tay hướng lên đỡ phần dưới địa cầu
-createHandFinger([
- [-1.15,.16,-.12],
- [-1.35,.55,-.28],
- [-1.25,.95,-.48],
- [-.95,1.22,-.62]
-],.19);
+// Tạo bàn tay lớn ở một bên địa cầu
+function createCeilingHand(side){
 
-createHandFinger([
- [-.55,.2,-.25],
- [-.65,.68,-.48],
- [-.48,1.12,-.72],
- [-.2,1.38,-.82]
-],.2);
+ const hand=new THREE.Group();
 
-createHandFinger([
- [.15,.2,-.25],
- [.2,.72,-.48],
- [.42,1.15,-.68],
- [.68,1.35,-.75]
-],.2);
+ // CÁNH TAY DÀI ĐI XUỐNG TỪ TRẦN
+ createHandSegment(
+  hand,
+  [side*7.2,12.1,0],
+  [side*6.2,10.1,0],
+  .58
+ );
 
-createHandFinger([
- [.8,.16,-.1],
- [1.05,.55,-.3],
- [1.2,.92,-.48],
- [1.12,1.12,-.55]
-],.18);
+ createHandSegment(
+  hand,
+  [side*6.2,10.1,0],
+  [side*5.1,8.1,.05],
+  .52
+ );
 
-// Ngón cái xòe sang bên
-createHandFinger([
- [-1.25,.1,.25],
- [-1.65,.32,.05],
- [-1.85,.65,-.2],
- [-1.72,.88,-.42]
-],.22);
+ createHandSegment(
+  hand,
+  [side*5.1,8.1,.05],
+  [side*4.1,6.5,.15],
+  .48
+ );
 
-// Cổ tay
-const wrist=new THREE.Mesh(
- new THREE.CylinderGeometry(.48,.62,.85,24),
- handMaterial
-);
+ // CỔ TAY
+ createHandSegment(
+  hand,
+  [side*4.1,6.5,.15],
+  [side*3.65,5.65,.25],
+  .43
+ );
 
-wrist.position.set(0,-.15,.85);
-wrist.rotation.x=-.35;
-hologramHand.add(wrist);
+ // LÒNG BÀN TAY LỚN
+ const palm=new THREE.Mesh(
+  new THREE.SphereGeometry(1,32,24),
+  handMaterial
+ );
 
-// Đường sáng trên lòng bàn tay
-const palmGlow=new THREE.Mesh(
- new THREE.TorusGeometry(.85,.018,8,64),
- handGlowMaterial
-);
+ palm.scale.set(.65,1.05,.48);
+ palm.position.set(side*3.45,5.15,.28);
 
-palmGlow.rotation.x=Math.PI/2;
-palmGlow.position.set(0,.35,.1);
-hologramHand.add(palmGlow);
+ // Xoay lòng bàn tay hướng vào địa cầu
+ palm.rotation.z=side*.25;
 
-// BÀN TAY HOLOGRAM NÂNG ĐỠ ĐỊA CẦU
-// Đưa bàn tay lên cao và ra phía trước bàn nghiên cứu
-hologramHand.position.set(0,.35,9.2);
-hologramHand.rotation.y=Math.PI;
-hologramHand.scale.setScalar(1.15);
+ hand.add(palm);
 
-globeBase.add(hologramHand);
+ // BỐN NGÓN TAY CONG VÀO QUẢ ĐỊA CẦU
+ const fingerStarts=[
+  [5.75,.85],
+  [5.25,.3],
+  [4.75,-.3],
+  [4.25,-.85]
+ ];
+
+ fingerStarts.forEach((data,index)=>{
+
+  const [startY,startZ]=data;
+
+  const startX=side*3.2;
+
+  const midX=side*(2.75-index*.12);
+  const endX=side*(2.15-index*.12);
+
+  createHandSegment(
+   hand,
+   [startX,startY,startZ],
+   [midX,startY-.65,startZ+.12],
+   .23
+  );
+
+  createHandSegment(
+   hand,
+   [midX,startY-.65,startZ+.12],
+   [endX,startY-1.15,startZ+.35],
+   .19
+  );
+
+  // Đầu ngón tay cong vào trong
+  createHandSegment(
+   hand,
+   [endX,startY-1.15,startZ+.35],
+   [side*1.85,startY-1.35,startZ+.48],
+   .16
+  );
+ });
+
+ // NGÓN CÁI CONG ÔM PHÍA TRƯỚC QUẢ ĐỊA CẦU
+ createHandSegment(
+  hand,
+  [side*3.25,5.35,.65],
+  [side*2.75,4.75,1.25],
+  .25
+ );
+
+ createHandSegment(
+  hand,
+  [side*2.75,4.75,1.25],
+  [side*2.1,4.15,1.55],
+  .21
+ );
+
+ createHandSegment(
+  hand,
+  [side*2.1,4.15,1.55],
+  [side*1.8,3.75,1.45],
+  .17
+ );
+
+ // VÒNG SÁNG TRÊN CỔ TAY
+ const wristRing=new THREE.Mesh(
+  new THREE.TorusGeometry(.48,.035,10,48),
+  handGlowMaterial
+ );
+
+ wristRing.position.set(side*3.8,6.15,.15);
+ wristRing.rotation.z=side*.35;
+ hand.add(wristRing);
+
+ globeBase.add(hand);
+
+ return hand;
+}
+
+// HAI BÀN TAY ĐỐI XỨNG HAI BÊN ĐỊA CẦU
+const leftCeilingHand=createCeilingHand(-1);
+const rightCeilingHand=createCeilingHand(1);
 
 // Thêm toàn bộ hệ thống lồng vào phòng
 commandRoom.add(globeBase);
