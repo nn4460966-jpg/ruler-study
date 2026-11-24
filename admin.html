@@ -1850,124 +1850,8 @@ globe.add(cyanLight);
 
 // Đã loại bỏ bệ trung tâm công nghệ.
 // Đã loại bỏ 12 bệ lục giác cố định.
-// Giữ nguyên địa cầu và các vệ tinh.
-/* ================= SIX MINI SATELLITES ================= */
-
-const satelliteOrbit=new THREE.Group();
-satelliteOrbit.position.copy(globe.position);
-satelliteOrbit.scale.setScalar(1.5);
-satelliteOrbit.visible=false;
-scene.add(satelliteOrbit);
-// TẠO VỆ TINH SIÊU NHỎ CÓ ĐUÔI SÁNG
-function createSatellite(){
- const sat=new THREE.Group();
-
- // THÂN VỆ TINH
- const body=new THREE.Mesh(
-  new THREE.BoxGeometry(.10,.085,.15),
-  new THREE.MeshStandardMaterial({
-   color:0xc8f5ff,
-   metalness:.8,
-   roughness:.2,
-   emissive:0x168dff,
-   emissiveIntensity:1.2
-  })
- );
- sat.add(body);
-
- // HAI TẤM PIN
- for(const side of [-1,1]){
-  const wing=new THREE.Mesh(
-   new THREE.BoxGeometry(.24,.016,.09),
-   new THREE.MeshBasicMaterial({
-    color:0x238edb,
-    transparent:true,
-    opacity:1
-   })
-  );
-
-  wing.position.x=side*.17;
-  sat.add(wing);
- }
-
- // ĐÈN XANH
- const light=new THREE.Mesh(
-  new THREE.SphereGeometry(.032,10,10),
-  new THREE.MeshBasicMaterial({
-   color:0x8dfaff
-  })
- );
- sat.add(light);
-
- // VỆT SÁNG XANH DÀI VÀ ĐẬM
- const trail=new THREE.Mesh(
-  new THREE.ConeGeometry(.055,.85,10,1,true),
-  new THREE.MeshBasicMaterial({
-   color:0x08aaff,
-   transparent:true,
-   opacity:.68,
-   blending:THREE.AdditiveBlending,
-   depthWrite:false,
-   side:THREE.DoubleSide
-  })
- );
-
- trail.rotation.z=Math.PI/2;
- trail.position.x=-.46;
- sat.add(trail);
-
- // LÕI SÁNG XANH
- const trailCore=new THREE.Mesh(
-  new THREE.CylinderGeometry(.004,.025,.72,8,1,true),
-  new THREE.MeshBasicMaterial({
-   color:0x9afaff,
-   transparent:true,
-   opacity:.8,
-   blending:THREE.AdditiveBlending,
-   depthWrite:false
-  })
- );
-
- trailCore.rotation.z=Math.PI/2;
- trailCore.position.x=-.42;
- sat.add(trailCore);
-
- const glow=new THREE.PointLight(0x28caff,.5,1.5);
- sat.add(glow);
-
- return sat;
-}
-
-// 6 VỆ TINH Ở CÁC VỊ TRÍ VÀ ĐỘ CAO KHÁC NHAU
-const satellites=[];
-
-const satellitePositions=[
- [4.0,1.1,0.5],
- [-4.2,-.8,.7],
- [1.0,3.9,-1.2],
- [-1.4,-3.8,-.8],
- [0.5,.5,4.3],
- [-.8,1.8,-4.0]
-];
-
-for(let i=0;i<6;i++){
- const sat=createSatellite();
-
- sat.position.set(
-  satellitePositions[i][0],
-  satellitePositions[i][1],
-  satellitePositions[i][2]
- );
-
- sat.rotation.set(
-  Math.random()*Math.PI,
-  Math.random()*Math.PI,
-  Math.random()*Math.PI
- );
-
- satelliteOrbit.add(sat);
- satellites.push(sat);
-}
+// Đã loại bỏ hệ thống vệ tinh.
+// Giữ nguyên địa cầu và hiệu ứng ánh sáng.
 
 /* ================= FIXED ADMIN CONTROL PANEL ================= */
 
@@ -2277,24 +2161,11 @@ function animate(){
   }
  }
 
- // CHUYỂN ĐỘNG ĐỊA CẦU VÀ HỆ THỐNG VỆ TINH
+// CHUYỂN ĐỘNG ĐỊA CẦU VÀ HIỆU ỨNG ÁNH SÁNG
 if(!document.querySelector("#focus").classList.contains("show")){
 
  // Địa cầu tự xoay
-globe.rotation.y+=.001;
-
- // Sáu vệ tinh bay nhanh quanh địa cầu
-satelliteOrbit.rotation.y+=.006;
-
-// Quỹ đạo vệ tinh hơi nghiêng và thay đổi nhẹ
-satelliteOrbit.rotation.x=
- .22+Math.sin(elapsed*.0005)*.06;
-
-// Từng vệ tinh tự xoay khi đang bay
-satellites.forEach((sat,i)=>{
- sat.rotation.y+=.018+(i%2)*.003;
- sat.rotation.z=Math.sin(elapsed*.0015+i)*.12;
-});
+ globe.rotation.y+=.001;
 
  // Hiệu ứng ánh sáng địa cầu
  const pulse=1+Math.sin(elapsed*.0015)*.018;
