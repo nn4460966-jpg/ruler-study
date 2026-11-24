@@ -2293,8 +2293,8 @@ document.querySelector("#avatarFile").addEventListener("change",async function()
   const {data:updated,error:updateError}=await supabaseClient
    .from("profiles")
    .update({avatar_url:url})
-   .eq("user_id",user.id)
-   .select("user_id,avatar_url")
+   .eq("id",user.id)
+   .select("id,avatar_url")
    .maybeSingle();
 
   if(updateError)throw updateError;
@@ -2309,7 +2309,6 @@ document.querySelector("#avatarFile").addEventListener("change",async function()
   this.value="";
  }
 });
-
 /* ================= CHECK ADMIN ================= */
 
 async function checkAdmin(){
