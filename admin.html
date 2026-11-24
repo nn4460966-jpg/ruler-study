@@ -2169,297 +2169,482 @@ function createRobotCable(parent,points,radius,color){
  parent.add(cable);
 }
 
-// TẠO MỘT CÁNH TAY ROBOT CONG TỪ NGOÀI VÀO
-function createMechanicalEmbraceArm(side){
+// ROBOT KHỔNG LỒ TRỒI TỪ TRẦN NHÀ XUỐNG ÔM ĐỊA CẦU
+function createCeilingRobotEmbrace(){
 
- const arm=new THREE.Group();
+ const robot=new THREE.Group();
 
- // ĐƯỜNG ĐI CỦA CÁNH TAY:
- // TỪ TRẦN PHÒNG -> CONG RA NGOÀI -> HẠ XUỐNG -> ÔM VÀO ĐỊA CẦU
+ // ================= CỬA TRẦN CƠ KHÍ =================
 
- const path=[
-  [side*8.2,12.05,-.15],
-  [side*7.7,10.9,-.05],
-  [side*6.8,9.5,.05],
-  [side*5.7,8.0,.12],
-  [side*4.8,6.8,.22],
-  [side*4.05,5.9,.35],
-  [side*3.35,5.2,.55]
- ];
+ const ceilingGate=new THREE.Group();
+ ceilingGate.position.set(0,12.15,0);
 
- // Các đoạn cánh tay lớn
- for(let i=0;i<path.length-1;i++){
+ const gateOuter=new THREE.Mesh(
+  new THREE.TorusGeometry(2.25,.22,16,96),
+  robotArmDark
+ );
+ gateOuter.rotation.x=Math.PI/2;
+ ceilingGate.add(gateOuter);
 
-  createRobotLink(
-   arm,
-   path[i],
-   path[i+1],
-   .78-i*.045
-  );
+ const gateInner=new THREE.Mesh(
+  new THREE.TorusGeometry(1.92,.085,12,96),
+  robotArmGlow
+ );
+ gateInner.rotation.x=Math.PI/2;
+ ceilingGate.add(gateInner);
 
-  createRobotJoint(
-   arm,
-   path[i+1],
-   .48-i*.025
-  );
- }
+ // Các tấm giáp bao quanh miệng cửa trần
+ for(let i=0;i<8;i++){
 
- // VỎ GIÁP LỚN TRÊN CÁNH TAY
- for(let i=1;i<5;i++){
+  const angle=i/8*Math.PI*2;
 
-  const p=path[i];
-
-  const armorPlate=new THREE.Mesh(
-   new THREE.BoxGeometry(1.18,1.05,.9),
+  const panel=new THREE.Mesh(
+   new THREE.BoxGeometry(.95,.22,.72),
    robotArmArmor
   );
 
-  armorPlate.position.set(
-   p[0]-side*.18,
-   p[1],
-   p[2]
+  panel.position.set(
+   Math.cos(angle)*2.15,
+   0,
+   Math.sin(angle)*2.15
   );
 
-  armorPlate.rotation.z=-side*.42;
-  arm.add(armorPlate);
+  panel.rotation.y=-angle;
+  ceilingGate.add(panel);
 
-  const armorLine=new THREE.Mesh(
-   new THREE.BoxGeometry(.055,.8,.94),
+  const bolt=new THREE.Mesh(
+   new THREE.SphereGeometry(.09,12,10),
    robotArmGlow
   );
 
-  armorLine.position.set(
-   p[0]-side*.2,
-   p[1],
-   p[2]+.48
+  bolt.position.set(
+   Math.cos(angle)*2.15,
+   -.13,
+   Math.sin(angle)*2.15
   );
 
-  armorLine.rotation.z=-side*.42;
-  arm.add(armorLine);
+  ceilingGate.add(bolt);
  }
 
- // PISTON THỦY LỰC Ở MẶT TRONG CÁNH TAY
- for(let i=1;i<5;i++){
+ // Piston nối cửa trần với thân robot
+ for(let i=0;i<4;i++){
 
-  const p1=path[i];
-  const p2=path[i+1];
+  const angle=i/4*Math.PI*2;
+
+  const x=Math.cos(angle)*1.75;
+  const z=Math.sin(angle)*1.75;
 
   createRobotLink(
-   arm,
-   [p1[0]-side*.3,p1[1]-.18,p1[2]+.5],
-   [p2[0]-side*.3,p2[1]+.18,p2[2]+.5],
-   .13
-  );
- }
-
- // CÁC DÂY ĐIỆN CHẠY DỌC CÁNH TAY
- for(let cableIndex=0;cableIndex<4;cableIndex++){
-
-  const offset=(cableIndex-1.5)*.16;
-
-  const cablePoints=path.map((p,i)=>[
-   p[0]+offset*side,
-   p[1],
-   p[2]+.48+Math.sin(i*.8+cableIndex)*.12
-  ]);
-
-  createRobotCable(
-   arm,
-   cablePoints,
-   cableIndex%2===0?.045:.027,
-   cableIndex%2===0?0x18dfff:0x8af5ff
-  );
- }
-
-// CỔ TAY CƠ KHÍ - ĐƯA RA NGOÀI MỘT CHÚT
-createRobotJoint(
- arm,
- [side*3.35,5.2,.55],
- .72
-);
-
-// CỤM ĐỆM CỔ TAY CÓ GIÁP BỌC
-createRobotLink(
- arm,
- [side*3.35,5.2,.55],
- [side*3.75,4.95,.85],
- .58
-);
-
-// LÒNG BÀN TAY ĐẶT XA ĐỊA CẦU HƠN
-const palm=new THREE.Mesh(
- new THREE.BoxGeometry(1.8,1.45,.72),
- robotArmArmor
-);
-
-palm.position.set(side*3.75,4.65,.95);
-palm.rotation.z=-side*.28;
-arm.add(palm);
-
-// MẶT LÒNG BÀN TAY
-const palmCore=new THREE.Mesh(
- new THREE.BoxGeometry(1.42,1.08,.09),
- robotArmGlass
-);
-
-palmCore.position.set(side*3.75,4.65,1.35);
-palmCore.rotation.z=-side*.28;
-arm.add(palmCore);
-
-// VIỀN GIÁP QUANH LÒNG BÀN TAY
-for(let i=0;i<3;i++){
-
- const plate=new THREE.Mesh(
-  new THREE.BoxGeometry(.12,.9,.16),
-  robotArmDark
- );
-
- plate.position.set(
-  side*(3.15+i*.58),
-  4.65,
-  1.42
- );
-
- plate.rotation.z=-side*.28;
- arm.add(plate);
-}
-
-// BA NGÓN TAY CONG VÒNG Ở PHÍA NGOÀI ĐỊA CẦU
-// ĐẦU NGÓN ĐƯỢC GIỮ CÁCH BỀ MẶT QUẢ CẦU
-const fingerPaths=[
- [
-  [side*3.9,5.55,1.05],
-  [side*3.65,5.45,1.75],
-  [side*3.2,5.5,2.35],
-  [side*2.75,5.55,2.75]
- ],
- [
-  [side*4.0,4.95,1.12],
-  [side*3.7,4.95,1.9],
-  [side*3.25,5.0,2.55],
-  [side*2.85,5.0,2.9]
- ],
- [
-  [side*3.9,4.35,1.05],
-  [side*3.65,4.35,1.8],
-  [side*3.2,4.25,2.45],
-  [side*2.9,4.15,2.8]
- ]
-];
-
-fingerPaths.forEach((points,index)=>{
-
- for(let i=0;i<points.length-1;i++){
-
-  createRobotLink(
-   arm,
-   points[i],
-   points[i+1],
-   .31-index*.025
+   ceilingGate,
+   [x,.05,z],
+   [x*.78,-1.15,z*.78],
+   .16
   );
 
   createRobotJoint(
-   arm,
-   points[i+1],
-   .23-index*.015
+   ceilingGate,
+   [x*.78,-1.15,z*.78],
+   .23
   );
  }
 
- const tip=new THREE.Mesh(
-  new THREE.SphereGeometry(.19,18,14),
+ robot.add(ceilingGate);
+
+ // ================= ĐẦU ROBOT TRONG TRẦN =================
+
+ const head=new THREE.Group();
+ head.position.set(0,11.9,-.35);
+
+ const helmet=new THREE.Mesh(
+  new THREE.SphereGeometry(1.05,32,24),
+  robotArmMetal
+ );
+ helmet.scale.set(1,.95,.82);
+ head.add(helmet);
+
+ const helmetTop=new THREE.Mesh(
+  new THREE.SphereGeometry(1.08,32,20),
+  robotArmArmor
+ );
+ helmetTop.scale.set(1,.48,.86);
+ helmetTop.position.y=.48;
+ head.add(helmetTop);
+
+ // Kính mặt trước hướng về phía người nhìn
+ const visor=new THREE.Mesh(
+  new THREE.BoxGeometry(1.35,.34,.18),
+  robotArmGlass
+ );
+ visor.position.set(0,.08,.82);
+ head.add(visor);
+
+ const visorLine=new THREE.Mesh(
+  new THREE.BoxGeometry(1.12,.055,.06),
   robotArmGlow
  );
+ visorLine.position.set(0,.08,.93);
+ head.add(visorLine);
 
- tip.position.set(...points[3]);
- arm.add(tip);
-});
+ // Hai cụm cảm biến hai bên đầu
+ for(const side of [-1,1]){
 
-// NGÓN CÁI CONG TỪ DƯỚI LÊN, ÔM PHÍA NGOÀI
-const thumbPath=[
- [side*3.55,4.05,1.15],
- [side*3.45,3.65,1.8],
- [side*3.2,3.45,2.35],
- [side*2.95,3.55,2.7]
-];
+  const sensor=new THREE.Mesh(
+   new THREE.SphereGeometry(.22,16,12),
+   robotArmGlow
+  );
 
-for(let i=0;i<thumbPath.length-1;i++){
+  sensor.position.set(side*.92,-.05,.18);
+  head.add(sensor);
 
- createRobotLink(
-  arm,
-  thumbPath[i],
-  thumbPath[i+1],
-  .35-i*.035
+  const earArmor=new THREE.Mesh(
+   new THREE.CylinderGeometry(.28,.34,.42,16),
+   robotArmDark
+  );
+
+  earArmor.rotation.z=Math.PI/2;
+  earArmor.position.set(side*1.02,-.05,0);
+  head.add(earArmor);
+ }
+
+ robot.add(head);
+
+ // ================= THÂN NGỰC ROBOT =================
+
+ const torso=new THREE.Group();
+ torso.position.set(0,9.55,-.55);
+
+ const chestCore=new THREE.Mesh(
+  new THREE.SphereGeometry(1.65,32,24),
+  robotArmMetal
  );
+ chestCore.scale.set(1.35,1.05,.72);
+ torso.add(chestCore);
 
- createRobotJoint(
-  arm,
-  thumbPath[i+1],
-  .25-i*.02
+ const chestArmor=new THREE.Mesh(
+  new THREE.BoxGeometry(3.25,2.05,.72),
+  robotArmArmor
  );
-}
+ chestArmor.position.set(0,-.08,.38);
+ chestArmor.scale.set(1,.9,1);
+ torso.add(chestArmor);
 
-// DÂY ĐIỆN LỚN CHẠY TỪ CỔ TAY VÀO LÒNG BÀN TAY
-createRobotCable(
- arm,
- [
-  [side*3.5,5.45,.85],
-  [side*3.85,5.15,1.05],
-  [side*4.0,4.8,1.3],
-  [side*3.85,4.55,1.5],
-  [side*3.55,4.4,1.55]
- ],
- .075,
- 0x17dfff
-);
+ // Giáp ngực chia thành hai mảng
+ for(const side of [-1,1]){
 
-createRobotCable(
- arm,
- [
-  [side*3.65,5.35,.75],
-  [side*4.05,5.0,1.05],
-  [side*4.15,4.65,1.25],
-  [side*3.95,4.35,1.5]
- ],
- .05,
- 0x7df5ff
-);
+  const plate=new THREE.Mesh(
+   new THREE.BoxGeometry(1.28,1.48,.2),
+   robotArmMetal
+  );
 
-// CÁC ỐNG DẪN NHỎ TRÊN MU BÀN TAY
-for(let i=0;i<3;i++){
+  plate.position.set(side*.78,-.08,.82);
+  plate.rotation.z=-side*.12;
+  torso.add(plate);
 
+  const seam=new THREE.Mesh(
+   new THREE.BoxGeometry(.055,1.05,.045),
+   robotArmGlow
+  );
+
+  seam.position.set(side*.78,-.08,.94);
+  seam.rotation.z=-side*.12;
+  torso.add(seam);
+ }
+
+ // Lõi năng lượng ở giữa ngực
+ const reactorRing=new THREE.Mesh(
+  new THREE.TorusGeometry(.57,.12,16,48),
+  robotArmGlow
+ );
+ reactorRing.position.set(0,-.05,1.02);
+ torso.add(reactorRing);
+
+ const reactorCore=new THREE.Mesh(
+  new THREE.SphereGeometry(.43,24,20),
+  robotArmGlass
+ );
+ reactorCore.position.set(0,-.05,1.02);
+ torso.add(reactorCore);
+
+ // Các đường dẫn năng lượng trên ngực
  createRobotCable(
-  arm,
-  [
-   [side*(3.25+i*.2),5.15,1.45],
-   [side*(3.5+i*.2),4.95,1.55],
-   [side*(3.65+i*.2),4.65,1.55],
-   [side*(3.45+i*.2),4.35,1.48]
-  ],
-  .025,
-  0x8af5ff
- );
-}
-
- createRobotCable(
-  arm,
-  [
-   [side*3.65,5.3,.75],
-   [side*3.8,4.95,1.1],
-   [side*3.65,4.55,1.4],
-   [side*3.35,4.25,1.65]
-  ],
+  torso,
+  [[-.95,.55,.88],[-.55,.3,1.0],[0,-.05,1.05],[.55,.3,1.0],[.95,.55,.88]],
   .045,
-  0x7df5ff
+  0x20dfff
  );
 
- globeBase.add(arm);
+ robot.add(torso);
 
- return arm;
+ // ================= VAI NỐI LIỀN VỚI THÂN =================
+
+ for(const side of [-1,1]){
+
+  const shoulder=new THREE.Mesh(
+   new THREE.SphereGeometry(.95,24,20),
+   robotArmArmor
+  );
+
+  shoulder.scale.set(1.25,.9,1);
+  shoulder.position.set(side*1.72,9.45,-.12);
+  robot.add(shoulder);
+
+  createRobotJoint(
+   robot,
+   [side*2.05,9.15,.05],
+   .62
+  );
+
+  // Giáp vai lớn
+  const shoulderPlate=new THREE.Mesh(
+   new THREE.SphereGeometry(.88,24,18),
+   robotArmMetal
+  );
+
+  shoulderPlate.scale.set(1.18,.7,1.12);
+  shoulderPlate.position.set(side*2.05,9.65,.2);
+  robot.add(shoulderPlate);
+
+  const shoulderGlow=new THREE.Mesh(
+   new THREE.TorusGeometry(.58,.055,10,36),
+   robotArmGlow
+  );
+
+  shoulderGlow.position.set(side*2.05,9.65,.82);
+  robot.add(shoulderGlow);
+ }
+
+ // ================= HAI CÁNH TAY VÒNG ÔM ĐỊA CẦU =================
+
+ for(const side of [-1,1]){
+
+  const arm=new THREE.Group();
+
+  // Đường tay đi từ vai, cong xuống hai bên rồi vòng vào dưới địa cầu.
+  // Tâm đường tay luôn nằm ngoài bề mặt quả cầu.
+  const path=[
+   [side*1.95,9.15,.18],
+   [side*2.9,8.25,.72],
+   [side*3.85,6.95,1.45],
+   [side*4.48,5.35,2.0],
+   [side*4.58,3.65,2.35],
+   [side*4.12,2.0,2.65],
+   [side*3.15,.72,2.85],
+   [side*1.85,-.05,3.0],
+   [side*1.05,-.25,3.0]
+  ];
+
+  // Các đoạn tay bọc giáp
+  for(let i=0;i<path.length-1;i++){
+
+   createRobotLink(
+    arm,
+    path[i],
+    path[i+1],
+    i<3?.66:.55
+   );
+
+   createRobotJoint(
+    arm,
+    path[i+1],
+    i<3?.43:.36
+   );
+  }
+
+  // Giáp bọc ngoài cánh tay
+  for(let i=1;i<7;i++){
+
+   const p=path[i];
+
+   const armor=new THREE.Mesh(
+    new THREE.SphereGeometry(.68,20,16),
+    robotArmArmor
+   );
+
+   armor.scale.set(1.05,.82,.72);
+   armor.position.set(
+    p[0]-side*.12,
+    p[1],
+    p[2]-.05
+   );
+
+   armor.rotation.z=-side*.35;
+   arm.add(armor);
+
+   const lightStrip=new THREE.Mesh(
+    new THREE.BoxGeometry(.075,.72,.12),
+    robotArmGlow
+   );
+
+   lightStrip.position.set(
+    p[0]-side*.2,
+    p[1],
+    p[2]+.58
+   );
+
+   lightStrip.rotation.z=-side*.35;
+   arm.add(lightStrip);
+  }
+
+  // Piston thủy lực chạy song song các đoạn tay
+  for(let i=1;i<7;i++){
+
+   const a=path[i];
+   const b=path[i+1];
+
+   createRobotLink(
+    arm,
+    [a[0]-side*.32,a[1]+.12,a[2]+.32],
+    [b[0]-side*.32,b[1]-.12,b[2]+.32],
+    .105
+   );
+
+   createRobotJoint(
+    arm,
+    [b[0]-side*.32,b[1]-.12,b[2]+.32],
+    .16
+   );
+  }
+
+  // Dây dẫn năng lượng chạy dọc toàn bộ cánh tay
+  for(let cableIndex=0;cableIndex<3;cableIndex++){
+
+   const offset=(cableIndex-1)*.16;
+
+   const cablePoints=path.map((p,i)=>[
+    p[0]+side*offset,
+    p[1]+(i===0?-.15:0),
+    p[2]+.48+cableIndex*.07
+   ]);
+
+   createRobotCable(
+    arm,
+    cablePoints,
+    cableIndex===1?.055:.032,
+    cableIndex===1?0x20dfff:0x83f4ff
+   );
+  }
+
+  // Cổ tay lớn ở gần đáy quả cầu
+  createRobotJoint(
+   arm,
+   [side*1.05,-.25,3.0],
+   .48
+  );
+
+  // Lòng bàn tay hướng vào phía đối diện
+  const palm=new THREE.Mesh(
+   new THREE.BoxGeometry(1.05,1.0,.48),
+   robotArmArmor
+  );
+
+  palm.position.set(side*.78,-.48,3.18);
+  palm.rotation.z=side*.2;
+  arm.add(palm);
+
+  const palmGlow=new THREE.Mesh(
+   new THREE.BoxGeometry(.72,.68,.08),
+   robotArmGlass
+  );
+
+  palmGlow.position.set(side*.78,-.48,3.45);
+  palmGlow.rotation.z=side*.2;
+  arm.add(palmGlow);
+
+  // Các ngón tay cong vào trong, tạo tư thế ôm
+  const fingers=[
+   [
+    [side*.48,-.12,3.2],
+    [side*.22,-.32,3.42],
+    [side*.08,-.62,3.48]
+   ],
+   [
+    [side*.42,-.48,3.2],
+    [side*.18,-.68,3.43],
+    [side*.08,-.88,3.48]
+   ],
+   [
+    [side*1.0,-.82,3.2],
+    [side*.78,-1.02,3.42],
+    [side*.55,-1.12,3.45]
+   ]
+  ];
+
+  fingers.forEach((finger,index)=>{
+
+   for(let i=0;i<finger.length-1;i++){
+
+    createRobotLink(
+     arm,
+     finger[i],
+     finger[i+1],
+     .22-index*.025
+    );
+
+    createRobotJoint(
+     arm,
+     finger[i+1],
+     .16-index*.018
+    );
+   }
+
+   const fingertip=new THREE.Mesh(
+    new THREE.SphereGeometry(.13,14,12),
+    robotArmGlow
+   );
+
+   fingertip.position.set(...finger[2]);
+   arm.add(fingertip);
+  });
+
+  // Ngón cái ôm vòng vào phía trong
+  const thumb=[
+   [side*1.18,-.2,3.12],
+   [side*1.28,-.55,3.38],
+   [side*1.02,-.78,3.48]
+  ];
+
+  for(let i=0;i<thumb.length-1;i++){
+
+   createRobotLink(
+    arm,
+    thumb[i],
+    thumb[i+1],
+    .24-i*.035
+   );
+
+   createRobotJoint(
+    arm,
+    thumb[i+1],
+    .17-i*.02
+   );
+  }
+
+  // Các ống dẫn nhỏ trên mu bàn tay
+  createRobotCable(
+   arm,
+   [
+    [side*1.25,-.15,3.35],
+    [side*1.05,-.35,3.48],
+    [side*.78,-.55,3.5],
+    [side*.48,-.72,3.48]
+   ],
+   .04,
+   0x20dfff
+  );
+
+  robot.add(arm);
+ }
+
+ // Thêm robot vào cùng hệ tọa độ với lồng kính
+ globeBase.add(robot);
+
+ return robot;
 }
+ // ROBOT NỬA THÂN TRỒI TỪ TRẦN XUỐNG ÔM ĐỊA CẦU
+const ceilingRobot=createCeilingRobotEmbrace();
 
-// HAI CÁNH TAY ROBOT KHỔNG LỒ ĐỐI XỨNG
-const leftCeilingHand=createMechanicalEmbraceArm(-1);
-const rightCeilingHand=createMechanicalEmbraceArm(1);
+// Thêm toàn bộ hệ thống lồng vào phòng
+commandRoom.add(globeBase);
 // Thêm toàn bộ hệ thống lồng vào phòng
 commandRoom.add(globeBase);
 // TẢI BẢN ĐỒ TRÁI ĐẤT
