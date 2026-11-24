@@ -1542,17 +1542,32 @@ function createOperatorChair(x,z,rotationY=0){
  commandRoom.add(chair);
 }
 
-// ================= 4 CỤM BÀN BAO QUANH ĐỊA CẦU =================
+// ================= 8 CỤM BÀN XẾP THÀNH VÒNG TRÒN =================
 
-// BỐN GÓC VÒNG TRÒN - MẶT BÀN HƯỚNG VÀO TRUNG TÂM
-const researchStations=[
- {x:-5.8,z:5.8,angle:-Math.PI/4},
- {x:5.8,z:5.8,angle:Math.PI/4},
- {x:-5.8,z:-5.8,angle:-3*Math.PI/4},
- {x:5.8,z:-5.8,angle:3*Math.PI/4}
-];
+// 8 BÀN LỚN XẾP ĐỀU QUANH ĐỊA CẦU
+// MẶT BÀN VÀ NGƯỜI NGHIÊN CỨU HƯỚNG VÀO TRUNG TÂM
 
-// TẠO BÀN VÀ GHẾ THEO VỊ TRÍ HƯỚNG TÂM
+const researchStations=[];
+
+const researchRadius=8.8;
+
+for(let i=0;i<8;i++){
+
+ const angle=(i/8)*Math.PI*2;
+
+ researchStations.push({
+
+  x:Math.sin(angle)*researchRadius,
+
+  z:Math.cos(angle)*researchRadius,
+
+  angle:angle
+
+ });
+}
+
+// TẠO BÀN VÀ GHẾ THEO VÒNG TRÒN
+
 researchStations.forEach(station=>{
 
  createControlDesk(
@@ -1561,7 +1576,7 @@ researchStations.forEach(station=>{
   station.angle
  );
 
- // GHẾ NẰM PHÍA NGOÀI BÀN
+ // GHẾ VÀ NGƯỜI NGỒI PHÍA NGOÀI BÀN
  const chairDistance=2.3;
 
  const chairX=
@@ -1576,7 +1591,6 @@ researchStations.forEach(station=>{
   station.angle
  );
 });
-
 
 // ================= NHÂN VIÊN NGHIÊN CỨU ĐỊA CẦU =================
 
