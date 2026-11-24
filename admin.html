@@ -1849,9 +1849,161 @@ const modules=[
  ["PHÂN QUYỀN VÀ BẢO MẬT","Quản lý quyền truy cập và bảo mật tài khoản.","security"]
 ];
 
-// Không còn các bảng 3D quay quanh địa cầu.
+// ================= 3D HOLOGRAPHIC ADMIN PANELS =================
+
+// Danh sách bảng điều khiển 3D
 const panels=[];
 const orbit={rotation:{y:0}};
+
+// Vẽ chữ tự động xuống dòng trên bảng hologram
+function drawAdminPanelWrappedText(ctx,text,x,y,maxWidth,lineHeight){
+ const words=text.split(" ");
+ let line="";
+
+ for(let i=0;i<words.length;i++){
+  const testLine=line+words[i]+" ";
+  const width=ctx.measureText(testLine).width;
+
+  if(width>maxWidth && i>0){
+   ctx.fillText(line,x,y);
+   line=words[i]+" ";
+   y+=lineHeight;
+  }else{
+   line=testLine;
+  }
+ }
+
+ if(line){
+  ctx.fillText(line,x,y);
+ }
+}
+
+// Tạo bảng hologram cho từng chức năng
+modules.forEach((mod,i)=>{
+
+ const canvas=document.createElement("canvas");
+ canvas.width=1024;
+ canvas.height=640;
+
+ const ctx=canvas.getContext("2d");
+
+ // Nền kính xanh đen
+ ctx.fillStyle="rgba(3,20,35,.96)";
+ ctx.fillRect(0,0,1024,640);
+
+ // Viền hologram
+ ctx.strokeStyle="rgba(65,220,255,.95)";
+ ctx.lineWidth=5;
+ ctx.strokeRect(12,12,1000,616);
+
+ // Viền trong
+ ctx.strokeStyle="rgba(65,220,255,.25)";
+ ctx.lineWidth=2;
+ ctx.strokeRect(27,27,970,586);
+
+ // Thanh tiêu đề
+ ctx.fillStyle="rgba(10,105,135,.35)";
+ ctx.fillRect(30,30,964,95);
+
+ // Nhãn hệ thống
+ ctx.fillStyle="#62eaff";
+ ctx.font="bold 22px Consolas,monospace";
+ ctx.fillText("RULER / ADMIN CONTROL SYSTEM",55,68);
+
+ // Số thứ tự
+ ctx.fillStyle="#4ce5ff";
+ ctx.font="bold 28px Consolas,monospace";
+ ctx.fillText(
+  String(i+1).padStart(2,"0")+" / 11",
+  830,
+  68
+ );
+
+ // Đường phân cách
+ ctx.strokeStyle="rgba(70,220,255,.55)";
+ ctx.lineWidth=2;
+ ctx.beginPath();
+ ctx.moveTo(55,145);
+ ctx.lineTo(965,145);
+ ctx.stroke();
+
+ // Tên chức năng
+ ctx.fillStyle="#e0fbff";
+ ctx.font="bold 38px Consolas,monospace";
+
+ drawAdminPanelWrappedText(
+  ctx,
+  mod[0],
+  60,
+  235,
+  880,
+  52
+ );
+
+ // Mô tả chức năng
+ ctx.fillStyle="#8bcbdc";
+ ctx.font="22px Consolas,monospace";
+
+ drawAdminPanelWrappedText(
+  ctx,
+  mod[1],
+  60,
+  375,
+  850,
+  38
+ );
+
+ // Chỉ báo trạng thái
+ ctx.fillStyle="#35e5ff";
+ ctx.fillRect(60,510,12,12);
+
+ ctx.fillStyle="#71d9ed";
+ ctx.font="18px Consolas,monospace";
+ ctx.fillText("MODULE READY",85,524);
+
+ // Đường sáng chân bảng
+ const gradient=ctx.createLinearGradient(60,0,960,0);
+ gradient.addColorStop(0,"rgba(0,210,255,0)");
+ gradient.addColorStop(.5,"rgba(0,210,255,.9)");
+ gradient.addColorStop(1,"rgba(0,210,255,0)");
+
+ ctx.fillStyle=gradient;
+ ctx.fillRect(60,565,900,3);
+
+ // Chuyển canvas thành texture
+ const texture=new THREE.CanvasTexture(canvas);
+ texture.colorSpace=THREE.SRGBColorSpace;
+ texture.needsUpdate=true;
+
+ // Tạo mặt bảng 3D
+ const panel=new THREE.Mesh(
+  new THREE.PlaneGeometry(3.8,2.35),
+  new THREE.MeshBasicMaterial({
+   map:texture,
+   transparent:true,
+   opacity:.96,
+   side:THREE.DoubleSide,
+   depthWrite:false
+  })
+ );
+
+ // Bố trí bảng theo vòng tròn quanh địa cầu
+ const angle=(i/modules.length)*Math.PI*2;
+ const radius=12;
+
+ panel.position.set(
+  Math.sin(angle)*radius,
+  6.2+Math.sin(angle*2)*.65,
+  Math.cos(angle)*radius
+ );
+
+ // Gắn dữ liệu chức năng để raycaster nhận diện
+ panel.userData.module=mod;
+ panel.userData.moduleIndex=i;
+
+ scene.add(panel);
+ panels.push(panel);
+});
 
 // Tạo bảng điều khiển cố định
 const adminPanel=document.createElement("div");
