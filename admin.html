@@ -1913,89 +1913,221 @@ globe.position.set(0,4,0);
 globe.scale.setScalar(1.3);
 scene.add(globe);
 
-// BỆ TRÒN KIM LOẠI ĐỠ ĐỊA CẦU
+// ================= LỒNG HOLOGRAM BẢO VỆ ĐỊA CẦU =================
+
 const globeBase = new THREE.Group();
 
-// Thân bệ kim loại
-const globePedestal = new THREE.Mesh(
- new THREE.CylinderGeometry(2.15,2.45,.30,96),
- new THREE.MeshStandardMaterial({
-  color:0x12384d,
-  emissive:0x06334b,
-  emissiveIntensity:.8,
-  metalness:.85,
-  roughness:.28
- })
-);
-
-globePedestal.position.y=-.18;
-globeBase.add(globePedestal);
-
-// Vật liệu vòng sáng
-const globeBaseRingMat = new THREE.MeshBasicMaterial({
- color:0x12dfff
+// Vật liệu kính hologram trong suốt
+const globeChamberGlass = new THREE.MeshBasicMaterial({
+ color:0x20cfff,
+ transparent:true,
+ opacity:.045,
+ side:THREE.DoubleSide,
+ depthWrite:false
 });
 
-// Vòng sáng chính
-const globeBaseRing = new THREE.Mesh(
- new THREE.TorusGeometry(2.55,.055,12,128),
- globeBaseRingMat
+// Thân lồng hình trụ kéo từ sàn lên gần trần
+const globeChamber = new THREE.Mesh(
+ new THREE.CylinderGeometry(5.9,5.9,12.3,96,1,true),
+ globeChamberGlass
 );
 
-globeBaseRing.rotation.x=Math.PI/2;
-globeBaseRing.position.y=-.025;
-globeBase.add(globeBaseRing);
+globeChamber.position.set(0,5.8,0);
+globeBase.add(globeChamber);
 
-// Vòng sáng ngoài
-const globeOuterRing = new THREE.Mesh(
- new THREE.TorusGeometry(2.85,.025,8,128),
- new THREE.MeshBasicMaterial({
-  color:0x087cff,
-  transparent:true,
-  opacity:.85
- })
-);
+// Vòng sáng trên và dưới lồng
+const chamberRingMaterial = new THREE.MeshBasicMaterial({
+ color:0x20dfff,
+ transparent:true,
+ opacity:.85
+});
 
-globeOuterRing.rotation.x=Math.PI/2;
-globeOuterRing.position.y=-.06;
-globeBase.add(globeOuterRing);
-
-// Vòng kim loại trong
-const globeInnerRing = new THREE.Mesh(
- new THREE.TorusGeometry(2.05,.04,10,128),
- new THREE.MeshStandardMaterial({
-  color:0x12617d,
-  emissive:0x087fae,
-  emissiveIntensity:1.8,
-  metalness:.8,
-  roughness:.25
- })
-);
-
-globeInnerRing.rotation.x=Math.PI/2;
-globeInnerRing.position.y=-.015;
-globeBase.add(globeInnerRing);
-
-// Các vạch chia quanh bệ
-for(let i=0;i<48;i++){
-
- const angle=(i/48)*Math.PI*2;
-
- const marker = new THREE.Mesh(
-  new THREE.BoxGeometry(.12,.035,.035),
-  globeBaseRingMat
+for(const y of [-.32,11.92]){
+ const ring = new THREE.Mesh(
+  new THREE.TorusGeometry(5.9,.045,12,128),
+  chamberRingMaterial
  );
 
- marker.position.set(
-  Math.cos(angle)*2.7,
-  -.015,
-  Math.sin(angle)*2.7
- );
-
- marker.rotation.y=-angle;
- globeBase.add(marker);
+ ring.rotation.x=Math.PI/2;
+ ring.position.y=y;
+ globeBase.add(ring);
 }
 
+// Các đường sáng dọc thân lồng
+for(let i=0;i<24;i++){
+
+ const angle=i/24*Math.PI*2;
+
+ const line=new THREE.Mesh(
+  new THREE.CylinderGeometry(.012,.012,12.1,6),
+  new THREE.MeshBasicMaterial({
+   color:0x16bfff,
+   transparent:true,
+   opacity:.32
+  })
+ );
+
+ line.position.set(
+  Math.cos(angle)*5.9,
+  5.8,
+  Math.sin(angle)*5.9
+ );
+
+ globeBase.add(line);
+}
+
+// Các vạch dữ liệu chạy quanh lồng
+for(let i=0;i<8;i++){
+
+ const y=.8+i*1.45;
+
+ const ring=new THREE.Mesh(
+  new THREE.TorusGeometry(5.91,.012,6,128),
+  new THREE.MeshBasicMaterial({
+   color:0x168cff,
+   transparent:true,
+   opacity:.3
+  })
+ );
+
+ ring.rotation.x=Math.PI/2;
+ ring.position.y=y;
+ globeBase.add(ring);
+}
+
+
+// ================= BÀN TAY HOLOGRAM ĐỠ ĐỊA CẦU =================
+
+const hologramHand = new THREE.Group();
+
+const handMaterial = new THREE.MeshStandardMaterial({
+ color:0x35dfff,
+ emissive:0x079bdc,
+ emissiveIntensity:2.2,
+ transparent:true,
+ opacity:.78,
+ metalness:.25,
+ roughness:.2
+});
+
+const handGlowMaterial = new THREE.MeshBasicMaterial({
+ color:0x56eaff,
+ transparent:true,
+ opacity:.7
+});
+
+// Lòng bàn tay mở ngửa
+const palm = new THREE.Mesh(
+ new THREE.SphereGeometry(1,32,24),
+ handMaterial
+);
+
+palm.scale.set(1.55,.22,.88);
+palm.position.set(0,.12,.1);
+hologramHand.add(palm);
+
+// Tạo từng đoạn ngón tay cong lên
+function createHandFinger(points,radius){
+
+ for(let i=0;i<points.length-1;i++){
+
+  const start=new THREE.Vector3(...points[i]);
+  const end=new THREE.Vector3(...points[i+1]);
+
+  const direction=new THREE.Vector3().subVectors(end,start);
+
+  const segment=new THREE.Mesh(
+   new THREE.CylinderGeometry(
+    radius*.78,
+    radius,
+    direction.length(),
+    12
+   ),
+   handMaterial
+  );
+
+  segment.position.copy(start).add(end).multiplyScalar(.5);
+
+  segment.quaternion.setFromUnitVectors(
+   new THREE.Vector3(0,1,0),
+   direction.clone().normalize()
+  );
+
+  hologramHand.add(segment);
+
+  const joint=new THREE.Mesh(
+   new THREE.SphereGeometry(radius,12,10),
+   handGlowMaterial
+  );
+
+  joint.position.copy(end);
+  hologramHand.add(joint);
+ }
+
+}
+
+// Bốn ngón tay hướng lên đỡ phần dưới địa cầu
+createHandFinger([
+ [-1.15,.16,-.12],
+ [-1.35,.55,-.28],
+ [-1.25,.95,-.48],
+ [-.95,1.22,-.62]
+],.19);
+
+createHandFinger([
+ [-.55,.2,-.25],
+ [-.65,.68,-.48],
+ [-.48,1.12,-.72],
+ [-.2,1.38,-.82]
+],.2);
+
+createHandFinger([
+ [.15,.2,-.25],
+ [.2,.72,-.48],
+ [.42,1.15,-.68],
+ [.68,1.35,-.75]
+],.2);
+
+createHandFinger([
+ [.8,.16,-.1],
+ [1.05,.55,-.3],
+ [1.2,.92,-.48],
+ [1.12,1.12,-.55]
+],.18);
+
+// Ngón cái xòe sang bên
+createHandFinger([
+ [-1.25,.1,.25],
+ [-1.65,.32,.05],
+ [-1.85,.65,-.2],
+ [-1.72,.88,-.42]
+],.22);
+
+// Cổ tay
+const wrist=new THREE.Mesh(
+ new THREE.CylinderGeometry(.48,.62,.85,24),
+ handMaterial
+);
+
+wrist.position.set(0,-.15,.85);
+wrist.rotation.x=-.35;
+hologramHand.add(wrist);
+
+// Đường sáng trên lòng bàn tay
+const palmGlow=new THREE.Mesh(
+ new THREE.TorusGeometry(.85,.018,8,64),
+ handGlowMaterial
+);
+
+palmGlow.rotation.x=Math.PI/2;
+palmGlow.position.set(0,.35,.1);
+hologramHand.add(palmGlow);
+
+// Đặt bàn tay ngay dưới địa cầu
+hologramHand.position.set(0,-.05,0);
+globeBase.add(hologramHand);
+
+// Thêm toàn bộ hệ thống lồng vào phòng
 commandRoom.add(globeBase);
 // TẢI BẢN ĐỒ TRÁI ĐẤT
 const earthTexture=new THREE.TextureLoader().load(
