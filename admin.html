@@ -1430,6 +1430,9 @@ function createControlDesk(x,z,rotationY=0){
   desk.add(lamp);
  }
 
+  // TĂNG KÍCH THƯỚC CỤM BÀN VÀ MÀN HÌNH
+ desk.scale.set(1.55,1.25,1.5);
+
  commandRoom.add(desk);
 }
 
@@ -1539,21 +1542,40 @@ function createOperatorChair(x,z,rotationY=0){
  commandRoom.add(chair);
 }
 
-// BỐ TRÍ 4 BÀN THEO VÒNG CUNG QUANH ĐỊA CẦU
+// ================= 4 CỤM BÀN BAO QUANH ĐỊA CẦU =================
 
-// CẶP BÀN PHÍA TRƯỚC – HAI BÊN
-createControlDesk(-10,0,-.65);
-createControlDesk(10,0,.65);
+// BỐN GÓC VÒNG TRÒN - MẶT BÀN HƯỚNG VÀO TRUNG TÂM
+const researchStations=[
+ {x:-5.8,z:5.8,angle:-Math.PI/4},
+ {x:5.8,z:5.8,angle:Math.PI/4},
+ {x:-5.8,z:-5.8,angle:-3*Math.PI/4},
+ {x:5.8,z:-5.8,angle:3*Math.PI/4}
+];
 
-// CẶP BÀN PHÍA SAU – HAI BÊN
-createControlDesk(-7.5,-10,-.35);
-createControlDesk(7.5,-10,.35);
+// TẠO BÀN VÀ GHẾ THEO VỊ TRÍ HƯỚNG TÂM
+researchStations.forEach(station=>{
 
-// GHẾ ĐẶT PHÍA SAU MỖI BÀN
-createOperatorChair(-10.67,.875,-.65);
-createOperatorChair(10.67,.875,.65);
-createOperatorChair(-7.88,-8.966,-.35);
-createOperatorChair(7.88,-8.966,.35);
+ createControlDesk(
+  station.x,
+  station.z,
+  station.angle
+ );
+
+ // GHẾ NẰM PHÍA NGOÀI BÀN
+ const chairDistance=2.3;
+
+ const chairX=
+  station.x+Math.sin(station.angle)*chairDistance;
+
+ const chairZ=
+  station.z+Math.cos(station.angle)*chairDistance;
+
+ createOperatorChair(
+  chairX,
+  chairZ,
+  station.angle
+ );
+});
 
 
 // ================= NHÂN VIÊN NGHIÊN CỨU ĐỊA CẦU =================
@@ -1691,11 +1713,23 @@ function createSeatedOperator(x,z,rotationY=0){
 }
 
 
-// BỐ TRÍ NGƯỜI NGỒI TẠI 4 BÀN
-createSeatedOperator(-10.67,.875,-.65);
-createSeatedOperator(10.67,.875,.65);
-createSeatedOperator(-7.88,-8.966,-.35);
-createSeatedOperator(7.88,-8.966,.35);
+// NGƯỜI NGỒI TẠI 4 CỤM BÀN NGHIÊN CỨU
+researchStations.forEach(station=>{
+
+ const chairDistance=2.3;
+
+ const operatorX=
+  station.x+Math.sin(station.angle)*chairDistance;
+
+ const operatorZ=
+  station.z+Math.cos(station.angle)*chairDistance;
+
+ createSeatedOperator(
+  operatorX,
+  operatorZ,
+  station.angle
+ );
+});
 
 // CỘT ĐÈN XANH HAI BÊN
 function createLightColumn(x,z){
