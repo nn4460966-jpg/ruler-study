@@ -1942,103 +1942,23 @@ globe.position.set(0,4,0);
 globe.scale.setScalar(1.17);
 scene.add(globe);
 
-// ================= LỒNG HOLOGRAM BẢO VỆ ĐỊA CẦU =================
-
+// HỆ ĐỊA CẦU — KHÔNG CÓ LỒNG BAO QUANH
 const globeBase = new THREE.Group();
-
-// Vật liệu kính hologram trong suốt
-const globeChamberGlass = new THREE.MeshBasicMaterial({
- color:0x20cfff,
- transparent:true,
- opacity:.045,
- side:THREE.DoubleSide,
- depthWrite:false
-});
-
-// Thân lồng hình trụ kéo từ sàn lên gần trần
-const globeChamber = new THREE.Mesh(
- new THREE.CylinderGeometry(5.2,5.2,12.3,96,1,true),
- globeChamberGlass
-);
-
-globeChamber.position.set(0,5.8,0);
-globeBase.add(globeChamber);
-
-// Vòng sáng trên và dưới lồng
-const chamberRingMaterial = new THREE.MeshBasicMaterial({
- color:0x20dfff,
- transparent:true,
- opacity:.85
-});
-
-for(const y of [-.32,11.92]){
- const ring = new THREE.Mesh(
-  new THREE.TorusGeometry(5.2,.045,12,128),
-  chamberRingMaterial
- );
-
- ring.rotation.x=Math.PI/2;
- ring.position.y=y;
- globeBase.add(ring);
-}
-
-// Các đường sáng dọc thân lồng
-for(let i=0;i<24;i++){
-
- const angle=i/24*Math.PI*2;
-
- const line=new THREE.Mesh(
-  new THREE.CylinderGeometry(.012,.012,12.1,6),
-  new THREE.MeshBasicMaterial({
-   color:0x16bfff,
-   transparent:true,
-   opacity:.32
-  })
- );
-
- line.position.set(
-  Math.cos(angle)*5.2,
-5.8,
-Math.sin(angle)*5.2
- );
-
- globeBase.add(line);
-}
-
-// Các vạch dữ liệu chạy quanh lồng
-for(let i=0;i<8;i++){
-
- const y=.8+i*1.45;
-
- const ring=new THREE.Mesh(
-  new THREE.TorusGeometry(5.21,.012,6,128),
-  new THREE.MeshBasicMaterial({
-   color:0x168cff,
-   transparent:true,
-   opacity:.3
-  })
- );
-
- ring.rotation.x=Math.PI/2;
- ring.position.y=y;
- globeBase.add(ring);
-}
-
 
 // ================= HAI CÁNH TAY ROBOT KHỔNG LỒ ÔM ĐỊA CẦU =================
 
 const robotArmMetal = new THREE.MeshStandardMaterial({
- color:0x183d55,
- metalness:.92,
- roughness:.24
+ color:0x101c35,
+ metalness:.95,
+ roughness:.22
 });
 
 const robotArmArmor = new THREE.MeshStandardMaterial({
- color:0x24617c,
- emissive:0x063b55,
- emissiveIntensity:.8,
- metalness:.88,
- roughness:.22
+ color:0x064bff,
+ emissive:0x071b75,
+ emissiveIntensity:.45,
+ metalness:.92,
+ roughness:.2
 });
 
 const robotArmDark = new THREE.MeshStandardMaterial({
@@ -2450,33 +2370,35 @@ createRobotJoint(
 
   // Cánh tay đi từ vai, vòng rộng ra ngoài,
   // sau đó cong xuống và hướng vào địa cầu.
+ // Tay máy công nghiệp gồm các đoạn giáp lớn và khớp xoay
  const path=[
- [side*3.1,9.15,-4.15],
- [side*4.25,8.0,-4.0],
- [side*5.35,6.5,-2.0],
- [side*5.65,5.0,.2],
- [side*5.25,3.9,1.8],
- [side*4.85,3.65,2.35],
- [side*4.25,3.55,2.65],
- [side*3.65,3.7,2.25],
- [side*3.15,4.0,1.05]
-];
+  [side*3.1,9.15,-4.15],
+  [side*5.0,7.35,-3.0],
+  [side*6.0,5.55,-.2],
+  [side*5.25,4.15,1.8],
+  [side*4.25,3.55,2.65],
+  [side*3.15,4.0,1.05]
+ ];
 
-    // Bắp tay và cẳng tay robot cỡ lớn
-  for(let i=0;i<path.length-1;i++){
+ // Các đoạn tay máy dày, vỏ giáp xanh cobalt
+ for(let i=0;i<path.length-1;i++){
 
-   createRobotLink(
-     arm,
-     path[i],
-     path[i+1],
-     i<2?.78:.62
-   );
+  const radius=i<2?.95:(i<4?.82:.62);
 
-   createRobotJoint(
-     arm,
-     path[i+1],
-     i<2?.58:.48
-   );
+  createRobotLink(
+   arm,
+   path[i],
+   path[i+1],
+   radius
+  );
+
+  // Khớp xoay công nghiệp ở khuỷu và cổ tay
+  createRobotJoint(
+   arm,
+   path[i+1],
+   i<2?.78:.62
+  );
+ }
   }
 
   // Giáp bọc lớn trên toàn bộ cánh tay
