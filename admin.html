@@ -2071,6 +2071,90 @@ const cyanLight=new THREE.PointLight(
 );
 cyanLight.position.set(2,1,1);
 globe.add(cyanLight);
+
+
+// ================= VÒNG QUỸ ĐẠO NGHIÊN CỨU =================
+
+const researchOrbitA=new THREE.Group();
+const researchOrbitB=new THREE.Group();
+const researchOrbitC=new THREE.Group();
+
+globe.add(researchOrbitA);
+globe.add(researchOrbitB);
+globe.add(researchOrbitC);
+
+function createResearchRing(group,radius,tube,color,opacity){
+
+ const ring=new THREE.Mesh(
+  new THREE.TorusGeometry(radius,tube,10,180),
+  new THREE.MeshBasicMaterial({
+   color:color,
+   transparent:true,
+   opacity:opacity,
+   blending:THREE.AdditiveBlending,
+   depthWrite:false
+  })
+ );
+
+ group.add(ring);
+
+ return ring;
+}
+
+// VÒNG QUỸ ĐẠO LỚN
+createResearchRing(
+ researchOrbitA,
+ 4.15,
+ .018,
+ 0x19dfff,
+ .8
+);
+
+// VÒNG QUỸ ĐẠO NGHIÊNG
+createResearchRing(
+ researchOrbitB,
+ 4.45,
+ .012,
+ 0x168bff,
+ .65
+);
+
+researchOrbitB.rotation.set(.8,.2,.45);
+
+// VÒNG QUỸ ĐẠO PHỤ
+createResearchRing(
+ researchOrbitC,
+ 3.85,
+ .009,
+ 0x65f4ff,
+ .55
+);
+
+researchOrbitC.rotation.set(1.15,.5,-.35);
+
+
+// CÁC ĐIỂM ĐÁNH DẤU TRÊN QUỸ ĐẠO
+for(let i=0;i<8;i++){
+
+ const angle=i/8*Math.PI*2;
+
+ const marker=new THREE.Mesh(
+  new THREE.SphereGeometry(.055,12,12),
+  new THREE.MeshBasicMaterial({
+   color:0x8af6ff
+  })
+ );
+
+ marker.position.set(
+  Math.cos(angle)*4.15,
+  Math.sin(angle)*4.15,
+  0
+ );
+
+ researchOrbitA.add(marker);
+}
+
+
 /* ================= CLEAN GLOBE AREA ================= */
 
 // Đã loại bỏ bệ trung tâm công nghệ.
@@ -2540,6 +2624,11 @@ if(!document.querySelector("#focus").classList.contains("show")){
 
  // Địa cầu tự xoay
  globe.rotation.y+=.001;
+
+ // Các vòng quỹ đạo nghiên cứu chuyển động độc lập
+ researchOrbitA.rotation.y+=.0025;
+ researchOrbitB.rotation.x+=.0012;
+ researchOrbitC.rotation.y-=.0018;
 
  // Hiệu ứng ánh sáng địa cầu
  const pulse=1+Math.sin(elapsed*.0015)*.018;
