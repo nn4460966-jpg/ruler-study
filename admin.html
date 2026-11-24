@@ -1443,13 +1443,152 @@ createControlDesk(-7.5,-10,-.35);
 createControlDesk(7.5,-10,.35);
 
 // GHẾ ĐẶT PHÍA SAU MỖI BÀN
-// Ghế xoay cùng hướng với bàn
-
 createOperatorChair(-10.67,.875,-.65);
 createOperatorChair(10.67,.875,.65);
-
 createOperatorChair(-7.88,-8.966,-.35);
 createOperatorChair(7.88,-8.966,.35);
+
+
+// ================= NHÂN VIÊN NGHIÊN CỨU ĐỊA CẦU =================
+
+function createSeatedOperator(x,z,rotationY=0){
+
+ const operator = new THREE.Group();
+
+ operator.position.set(x,-.435,z);
+ operator.rotation.y=rotationY;
+
+ const suitMat = new THREE.MeshStandardMaterial({
+  color:0x102b42,
+  metalness:.65,
+  roughness:.35
+ });
+
+ const suitLightMat = new THREE.MeshStandardMaterial({
+  color:0x087d9c,
+  emissive:0x063d55,
+  emissiveIntensity:.8
+ });
+
+ const skinMat = new THREE.MeshStandardMaterial({
+  color:0x7899a8,
+  roughness:.8
+ });
+
+ // TẠO CHI TIẾT TAY CHÂN
+ function makeLimb(start,end,radius,material){
+
+  const a=new THREE.Vector3(...start);
+  const b=new THREE.Vector3(...end);
+  const direction=new THREE.Vector3().subVectors(b,a);
+
+  const limb=new THREE.Mesh(
+   new THREE.CylinderGeometry(radius*.8,radius,direction.length(),12),
+   material
+  );
+
+  limb.position.copy(a).add(b).multiplyScalar(.5);
+  limb.quaternion.setFromUnitVectors(
+   new THREE.Vector3(0,1,0),
+   direction.normalize()
+  );
+
+  operator.add(limb);
+ }
+
+ // THÂN NGƯỜI
+ const torso=new THREE.Mesh(
+  new THREE.BoxGeometry(.78,.95,.42),
+  suitMat
+ );
+
+ torso.position.set(0,1.65,.12);
+ operator.add(torso);
+
+ // ÁO PHÍA TRƯỚC
+ const chest=new THREE.Mesh(
+  new THREE.BoxGeometry(.55,.42,.035),
+  suitLightMat
+ );
+
+ chest.position.set(0,1.78,-.105);
+ operator.add(chest);
+
+ // ĐẦU
+ const head=new THREE.Mesh(
+  new THREE.SphereGeometry(.28,24,20),
+  skinMat
+ );
+
+ head.scale.set(.85,1.12,.9);
+ head.position.set(0,2.38,-.02);
+ operator.add(head);
+
+ // CỔ
+ const neck=new THREE.Mesh(
+  new THREE.CylinderGeometry(.12,.14,.2,16),
+  skinMat
+ );
+
+ neck.position.set(0,2.12,0);
+ operator.add(neck);
+
+ // VAI VÀ CÁNH TAY HƯỚNG VỀ MÀN HÌNH
+ for(const side of [-1,1]){
+
+  makeLimb(
+   [side*.34,1.98,.05],
+   [side*.48,1.68,-.48],
+   .13,suitMat
+  );
+
+  makeLimb(
+   [side*.48,1.68,-.48],
+   [side*.48,1.48,-.95],
+   .095,suitMat
+  );
+
+  const hand=new THREE.Mesh(
+   new THREE.SphereGeometry(.105,14,12),
+   skinMat
+  );
+
+  hand.position.set(side*.48,1.48,-.95);
+  operator.add(hand);
+
+  // ĐÙI NGỒI
+  makeLimb(
+   [side*.2,1.05,.05],
+   [side*.23,.72,-.55],
+   .17,suitMat
+  );
+
+  // CẲNG CHÂN
+  makeLimb(
+   [side*.23,.72,-.55],
+   [side*.23,.25,-.48],
+   .12,suitMat
+  );
+ }
+
+ // ĐAI VAI PHÁT SÁNG
+ const shoulderLight=new THREE.Mesh(
+  new THREE.BoxGeometry(.82,.08,.46),
+  suitLightMat
+ );
+
+ shoulderLight.position.set(0,2.08,.1);
+ operator.add(shoulderLight);
+
+ commandRoom.add(operator);
+}
+
+
+// BỐ TRÍ NGƯỜI NGỒI TẠI 4 BÀN
+createSeatedOperator(-10.67,.875,-.65);
+createSeatedOperator(10.67,.875,.65);
+createSeatedOperator(-7.88,-8.966,-.35);
+createSeatedOperator(7.88,-8.966,.35);
 
 // CỘT ĐÈN XANH HAI BÊN
 function createLightColumn(x,z){
