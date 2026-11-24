@@ -2123,8 +2123,9 @@ palmGlow.rotation.x=Math.PI/2;
 palmGlow.position.set(0,.35,.1);
 hologramHand.add(palmGlow);
 
-// Đặt bàn tay ngay dưới địa cầu
-hologramHand.position.set(0,-.05,0);
+// Đưa bàn tay ra phía trước để camera nhìn thấy rõ
+// Bàn tay hướng lên và nâng phần dưới quả địa cầu
+hologramHand.position.set(0,-.42,4.35);
 globeBase.add(hologramHand);
 
 // Thêm toàn bộ hệ thống lồng vào phòng
