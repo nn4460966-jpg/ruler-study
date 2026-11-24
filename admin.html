@@ -2237,6 +2237,9 @@ const torso=new THREE.Group();
 // Đưa thân ra gần phía trước để nhìn rõ phía trên địa cầu
 torso.position.set(0,9.15,-4.9);
 
+// Phóng lớn thân robot
+torso.scale.set(1.45,1.35,1.25);
+
 // NGỰC ROBOT LỚN
 const chest=new THREE.Mesh(
  new THREE.BoxGeometry(3.8,2.35,1.25),
@@ -2329,6 +2332,9 @@ createRobotJoint(
 const head=new THREE.Group();
 head.position.set(0,11.65,-4.05);
 
+// Đầu lớn hơn, cân đối với thân robot
+head.scale.setScalar(1.28);
+
 // Hộp sọ kim loại
 const skull=new THREE.Mesh(
  new THREE.SphereGeometry(1.18,32,24),
@@ -2420,6 +2426,15 @@ createRobotJoint(
 
   const arm=new THREE.Group();
 
+// Phóng lớn cánh tay quanh đúng vị trí khớp vai
+  arm.scale.setScalar(1.3);
+
+  arm.position.set(
+   -side*.93,
+   -2.745,
+   1.245
+  );
+
   // Cánh tay đi từ vai, vòng rộng ra ngoài,
   // sau đó cong xuống và hướng vào địa cầu.
  const path=[
@@ -2428,8 +2443,10 @@ createRobotJoint(
  [side*5.35,6.5,-2.0],
  [side*5.65,5.0,.2],
  [side*5.25,3.9,1.8],
- [side*4.45,3.55,2.15],
- [side*3.15,4.0,.35]
+ [side*4.85,3.65,2.35],
+ [side*4.25,3.55,2.65],
+ [side*3.65,3.7,2.25],
+ [side*3.15,4.0,1.05]
 ];
 
   // Bắp tay và cẳng tay kim loại lớn
