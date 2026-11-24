@@ -2219,26 +2219,44 @@ function createWallRobotEmbrace(){
  mountGlow.position.set(0,9.5,-24.08);
  robot.add(mountGlow);
 
- // Hai thanh xương sống kéo robot nhô khỏi tường
+  // Hai thanh xương sống cơ khí kéo robot từ tường sau ra phía trước
  for(const side of [-1,1]){
+
   createRobotLink(
    robot,
-   [side*3.2,10.6,-24.0],
-   [side*2.1,10.4,-9.0],
-   .48
+   [side*4.2,11.2,-24.0],
+   [side*3.7,10.8,-16.0],
+   .85
   );
-  createRobotJoint(robot,[side*2.1,10.4,-9.0],.72);
- }
 
+  createRobotJoint(
+   robot,
+   [side*3.7,10.8,-16.0],
+   .95
+  );
+
+  createRobotLink(
+   robot,
+   [side*3.7,10.8,-16.0],
+   [side*3.0,9.5,-5.0],
+   .72
+  );
+
+  createRobotJoint(
+   robot,
+   [side*3.0,9.5,-5.0],
+   .85
+  );
+ }
 // ================= THÂN ROBOT TREO NGƯỢC =================
 
 const torso=new THREE.Group();
 
-// Đưa thân ra gần phía trước để nhìn rõ phía trên địa cầu
-torso.position.set(0,9.15,-4.9);
+// Thân robot trồi mạnh ra khỏi bức tường sau
+torso.position.set(0,8.8,-3.9);
 
-// Phóng lớn thân robot
-torso.scale.set(1.45,1.35,1.25);
+// Thân rộng gần 8 đơn vị, cao hơn rõ rệt
+torso.scale.set(2.1,1.65,1.4);
 
 // NGỰC ROBOT LỚN
 const chest=new THREE.Mesh(
@@ -2516,22 +2534,25 @@ createRobotJoint(
    0x20dfff
   );
 
-    // ================= CỔ TAY HƯỚNG VÀO ĐỊA CẦU =================
+     // ================= CỔ TAY NỐI THẲNG VỚI CẲNG TAY =================
 
   createRobotJoint(
    arm,
-   [side*3.15,4.0,.35],
-   .32
+   [side*3.15,4.0,1.05],
+   .42
   );
 
   // ================= LÒNG BÀN TAY ÔM ĐỊA CẦU =================
 
   const palm=new THREE.Mesh(
-   new THREE.BoxGeometry(.48,1.35,.85),
+   new THREE.BoxGeometry(.62,1.55,1.0),
    robotArmArmor
   );
 
-  palm.position.set(side*2.95,4.0,.45);
+  palm.position.set(side*3.15,4.0,1.05);
+
+  palm.rotation.y=-side*Math.PI/2;
+  arm.add(palm);
 
   // Xoay lòng bàn tay hướng vào phía tâm địa cầu
   palm.rotation.y=-side*Math.PI/2;
@@ -2574,10 +2595,10 @@ createRobotJoint(
 
    const y=4.75-finger*.5;
 
-   const points=[
-    [side*2.95,y,.55],
-    [side*2.72,y,1.45],
-    [side*2.15,y-.12,2.20]
+    const points=[
+    [side*3.15,y,1.05],
+    [side*2.85,y,1.85],
+    [side*2.20,y-.12,2.45]
    ];
 
    createRobotLink(
