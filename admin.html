@@ -2221,12 +2221,11 @@ const supabaseClient=window.supabase.createClient(
 );
 
 /* ================= ADMIN AVATAR ================= */
-
 async function loadAdminAvatar(userId){
  const {data,error}=await supabaseClient
   .from("profiles")
   .select("avatar_url")
-  .eq("user_id",userId)
+  .eq("id",userId)
   .maybeSingle();
 
  if(error){
