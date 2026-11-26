@@ -843,7 +843,38 @@ button{cursor:pointer}
     font-size:45px;
   }
 }
+/* TRANG HỒ SƠ HỌC SINH RIÊNG */
+#accountArea .sidebar,
+#accountArea .topbar {
+  display:none !important;
+}
 
+#accountArea .main {
+  width:100%;
+  margin-left:0;
+  padding:35px;
+}
+
+#personal .stats,
+#personal .dashboard-grid,
+#personal .bottom-grid {
+  display:none !important;
+}
+
+#personal .camera {
+  display:none !important;
+}
+
+#personal .back-btn {
+  display:inline-block;
+  margin-bottom:22px;
+}
+
+@media(max-width:700px) {
+  #accountArea .main {
+    padding:18px;
+  }
+}
 </style>
 </head>
 
@@ -980,10 +1011,14 @@ button{cursor:pointer}
     <div class="top-avatar" id="topAvatar">👤</div>
 </header>
 
-    <!-- HỒ SƠ CÁ NHÂN -->
-    <section id="personal" class="profile-panel">
+   <!-- HỒ SƠ HỌC SINH RIÊNG -->
+<section id="personal" class="profile-panel">
 
-      <div class="hero">
+  <button class="back-btn" onclick="goBack()">
+    ← Quay lại trang chủ
+  </button>
+
+  <div class="hero">
 
         <div class="avatar-wrap">
           <div class="avatar" id="mainAvatar">👤</div>
