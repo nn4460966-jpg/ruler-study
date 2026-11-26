@@ -176,6 +176,117 @@ body {
   font-size:23px;
 }
 
+/* CỤM TÀI KHOẢN SAU ĐĂNG NHẬP */
+.account-area {
+  position:relative;
+  display:flex;
+  align-items:center;
+}
+
+.account-trigger {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  border:0;
+  background:transparent;
+  padding:5px 8px;
+  border-radius:12px;
+  cursor:pointer;
+  font-family:inherit;
+  color:#172554;
+}
+
+.account-trigger:hover {
+  background:#ffffff80;
+}
+
+.account-avatar {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:#243b70;
+  color:white;
+  display:grid;
+  place-items:center;
+  font-size:19px;
+  font-weight:700;
+  flex-shrink:0;
+}
+
+.account-info {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+}
+
+.account-name {
+  font-size:12px;
+  font-weight:700;
+}
+
+.account-class {
+  font-size:11px;
+  color:#64748b;
+}
+
+.account-arrow {
+  font-size:13px;
+  color:#64748b;
+}
+
+.account-menu {
+  position:absolute;
+  top:calc(100% + 10px);
+  right:0;
+  width:190px;
+  background:white;
+  border:1px solid #dce4ff;
+  border-radius:13px;
+  padding:7px;
+  box-shadow:0 10px 28px #17255420;
+  z-index:30;
+}
+
+.account-menu a,
+.account-menu button {
+  display:block;
+  width:100%;
+  padding:11px 12px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#172554;
+  text-decoration:none;
+  text-align:left;
+  font-family:inherit;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.account-menu a:hover,
+.account-menu button:hover {
+  background:#edf3ff;
+}
+
+.account-menu[hidden] {
+  display:none;
+}
+
+@media(max-width:520px) {
+  .account-name {
+    max-width:105px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  .account-trigger {
+    gap:6px;
+    padding:4px;
+  }
+}
+
 .hero {
   min-height:245px;
   border-radius:22px;
@@ -640,10 +751,43 @@ async function checkHomeLogin(){
   if(!authButtons) return;
 
   if(error || !data.session){
-    authButtons.innerHTML=`
-      <a href="login.html">Đăng nhập</a>
-      <a href="register.html">Đăng ký</a>
-    `;
+    const {data:profileData} = await homeSupabase
+    .from("profiles")
+    .select("full_name,class_name")
+    .eq("id",data.session.user.id)
+    .maybeSingle();
+
+  const userEmail = data.session.user.email || "";
+  const displayName =
+    profileData?.full_name ||
+    data.session.user.user_metadata?.full_name ||
+    userEmail.split("@")[0] ||
+    "Học sinh";
+
+  const displayClass = profileData?.class_name || "Học sinh";
+  const initial = displayName.trim().charAt(0).toUpperCase() || "H";
+
+  authButtons.innerHTML = `
+    <div class="account-area">
+      <button class="account-trigger"
+              type="button"
+              onclick="toggleAccountMenu()">
+        <span class="account-avatar">${escapeAccountText(initial)}</span>
+
+        <span class="account-info">
+          <span class="account-name">${escapeAccountText(displayName)}</span>
+          <span class="account-class">Lớp ${escapeAccountText(displayClass)}</span>
+        </span>
+
+        <span class="account-arrow">⌄</span>
+      </button>
+
+      <div class="account-menu" id="accountMenu" hidden>
+        <a href="account.html">👤 Hồ sơ cá nhân</a>
+        <button type="button" onclick="logoutUser()">⇥ Đăng xuất</button>
+      </div>
+    </div>
+  `;
     return;
   }
 
@@ -675,7 +819,23 @@ async function checkHomeLogin(){
   `;
 
 }
+function escapeAccountText(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
 
+function toggleAccountMenu() {
+  const menu = document.getElementById("accountMenu");
+
+  if (!menu) return;
+
+  menu.hidden = !menu.hidden;
+}
 async function logoutUser(){
   await homeSupabase.rpc("record_student_logout");
 
