@@ -750,51 +750,41 @@ async function checkHomeLogin(){
 
   if(!authButtons) return;
 
+  // CHƯA ĐĂNG NHẬP
   if(error || !data.session){
-    const {data:profileData} = await homeSupabase
-    .from("profiles")
-    .select("full_name,class_name")
-    .eq("id",data.session.user.id)
-    .maybeSingle();
+    authButtons.innerHTML=`
+      <a href="login.html" style="
+        padding:12px 20px;
+        border:1px solid #3568e8;
+        border-radius:12px;
+        color:#3568e8;
+        background:white;
+        text-decoration:none;
+        font-size:13px;
+        font-weight:700;
+      ">Đăng nhập</a>
 
-  const userEmail = data.session.user.email || "";
-  const displayName =
-    profileData?.full_name ||
-    data.session.user.user_metadata?.full_name ||
-    userEmail.split("@")[0] ||
-    "Học sinh";
-
-  const displayClass = profileData?.class_name || "Học sinh";
-  const initial = displayName.trim().charAt(0).toUpperCase() || "H";
-
-  authButtons.innerHTML = `
-    <div class="account-area">
-      <button class="account-trigger"
-              type="button"
-              onclick="toggleAccountMenu()">
-        <span class="account-avatar">${escapeAccountText(initial)}</span>
-
-        <span class="account-info">
-          <span class="account-name">${escapeAccountText(displayName)}</span>
-          <span class="account-class">Lớp ${escapeAccountText(displayClass)}</span>
-        </span>
-
-        <span class="account-arrow">⌄</span>
-      </button>
-
-      <div class="account-menu" id="accountMenu" hidden>
-        <a href="account.html">👤 Hồ sơ cá nhân</a>
-        <button type="button" onclick="logoutUser()">⇥ Đăng xuất</button>
-      </div>
-    </div>
-  `;
+      <a href="register.html" style="
+        padding:12px 20px;
+        border-radius:12px;
+        color:white;
+        background:linear-gradient(100deg,#3568e8,#8175ee);
+        text-decoration:none;
+        font-size:13px;
+        font-weight:700;
+        box-shadow:0 4px 12px #3568e830;
+      ">Đăng ký</a>
+    `;
     return;
   }
 
+  const user = data.session.user;
+
+  // KIỂM TRA QUYỀN TÀI KHOẢN
   const {data:roleData,error:roleError}=await homeSupabase
     .from("user_roles")
     .select("role")
-    .eq("user_id",data.session.user.id)
+    .eq("user_id",user.id)
     .maybeSingle();
 
   if(roleError){
@@ -802,7 +792,6 @@ async function checkHomeLogin(){
     return;
   }
 
-  
   if(roleData?.role==="admin"){
     window.location.replace("admin.html");
     return;
@@ -813,11 +802,63 @@ async function checkHomeLogin(){
     return;
   }
 
-  authButtons.innerHTML=`
-    <a href="account.html">Hồ sơ cá nhân</a>
-    <button onclick="logoutUser()">Đăng xuất</button>
-  `;
+  // LẤY TÊN VÀ LỚP HỌC SINH
+  const {data:profileData}=await homeSupabase
+    .from("profiles")
+    .select("full_name,class_name")
+    .eq("id",user.id)
+    .maybeSingle();
 
+  const userEmail=user.email || "";
+
+  const displayName=
+    profileData?.full_name ||
+    user.user_metadata?.full_name ||
+    userEmail.split("@")[0] ||
+    "Học sinh";
+
+  const rawClass=profileData?.class_name || "Chưa chọn lớp";
+
+  const displayClass =
+    /^lớp\s/i.test(rawClass)
+      ? rawClass
+      : "Lớp "+rawClass;
+
+  const initial=displayName.trim().charAt(0).toUpperCase() || "H";
+
+  // HIỂN THỊ CỤM TÀI KHOẢN
+  authButtons.innerHTML=`
+    <div class="account-area">
+
+      <button class="account-trigger"
+              type="button"
+              onclick="toggleAccountMenu()">
+
+        <span class="account-avatar">
+          ${escapeAccountText(initial)}
+        </span>
+
+        <span class="account-info">
+          <span class="account-name">
+            ${escapeAccountText(displayName)}
+          </span>
+
+          <span class="account-class">
+            ${escapeAccountText(displayClass)}
+          </span>
+        </span>
+
+        <span class="account-arrow">⌄</span>
+
+      </button>
+
+      <div class="account-menu" id="accountMenu" hidden>
+        <a href="account.html">👤 Hồ sơ cá nhân</a>
+        <button type="button" onclick="logoutUser()">⇥ Đăng xuất</button>
+      </div>
+
+    </div>
+  `;
 }
 function escapeAccountText(value) {
   return String(value).replace(/[&<>"']/g, char => ({
