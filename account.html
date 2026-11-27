@@ -1940,20 +1940,35 @@ async function uploadAvatar(file,userId){
   const extension=file.name.split(".").pop().toLowerCase();
   const filePath=userId+"/"+Date.now()+"."+extension;
 
-  const {error}=await supabaseClient.storage
+  console.log("AVATAR DEBUG:",{
+    userId:userId,
+    filePath:filePath,
+    bucket:"avatars"
+  });
+
+  const {data:sessionData,error:sessionError} =
+    await supabaseClient.auth.getSession();
+
+  console.log("SESSION USER ID:",sessionData?.session?.user?.id);
+  console.log("SESSION ERROR:",sessionError);
+
+  const {data,error}=await supabaseClient.storage
     .from("avatars")
     .upload(filePath,file,{
       cacheControl:"3600",
-      upsert:true
+      upsert:false
     });
 
-  if(error) throw error;
+  if(error){
+    console.error("AVATAR UPLOAD ERROR:",error);
+    throw error;
+  }
 
-  const {data}=supabaseClient.storage
+  const {data:publicData}=supabaseClient.storage
     .from("avatars")
     .getPublicUrl(filePath);
 
-  return data.publicUrl;
+  return publicData.publicUrl;
 }
 async function saveProfile(){
   const profileMessage = document.getElementById("profileMessage");
