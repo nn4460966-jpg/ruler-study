@@ -1595,10 +1595,10 @@ async function loadProfile(){
   document.getElementById("email").value=user.email||"";
 
   const {data:profile,error:profileError}=await supabaseClient
-    .from("profiles")
-    .select("full_name,email,birth_date,class_name,school_name,avatar_url")
-    .eq("user_id",user.id)
-    .maybeSingle();
+  .from("profiles")
+  .select("full_name,email,birth_date,class_name,school_name,avatar_url")
+  .eq("id",user.id)
+  .maybeSingle();
 
   if(profileError){
     message("profileMessage","Lỗi tải hồ sơ: "+profileError.message);
