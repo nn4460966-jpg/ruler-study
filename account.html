@@ -1956,75 +1956,97 @@ async function uploadAvatar(file,userId){
   return data.publicUrl;
 }
 async function saveProfile(){
-  const {data,error}=await supabaseClient.auth.getUser();
+  const profileMessage = document.getElementById("profileMessage");
+  const saveButton = document.querySelector(
+    '#editProfile button[onclick="saveProfile()"]'
+  );
 
-  if(error||!data.user){
-    message("profileMessage","Bạn cần đăng nhập trước!");
-    return;
+  if(saveButton){
+    saveButton.disabled = true;
+    saveButton.textContent = "Đang lưu...";
   }
 
-  const user=data.user;
+  profileMessage.textContent = "Đang lưu hồ sơ...";
+  profileMessage.style.display = "block";
 
-  const fullName=document.getElementById("fullName").value.trim();
-  const birthDate=document.getElementById("birthDate").value||null;
-  const className=document.getElementById("className").value.trim();
-  const schoolName=document.getElementById("schoolName").value.trim();
-  let avatarUrl=document.getElementById("avatarUrl").value.trim();
-
-const avatarFile=document.getElementById("avatarFile").files[0];
-
-if(avatarFile){
   try{
-    avatarUrl=await uploadAvatar(avatarFile,user.id);
-  }catch(uploadError){
-    message("profileMessage","Lỗi tải ảnh: "+uploadError.message);
-    return;
+    const {data,error} = await supabaseClient.auth.getUser();
+
+    if(error) throw error;
+
+    if(!data.user){
+      throw new Error("Bạn cần đăng nhập trước!");
+    }
+
+    const user = data.user;
+
+    const fullName = document.getElementById("fullName").value.trim();
+    const birthDate = document.getElementById("birthDate").value || null;
+    const className = document.getElementById("className").value.trim();
+    const schoolName = document.getElementById("schoolName").value.trim();
+
+    let avatarUrl = document.getElementById("avatarUrl").value.trim();
+    const avatarFile = document.getElementById("avatarFile").files[0];
+
+    if(!fullName){
+      throw new Error("Hãy nhập họ và tên!");
+    }
+
+    if(avatarFile){
+      avatarUrl = await uploadAvatar(avatarFile,user.id);
+    }
+
+    const {error:saveError} = await supabaseClient
+      .from("profiles")
+      .upsert({
+        id:user.id,
+        email:user.email,
+        full_name:fullName,
+        birth_date:birthDate,
+        class_name:className,
+        school_name:schoolName,
+        avatar_url:avatarUrl || null
+      },{onConflict:"id"});
+
+    if(saveError) throw saveError;
+
+    document.getElementById("displayName").textContent = fullName;
+    document.getElementById("displayEmail").textContent = user.email || "";
+    document.getElementById("displayBirth").textContent = birthDate || "Chưa cập nhật";
+    document.getElementById("displayClass").textContent = className || "Chưa cập nhật";
+    document.getElementById("displaySchool").textContent = schoolName || "Chưa cập nhật";
+
+    document.getElementById("summaryName").textContent = fullName;
+    document.getElementById("summaryEmail").textContent = user.email || "";
+    document.getElementById("summaryBirth").textContent = birthDate || "Chưa cập nhật";
+    document.getElementById("summaryClass").textContent = className || "Chưa cập nhật";
+
+    document.getElementById("avatarUrl").value = avatarUrl || "";
+    document.getElementById("avatarFile").value = "";
+
+    updateAvatar(avatarUrl);
+
+    profileMessage.textContent = "Lưu hồ sơ thành công!";
+    profileMessage.style.display = "block";
+
+    setTimeout(() => {
+      showPanel("personal");
+    },1500);
+
+  }catch(error){
+    console.error("Lỗi lưu hồ sơ:",error);
+
+    profileMessage.textContent =
+      "Không lưu được hồ sơ: " + (error.message || "Lỗi không xác định");
+
+    profileMessage.style.display = "block";
+
+  }finally{
+    if(saveButton){
+      saveButton.disabled = false;
+      saveButton.textContent = "💾 Lưu hồ sơ";
+    }
   }
-}
-
-  if(!fullName){
-    message("profileMessage","Hãy nhập họ và tên!");
-    return;
-  }
-
-   const {error:saveError}=await supabaseClient
-    .from("profiles")
-    .upsert({
-      id:user.id,
-      email:user.email,
-      full_name:fullName,
-      birth_date:birthDate,
-      class_name:className,
-      school_name:schoolName,
-      avatar_url:avatarUrl||null
-    },{onConflict:"id"});
-  if(saveError){
-    message("profileMessage","Lỗi lưu hồ sơ: "+saveError.message);
-    return;
-  }
-
-  document.getElementById("displayName").textContent=fullName;
-  document.getElementById("displayEmail").textContent=user.email||"";
-  document.getElementById("displayBirth").textContent=birthDate||"Chưa cập nhật";
-  document.getElementById("displayClass").textContent=className||"Chưa cập nhật";
-  document.getElementById("displaySchool").textContent=schoolName||"Chưa cập nhật";
-
-  document.getElementById("summaryName").textContent=fullName;
-  document.getElementById("summaryEmail").textContent=user.email||"";
-  document.getElementById("summaryBirth").textContent=birthDate||"Chưa cập nhật";
-  document.getElementById("summaryClass").textContent=className||"Chưa cập nhật";
-document.getElementById("avatarUrl").value=avatarUrl||"";
-document.getElementById("avatarFile").value="";
-
-updateAvatar(avatarUrl);
-
-const profileMessage = document.getElementById("profileMessage");
-profileMessage.textContent = "Lưu hồ sơ thành công!";
-profileMessage.style.display = "block";
-
-setTimeout(() => {
-  showPanel("personal");
-}, 1500);
 }
 
 async function changePassword(){
