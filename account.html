@@ -1983,7 +1983,6 @@ async function saveProfile(){
     const fullName = document.getElementById("fullName").value.trim();
     const birthDate = document.getElementById("birthDate").value || null;
     const className = document.getElementById("className").value.trim();
-    const schoolName = document.getElementById("schoolName").value.trim();
 
     let avatarUrl = document.getElementById("avatarUrl").value.trim();
     const avatarFile = document.getElementById("avatarFile").files[0];
@@ -2004,7 +2003,6 @@ async function saveProfile(){
         full_name:fullName,
         birth_date:birthDate,
         class_name:className,
-        school_name:schoolName,
         avatar_url:avatarUrl || null
       },{onConflict:"id"});
 
@@ -2014,7 +2012,6 @@ async function saveProfile(){
     document.getElementById("displayEmail").textContent = user.email || "";
     document.getElementById("displayBirth").textContent = birthDate || "Chưa cập nhật";
     document.getElementById("displayClass").textContent = className || "Chưa cập nhật";
-    document.getElementById("displaySchool").textContent = schoolName || "Chưa cập nhật";
 
     document.getElementById("summaryName").textContent = fullName;
     document.getElementById("summaryEmail").textContent = user.email || "";
