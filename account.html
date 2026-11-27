@@ -1624,9 +1624,14 @@ async function loadProfile(){
   document.getElementById("summaryBirth").textContent=profile?.birth_date||"Chưa cập nhật";
   document.getElementById("summaryClass").textContent=profile?.class_name||"Chưa cập nhật";
 
-  updateAvatar(profile?.avatar_url);
+   updateAvatar(profile?.avatar_url);
 
-  showPanel("personal");
+  if (location.hash === "#vocabulary") {
+    showPanel("vocabulary");
+    showVocabularyTab("overview");
+  } else {
+    showPanel("personal");
+  }
 }
 
 function updateAvatar(url){
