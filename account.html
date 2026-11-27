@@ -2018,9 +2018,13 @@ document.getElementById("avatarFile").value="";
 
 updateAvatar(avatarUrl);
 
-alert("Lưu hồ sơ thành công!");
+const profileMessage = document.getElementById("profileMessage");
+profileMessage.textContent = "Lưu hồ sơ thành công!";
+profileMessage.style.display = "block";
 
-showPanel("personal");
+setTimeout(() => {
+  showPanel("personal");
+}, 1500);
 }
 
 async function changePassword(){
