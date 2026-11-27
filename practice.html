@@ -621,59 +621,20 @@ function selectSubject(subject){
 }
 
 
-// HIỂN THỊ DANH SÁCH BÀI
+// HIỂN THỊ DANH SÁCH BÀI ÔN LUYỆN
 function renderLessons(){
 
   const grid=document.getElementById("lessonGrid");
 
-  grid.innerHTML="";
+  // Không tự tạo Bài 1, Bài 2 từ câu hỏi mẫu
+  // Danh sách chỉ hiển thị khi có bài được thêm vào
+  grid.innerHTML=`
+    <p style="color:#64748b;grid-column:1/-1;text-align:center;padding:25px">
+      Hiện chưa có bài ôn luyện cho môn ${currentSubject}.
+    </p>
+  `;
 
-  const questions=questionBank[currentSubject] || [];
-
-  if(questions.length===0){
-
-    grid.innerHTML=`
-      <p style="color:#64748b">
-        Hiện chưa có bài ôn luyện cho môn học này.
-      </p>
-    `;
-
-    return;
-  }
-
-  questions.forEach((question,index)=>{
-
-    const card=document.createElement("div");
-
-    card.className="lesson-card";
-
-    card.innerHTML=`
-      <div class="lesson-icon">📘</div>
-
-      <h3>Bài ${index+1}</h3>
-
-      <p>
-        Bài ôn luyện số ${index+1} của môn ${currentSubject}.
-      </p>
-
-      <p>
-        Số câu hỏi: 1 câu
-      </p>
-
-      <button type="button">
-        Ôn luyện ngay →
-      </button>
-    `;
-
-    card.querySelector("button").onclick=()=>{
-      startQuiz(currentSubject,index);
-    };
-
-    grid.appendChild(card);
-
-  });
 }
-
 
 // QUAY LẠI DANH SÁCH MÔN
 function backToSubjects(){
