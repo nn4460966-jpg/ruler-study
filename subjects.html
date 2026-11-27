@@ -342,6 +342,10 @@ function renderSubjects(){
   subjects.forEach(subject=>{
     const card=document.createElement("article");
     card.className="subject-card";
+    card.tabIndex=0;
+    card.setAttribute("role","button");
+    card.setAttribute("aria-label","Mở môn "+subject.name+" lớp "+currentClass);
+
     const title=subject.name+" "+currentClass;
 
     const icon=document.createElement("div");
@@ -352,11 +356,60 @@ function renderSubjects(){
     heading.textContent=title;
 
     const description=document.createElement("p");
-    description.textContent="Khu vực học tập "+title+". Nội dung sẽ được cập nhật sau.";
+    description.textContent="Bấm để xem danh sách bài học của môn "+subject.name+".";
 
-        card.append(icon,heading,description);
+    card.append(icon,heading,description);
+
+    card.onclick=()=>openSubject(subject);
+    card.onkeydown=(event)=>{
+      if(event.key==="Enter"||event.key===" "){
+        event.preventDefault();
+        openSubject(subject);
+      }
+    };
+
     grid.appendChild(card);
   });
+
+  showSubjectList();
+}
+
+function openSubject(subject){
+  document.getElementById("subjectsIntro").hidden=true;
+  document.getElementById("classHeading").hidden=true;
+  document.getElementById("classGrid").hidden=true;
+  document.getElementById("currentClassBox").hidden=true;
+  document.getElementById("subjectHeading").hidden=true;
+  document.getElementById("subjectGrid").hidden=true;
+  document.getElementById("subjectsEmptyNote").hidden=true;
+
+  document.getElementById("lessonSubjectTitle").textContent=
+    subject.icon+" "+subject.name+" lớp "+currentClass;
+
+  document.getElementById("lessonSubjectDescription").textContent=
+    "Danh sách bài học môn "+subject.name+" dành cho lớp "+currentClass+".";
+
+  document.getElementById("lessonClassBadge").textContent=
+    "LỚP "+currentClass;
+
+  document.getElementById("lessonEmptyNote").hidden=false;
+  document.getElementById("lessonView").hidden=false;
+
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showSubjectList(){
+  document.getElementById("lessonView").hidden=true;
+
+  document.getElementById("subjectsIntro").hidden=false;
+  document.getElementById("classHeading").hidden=false;
+  document.getElementById("classGrid").hidden=false;
+  document.getElementById("currentClassBox").hidden=false;
+  document.getElementById("subjectHeading").hidden=false;
+  document.getElementById("subjectGrid").hidden=false;
+  document.getElementById("subjectsEmptyNote").hidden=false;
+
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 async function selectClass(classNumber){
