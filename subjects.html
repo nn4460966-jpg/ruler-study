@@ -328,11 +328,7 @@ function renderSubjects(){
     const description=document.createElement("p");
     description.textContent="Khu vực học tập "+title+". Nội dung sẽ được cập nhật sau.";
 
-    const button=document.createElement("button");
-    button.textContent="Khám phá →";
-    button.onclick=()=>alert("Nội dung "+title+" sẽ được bổ sung sau.");
-
-    card.append(icon,heading,description,button);
+        card.append(icon,heading,description);
     grid.appendChild(card);
   });
 }
