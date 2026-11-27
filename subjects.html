@@ -42,13 +42,17 @@ body{margin:0;font-family:'Be Vietnam Pro',sans-serif;background:linear-gradient
 .current-class p{margin:6px 0 0;color:#64748b;font-size:13px}
 .current-badge{background:#e9efff;color:#3568e8;padding:9px 14px;border-radius:20px;font-size:12px;font-weight:800;white-space:nowrap}
 .subject-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.subject-card{background:white;border:1px solid #dce4ff;border-radius:20px;padding:23px;box-shadow:0 5px 17px #263c7510;transition:.2s;min-height:190px;display:flex;flex-direction:column}
-.subject-card:hover{transform:translateY(-4px);box-shadow:0 9px 24px #263c7520}
+.subject-card{background:white;border:1px solid #dce4ff;border-radius:20px;padding:23px;box-shadow:0 5px 17px #263c7510;transition:.2s;min-height:190px;display:flex;flex-direction:column;cursor:pointer}
+.subject-card:hover{transform:translateY(-4px);box-shadow:0 9px 24px #263c7520;border-color:#8ba5f5}
+.subject-card:focus-visible{outline:3px solid #6588ef;outline-offset:3px}
 .subject-card .icon{font-size:35px;margin-bottom:12px}
 .subject-card h3{font-size:17px;margin:0 0 8px}
 .subject-card p{font-size:12px;color:#64748b;line-height:1.6;margin:0 0 15px}
-.subject-card button{margin-top:auto;align-self:flex-start;border:0;border-radius:11px;padding:11px 16px;background:linear-gradient(100deg,#3568e8,#8175ee);color:white;font-family:inherit;font-weight:700;cursor:pointer}
-.subject-card button:hover{filter:brightness(.95)}
+
+.back-btn{padding:11px 17px;border:1px solid #dce4ff;border-radius:12px;background:white;color:#263b70;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 3px 10px #263c7510;margin-bottom:18px}
+.back-btn:hover{background:#edf3ff}
+.lesson-heading{margin-top:0}
+[hidden]{display:none!important}
 .empty-note{padding:20px;background:#f5f7ff;border:1px dashed #cbd6f5;border-radius:15px;color:#64748b;font-size:13px;margin-top:18px}
 footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
 @media(max-width:1050px){.class-grid{grid-template-columns:repeat(4,1fr)}.subject-grid{grid-template-columns:repeat(2,1fr)}}
@@ -234,7 +238,7 @@ footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
 
 <main class="main">
 
-  <section class="intro">
+  <section class="intro" id="subjectsIntro">
     <div>
       <h1>Kho bài học 📚</h1>
       <p>Chọn khối lớp của bạn để khám phá hệ thống môn học.<br>Kiến thức được sắp xếp theo từng lớp từ 1 đến 12.</p>
@@ -242,12 +246,12 @@ footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
     <div class="intro-art">🎓📖</div>
   </section>
 
-  <div class="section-heading">
+  <div class="section-heading" id="classHeading">
     <h2>🎒 Chọn lớp học</h2>
   </div>
   <section class="class-grid" id="classGrid"></section>
 
-  <section class="current-class">
+  <section class="current-class" id="currentClassBox">
     <div>
       <h2 id="classTitle">Các môn học lớp 1</h2>
       <p id="classDescription">Danh sách môn học dành cho học sinh lớp 1.</p>
@@ -255,14 +259,36 @@ footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
     <span class="current-badge" id="classBadge">LỚP 1</span>
   </section>
 
-  <div class="section-heading">
+  <div class="section-heading" id="subjectHeading">
     <h2>📚 Danh sách môn học</h2>
   </div>
   <section class="subject-grid" id="subjectGrid"></section>
 
-  <div class="empty-note">
+  <div class="empty-note" id="subjectsEmptyNote">
     💡 Nội dung kiến thức và bài tập của từng môn sẽ được bổ sung sau.
   </div>
+
+  <section id="lessonView" hidden>
+    <button class="back-btn" type="button" onclick="showSubjectList()">
+      ← Quay lại danh sách môn học
+    </button>
+
+    <section class="current-class">
+      <div>
+        <h2 id="lessonSubjectTitle">Môn học</h2>
+        <p id="lessonSubjectDescription"></p>
+      </div>
+      <span class="current-badge" id="lessonClassBadge"></span>
+    </section>
+
+    <div class="section-heading">
+      <h2>📖 Danh sách bài học</h2>
+    </div>
+
+    <div class="empty-note" id="lessonEmptyNote">
+      💡 Môn học này hiện chưa có bài học. Nội dung sẽ được cập nhật sau.
+    </div>
+  </section>
 
   <footer>© 2026 RULER STUDY</footer>
 </main>
