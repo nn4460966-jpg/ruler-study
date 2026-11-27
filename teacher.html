@@ -822,9 +822,222 @@ hr{
   padding:18px 9px;
  }
 }
-</style>
-</head>
+/* ===== RULER TEACHER LIGHT THEME ===== */
 
+:root{
+  --navy:#142b59;
+  --blue:#3568e8;
+  --purple:#8175ee;
+  --text:#172554;
+  --muted:#64748b;
+}
+
+body{
+  background:linear-gradient(135deg,#edf3ff,#e9eaff);
+  color:#172554;
+}
+
+.sidebar{
+  background:linear-gradient(180deg,#10275a,#19366f);
+  border-right:0;
+  box-shadow:8px 0 25px #263b7015;
+}
+
+.brand{
+  border-bottom:1px solid #ffffff30;
+}
+
+.brand p{color:#d7e4ff}
+
+.nav button{
+  color:#eaf0ff;
+  border-radius:13px;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:linear-gradient(100deg,#3975e9,#756ce7);
+  border:0;
+  box-shadow:0 7px 18px #071b493d;
+}
+
+.teacher-mini{
+  background:#ffffff12;
+  border-color:#ffffff30;
+  color:#dce7ff;
+}
+
+.main{color:#172554}
+
+.topbar{
+  background:#ffffffed;
+  border:1px solid #dce5ff;
+  border-radius:16px;
+  box-shadow:0 5px 18px #263c7510;
+}
+
+.topbar h1{color:#142b59}
+.eyebrow{color:#3568e8}
+.avatar{background:#dbe6ff}
+
+.welcome{
+  background:linear-gradient(110deg,#a8d5ff,#e1eaff 53%,#b9b0ff);
+  border:1px solid #dce4ff;
+  box-shadow:0 8px 24px #4567b51c;
+}
+
+.welcome h2{color:#142b59}
+.welcome p{color:#334b7b}
+
+.stat,.panel{
+  background:#ffffffdf;
+  border:1px solid #dce4ff;
+  box-shadow:0 5px 18px #263c7510;
+}
+
+.stat-icon{background:#e7efff}
+.stat strong,.section-head h2{color:#172554}
+
+.stat span,.section-head p,.muted{color:#64748b}
+
+.empty{color:#8290ad}
+.empty strong{color:#33456f}
+
+.editor-grid textarea,
+.studio-textarea,
+.paste-textarea,
+.studio-input,
+#assignmentTitle{
+  background:#fbfcff !important;
+  border:1px solid #d8e2f7 !important;
+  color:#172554 !important;
+  border-radius:12px;
+}
+
+.editor-grid textarea::placeholder,
+.studio-textarea::placeholder,
+.paste-textarea::placeholder,
+.studio-input::placeholder{
+  color:#8290ad;
+}
+
+.editor-grid textarea:focus,
+.studio-textarea:focus,
+.paste-textarea:focus,
+.studio-input:focus{
+  border-color:#6689f0 !important;
+  box-shadow:0 0 0 3px #6689f018;
+}
+
+.studio-heading h2,
+.studio-preview{color:#142b59}
+
+.studio-heading p{color:#64748b}
+
+.studio-status{
+  background:#edf3ff;
+  border-color:#dce4ff;
+  color:#3156a8;
+  border-radius:12px;
+}
+
+.studio-editor,
+.studio-settings{
+  background:#ffffffdf;
+  border:1px solid #dce4ff;
+  border-radius:16px;
+  box-shadow:0 8px 25px #263c7510;
+}
+
+.studio-toolbar,
+.settings-heading{
+  background:#f1f5ff;
+  border-color:#dce4ff;
+  color:#172554;
+}
+
+.toolbar-left,
+.editor-caption{color:#334b7b}
+
+.toolbar-icon,
+.settings-heading span{color:#3568e8}
+
+.toolbar-hint,
+.editor-bottom{color:#8290ad}
+
+.studio-label{color:#334b7b}
+
+.settings-divider{background:#dce4ff}
+
+.publish-info{
+  background:#f0f7ff;
+  border-color:#cbdcf5;
+}
+
+.publish-info strong{color:#3156a8}
+.publish-info p{color:#52658d}
+.publish-info-icon{color:#3568e8}
+
+.primary{
+  background:linear-gradient(100deg,#3568e8,#8175ee);
+  color:white;
+  border:0;
+}
+
+.secondary{
+  background:#edf2ff;
+  color:#3156a8;
+  border:1px solid #dce4ff;
+}
+
+.notice{
+  background:#fff8e6;
+  border:1px solid #f3dfac;
+  color:#8b6514;
+}
+
+.profile-avatar{background:#e4ecff}
+
+.history-item{
+  background:#ffffffdf;
+  border:1px solid #dce4ff;
+  color:#172554;
+}
+
+.image-drop-zone{
+  background:#f5f8ff;
+  border-color:#9bb5ed;
+  color:#172554;
+}
+
+.image-drop-zone.dragover{
+  background:#e8efff;
+  border-color:#6689f0;
+}
+
+.image-drop-zone p{color:#64748b}
+
+.image-upload-button{
+  background:#edf3ff;
+  border-color:#cbd8f5;
+  color:#3156a8;
+}
+
+.image-preview-wrap{
+  background:#f8faff;
+  border-color:#dce4ff;
+}
+
+.image-preview-wrap img{background:#edf2ff}
+
+.ocr-status{
+  background:#edf3ff;
+  color:#52658d;
+}
+
+hr{border-color:#dce4ff !important}
+</head>
+<style>
 <body>
 <aside class="sidebar">
  <div class="brand">
