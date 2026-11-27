@@ -1607,10 +1607,15 @@ async function loadProfile(){
 
   const name=profile?.full_name||user.user_metadata?.full_name||"";
 
-  document.getElementById("fullName").value=name;
+   document.getElementById("fullName").value=name;
   document.getElementById("birthDate").value=profile?.birth_date||"";
   document.getElementById("className").value=profile?.class_name||"";
-  document.getElementById("schoolName").value=profile?.school_name||"";
+
+  const schoolNameInput=document.getElementById("schoolName");
+  if(schoolNameInput){
+    schoolNameInput.value=profile?.school_name||"";
+  }
+
   document.getElementById("avatarUrl").value=profile?.avatar_url||"";
 
   document.getElementById("displayName").textContent=name||"Học sinh";
