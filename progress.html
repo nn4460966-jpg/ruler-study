@@ -283,36 +283,29 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:25px}
 </head>
 
 <body>
-<aside class="sidebar">
-  <div class="brand">
-    <div class="brand-icon">📚⭐</div>
-    <h2>RULER STUDY</h2>
-    <p>Học tốt hơn - Thành công hơn</p>
+<header class="site-header">
+  <div class="site-brand">
+    <span class="site-brand-icon">📚⭐</span>
+    <span>RULER STUDY</span>
   </div>
 
   <nav class="nav">
-    <a href="index.html"><span class="nav-icon">⌂</span><span class="nav-text">Trang chủ</span></a>
-    <a href="subjects.html"><span class="nav-icon">📖</span><span class="nav-text">Bài học</span></a>
-    <a href="practice.html"><span class="nav-icon">✍️</span><span class="nav-text">Ôn luyện</span></a>
-    <a href="account.html"><span class="nav-icon">🔤</span><span class="nav-text">Từ vựng</span></a>
-    <a href="account.html"><span class="nav-icon">👤</span><span class="nav-text">Hồ sơ cá nhân</span></a>
-    <a href="progress.html" class="active"><span class="nav-icon">📊</span><span class="nav-text">Tiến độ & thành tích</span></a>
+    <a href="index.html">Trang chủ</a>
+    <a href="subjects.html">Bài học</a>
+    <a href="practice.html">Ôn luyện</a>
+    <a href="account.html#vocabulary">Từ vựng</a>
+    <a href="progress.html" class="active">Tiến độ & thành tích</a>
   </nav>
 
-  <div class="sidebar-bottom">
-    <div class="sidebar-art">🏆</div>
-    <button class="logout-btn" onclick="logoutUser()">⇥　Đăng xuất</button>
-  </div>
-</aside>
+  <div id="authButtons"></div>
+</header>
 
 <main class="main">
-  <header class="topbar">
-    <div class="page-heading">
-      <h1>📊 Tiến độ học tập</h1>
-      <p>Theo dõi hành trình học tập và khám phá tiềm năng của bạn!</p>
-    </div>
-    <div class="top-right"><div class="top-avatar">👤</div></div>
-  </header>
+
+<div class="page-heading">
+  <h1>📊 Tiến độ học tập</h1>
+  <p>Theo dõi hành trình học tập và khám phá tiềm năng của bạn!</p>
+</div>
 
   <section class="intro">
     <h2>Chào mừng đến với hành trình học tập! ✨</h2>
@@ -540,6 +533,65 @@ function updateAchievements(){
 }
 
 updateAchievements();
+</script>
+<script>
+async function loadPageAccount() {
+  const target = document.getElementById("authButtons");
+  if (!target) return;
+
+  const {data} = await progressSupabase.auth.getUser();
+  const user = data?.user;
+
+  if (!user) {
+    target.innerHTML = `
+      <a class="login-link" href="login.html">Đăng nhập</a>
+      <a class="register-link" href="register.html">Đăng ký</a>
+    `;
+    return;
+  }
+
+  const {data:profile} = await progressSupabase
+    .from("profiles")
+    .select("full_name,class_name")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  const name = profile?.full_name ||
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] || "Học sinh";
+
+  const rawClass = profile?.class_name ||
+    user.user_metadata?.class_name || "Chưa chọn lớp";
+
+  const className = /^lớp\s/i.test(rawClass)
+    ? rawClass : "Lớp " + rawClass;
+
+  const initial = Array.from(name.trim())[0] || "H";
+
+  target.innerHTML = `
+    <div class="account-area">
+      <button class="account-trigger" onclick="togglePageAccount()">
+        <span class="account-avatar">${initial.toUpperCase()}</span>
+        <span class="account-info">
+          <span class="account-name">${name}</span>
+          <span class="account-class">${className}</span>
+        </span>
+        <span class="account-arrow">⌄</span>
+      </button>
+      <div class="account-menu" id="pageAccountMenu" hidden>
+        <a href="account.html">👤 Hồ sơ cá nhân</a>
+        <button onclick="logoutUser()">⇥ Đăng xuất</button>
+      </div>
+    </div>
+  `;
+}
+
+function togglePageAccount() {
+  const menu = document.getElementById("pageAccountMenu");
+  if (menu) menu.hidden = !menu.hidden;
+}
+
+loadPageAccount();
 </script>
 </body>
 </html>
