@@ -300,6 +300,12 @@ const client=window.supabase.createClient(
   "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
 );
 
+const primarySubjects=[
+  {name:"Toán",icon:"📐"},
+  {name:"Tiếng Việt",icon:"📖"},
+  {name:"Tiếng Anh",icon:"🌍"}
+];
+
 const subjects=[
   {name:"Toán học",icon:"📐"},
   {name:"Ngữ văn",icon:"📖"},
@@ -310,7 +316,11 @@ const subjects=[
   {name:"Lịch sử",icon:"🏛️"},
   {name:"Địa lý",icon:"🌏"},
   {name:"Tin học",icon:"💻"},
-  {name:"Công nghệ",icon:"⚙️"}
+  {name:"Công nghệ",icon:"⚙️"},
+  {name:"Giáo dục công dân",icon:"🤝"},
+  {name:"Giáo dục thể chất",icon:"⚽"},
+  {name:"Âm nhạc",icon:"🎵"},
+  {name:"Mỹ thuật",icon:"🎨"}
 ];
 
 let currentClass=1;
@@ -336,7 +346,11 @@ function renderSubjects(){
   const grid=document.getElementById("subjectGrid");
   grid.innerHTML="";
 
-  subjects.forEach(subject=>{
+  const visibleSubjects=currentClass<=5
+    ? primarySubjects
+    : subjects;
+
+  visibleSubjects.forEach(subject=>{
     const card=document.createElement("article");
     card.className="subject-card";
     card.tabIndex=0;
@@ -370,7 +384,6 @@ function renderSubjects(){
 
   showSubjectList();
 }
-
 function openSubject(subject){
   document.getElementById("subjectsIntro").hidden=true;
   document.getElementById("classHeading").hidden=true;
