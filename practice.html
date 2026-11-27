@@ -376,6 +376,60 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:12px}
     padding:15px!important;
   }
 }
+/* ===== DANH SÁCH BÀI ÔN LUYỆN ===== */
+
+.lesson-card {
+  background:white;
+  border:1px solid #dce4ff;
+  border-radius:18px;
+  padding:23px;
+  box-shadow:0 5px 17px #263c7510;
+  transition:.2s;
+  display:flex;
+  flex-direction:column;
+  min-height:190px;
+}
+
+.lesson-card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 9px 24px #263c7520;
+  border-color:#8ba8f5;
+}
+
+.lesson-icon {
+  font-size:35px;
+  margin-bottom:12px;
+}
+
+.lesson-card h3 {
+  margin:0 0 9px;
+  color:#172554;
+  font-size:17px;
+}
+
+.lesson-card p {
+  color:#64748b;
+  font-size:13px;
+  line-height:1.6;
+  margin:0 0 18px;
+}
+
+.lesson-card button {
+  margin-top:auto;
+  align-self:flex-start;
+}
+
+@media(max-width:900px) {
+  #lessonGrid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+}
+
+@media(max-width:520px) {
+  #lessonGrid {
+    grid-template-columns:1fr;
+  }
+}
 </style>
 </head>
 <body>
@@ -403,66 +457,97 @@ footer{text-align:center;padding:25px;color:#64748b;font-size:12px}
     <p>Luyện tập kiến thức, kiểm tra khả năng ghi nhớ và đánh giá kết quả học tập của bạn.</p>
   </section>
 
- <section class="quiz-card" id="setup">
-  <h2>📚 Chọn môn học yêu thích</h2>
+ <!-- BƯỚC 1: CHỌN MÔN HỌC -->
+<section class="quiz-card" id="setup">
+
+  <h2>📚 Chọn môn học muốn ôn luyện</h2>
+
   <p style="color:#64748b">
-    Chọn một môn học để bắt đầu thử sức nhé!
+    Chọn môn học để xem danh sách các bài ôn luyện.
   </p>
 
-  <select id="subjectSelect" style="display:none">
-    <option value="Toán học">Toán học</option>
-    <option value="Ngữ văn">Ngữ văn</option>
-    <option value="Tiếng Anh">Tiếng Anh</option>
-    <option value="Vật lý">Vật lý</option>
-    <option value="Hóa học">Hóa học</option>
-    <option value="Sinh học">Sinh học</option>
-  </select>
+  <p style="color:#3568e8;font-weight:700" id="practiceClassLabel">
+    Lớp học: Đang tải...
+  </p>
 
   <div class="subject-grid">
+
     <div class="subject-card" style="background:#eff6ff">
       <div class="subject-icon">📐</div>
       <h3>Toán học</h3>
-      <p>Tư duy và tính toán</p>
-      <button onclick="selectSubject('Toán học')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Toán học</p>
+      <button onclick="selectSubject('Toán học')">
+        Xem bài ôn
+      </button>
     </div>
 
     <div class="subject-card" style="background:#fff1f2">
       <div class="subject-icon">📖</div>
       <h3>Ngữ văn</h3>
-      <p>Khám phá ngôn từ</p>
-      <button onclick="selectSubject('Ngữ văn')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Ngữ văn</p>
+      <button onclick="selectSubject('Ngữ văn')">
+        Xem bài ôn
+      </button>
     </div>
 
     <div class="subject-card" style="background:#ecfdf5">
       <div class="subject-icon">🌍</div>
       <h3>Tiếng Anh</h3>
-      <p>Rèn luyện ngoại ngữ</p>
-      <button onclick="selectSubject('Tiếng Anh')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Tiếng Anh</p>
+      <button onclick="selectSubject('Tiếng Anh')">
+        Xem bài ôn
+      </button>
     </div>
 
     <div class="subject-card" style="background:#f5f3ff">
       <div class="subject-icon">⚡</div>
       <h3>Vật lý</h3>
-      <p>Khám phá thế giới tự nhiên</p>
-      <button onclick="selectSubject('Vật lý')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Vật lý</p>
+      <button onclick="selectSubject('Vật lý')">
+        Xem bài ôn
+      </button>
     </div>
 
     <div class="subject-card" style="background:#fff7ed">
       <div class="subject-icon">🧪</div>
       <h3>Hóa học</h3>
-      <p>Khám phá các phản ứng</p>
-      <button onclick="selectSubject('Hóa học')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Hóa học</p>
+      <button onclick="selectSubject('Hóa học')">
+        Xem bài ôn
+      </button>
     </div>
 
     <div class="subject-card" style="background:#f0fdfa">
       <div class="subject-icon">🧬</div>
       <h3>Sinh học</h3>
-      <p>Khám phá sự sống</p>
-      <button onclick="selectSubject('Sinh học')">Bắt đầu</button>
+      <p>Ôn tập kiến thức Sinh học</p>
+      <button onclick="selectSubject('Sinh học')">
+        Xem bài ôn
+      </button>
     </div>
+
   </div>
 </section>
 
+
+<!-- BƯỚC 2: DANH SÁCH BÀI ÔN LUYỆN -->
+<section class="quiz-card" id="lessonSetup" style="display:none">
+
+  <button class="back-btn" onclick="backToSubjects()">
+    ← Quay lại môn học
+  </button>
+
+  <h2 id="lessonSubjectTitle" style="margin-top:22px">
+    Danh sách bài ôn luyện
+  </h2>
+
+  <p style="color:#64748b">
+    Chọn bài mà bạn muốn ôn tập.
+  </p>
+
+  <div class="subject-grid" id="lessonGrid"></div>
+
+</section>
   <section class="quiz-card" id="quiz" style="display:none">
     <p class="question-info" id="questionInfo"></p>
     <div class="question" id="questionText"></div>
@@ -516,18 +601,119 @@ let currentIndex=0;
 let score=0;
 let selectedAnswer=null;
 let answered=false;
+
+let currentSubject="";
+let currentLessonIndex=0;
+
+
+// CHỌN MÔN HỌC
 function selectSubject(subject){
-  document.getElementById("subjectSelect").value=subject;
-  startQuiz();
+
+  currentSubject=subject;
+
+  document.getElementById("setup").style.display="none";
+  document.getElementById("lessonSetup").style.display="block";
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="none";
+
+  document.getElementById("lessonSubjectTitle").textContent=
+    "📚 Bài ôn luyện môn "+subject;
+
+  renderLessons();
 }
-function startQuiz(){
-  const subject=document.getElementById("subjectSelect").value;
-  currentQuestions=questionBank[subject];
+
+
+// HIỂN THỊ DANH SÁCH BÀI
+function renderLessons(){
+
+  const grid=document.getElementById("lessonGrid");
+
+  grid.innerHTML="";
+
+  const questions=questionBank[currentSubject] || [];
+
+  if(questions.length===0){
+
+    grid.innerHTML=`
+      <p style="color:#64748b">
+        Hiện chưa có bài ôn luyện cho môn học này.
+      </p>
+    `;
+
+    return;
+  }
+
+  questions.forEach((question,index)=>{
+
+    const card=document.createElement("div");
+
+    card.className="lesson-card";
+
+    card.innerHTML=`
+      <div class="lesson-icon">📘</div>
+
+      <h3>Bài ${index+1}</h3>
+
+      <p>
+        Bài ôn luyện số ${index+1} của môn ${currentSubject}.
+      </p>
+
+      <p>
+        Số câu hỏi: 1 câu
+      </p>
+
+      <button type="button">
+        Ôn luyện ngay →
+      </button>
+    `;
+
+    card.querySelector("button").onclick=()=>{
+      startQuiz(currentSubject,index);
+    };
+
+    grid.appendChild(card);
+
+  });
+}
+
+
+// QUAY LẠI DANH SÁCH MÔN
+function backToSubjects(){
+
+  document.getElementById("lessonSetup").style.display="none";
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="none";
+  document.getElementById("setup").style.display="block";
+
+}
+
+
+// BẮT ĐẦU BÀI ĐÃ CHỌN
+function startQuiz(subject,lessonIndex){
+
+  currentSubject=subject;
+  currentLessonIndex=lessonIndex;
+
+  const allQuestions=questionBank[subject] || [];
+
+  if(!allQuestions[lessonIndex]){
+    alert("Bài ôn luyện này hiện chưa có câu hỏi.");
+    return;
+  }
+
+  // Mỗi bài hiện sử dụng câu hỏi tương ứng
+  currentQuestions=[allQuestions[lessonIndex]];
+
   currentIndex=0;
   score=0;
+  selectedAnswer=null;
+  answered=false;
+
   document.getElementById("setup").style.display="none";
+  document.getElementById("lessonSetup").style.display="none";
   document.getElementById("result").style.display="none";
   document.getElementById("quiz").style.display="block";
+
   showQuestion();
 }
 
@@ -592,8 +778,13 @@ function showResult(){
 }
 
 function restartQuiz(){
+
   document.getElementById("result").style.display="none";
-  document.getElementById("setup").style.display="block";
+
+  // Quay về danh sách bài của môn vừa chọn
+  document.getElementById("lessonSetup").style.display="block";
+
+  renderLessons();
 }
 </script>
 <script>
@@ -651,11 +842,17 @@ async function loadPageAccount() {
     user.user_metadata?.full_name ||
     user.email?.split("@")[0] || "Học sinh";
 
-  const rawClass = profile?.class_name ||
+ const rawClass = profile?.class_name ||
     user.user_metadata?.class_name || "Chưa chọn lớp";
 
-  const className = /^lớp\s/i.test(rawClass)
+const className = /^lớp\s/i.test(rawClass)
     ? rawClass : "Lớp " + rawClass;
+
+const classLabel=document.getElementById("practiceClassLabel");
+
+if(classLabel){
+  classLabel.textContent="Lớp học: "+className;
+}
 
   const initial = Array.from(name.trim())[0] || "H";
 
