@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phòng thi | RULER STUDY</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#142b59;--blue:#3568e8;--text:#172554;--muted:#64748b}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',sans-serif;color:var(--text);background:linear-gradient(135deg,#edf3ff,#e7eaff);min-height:100vh}
+.site-header{width:100%;min-height:88px;padding:12px 30px;display:flex;align-items:center;justify-content:space-between;gap:28px;background:#ffffffed;border-bottom:1px solid #dce5ff;box-shadow:0 4px 18px #243b7010}
+.site-brand{display:flex;align-items:center;gap:10px;color:var(--navy);font-size:23px;font-weight:800;white-space:nowrap}
+.site-brand-icon{font-size:31px}
+.nav{flex:1;display:flex;justify-content:center;align-items:center;gap:30px}
+.nav a{padding:10px 0;color:#263b70;text-decoration:none;font-size:16px;font-weight:700;white-space:nowrap}
+.nav a:hover,.nav a.active{color:var(--blue)}
+.nav a.active{border-bottom:3px solid var(--blue)}
+.auth-link{padding:11px 17px;border:1px solid var(--blue);border-radius:12px;color:var(--blue);text-decoration:none;font-size:13px;font-weight:700;white-space:nowrap}
+.main{max-width:1180px;margin:0 auto;padding:42px 30px}
+.heading{text-align:center;margin:12px 0 34px}
+.eyebrow{color:var(--blue);font-size:12px;font-weight:800;letter-spacing:2px}
+.heading h1{font-size:32px;margin:10px 0;color:var(--navy)}
+.heading p{color:var(--muted);font-size:14px;line-height:1.8}
+.exam-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.exam-card{min-height:250px;padding:27px 24px;border-radius:22px;background:#ffffffdf;border:1px solid #dce4ff;box-shadow:0 8px 25px #263c7510;display:flex;flex-direction:column;align-items:flex-start}
+.exam-icon{width:66px;height:66px;border-radius:19px;background:linear-gradient(135deg,#e4efff,#eeeaff);display:grid;place-items:center;font-size:34px;margin-bottom:20px}
+.exam-card h2{font-size:19px;margin:0 0 10px;color:var(--navy)}
+.exam-card p{font-size:13px;line-height:1.8;color:var(--muted);margin:0}
+.coming{margin-top:auto;padding-top:22px;color:#5573b8;font-size:11px;font-weight:800}
+footer{text-align:center;padding:28px 15px;color:var(--muted);font-size:12px}
+@media(max-width:900px){.site-header{gap:14px;padding:12px 16px}.site-brand{font-size:19px}.nav{gap:14px}.nav a{font-size:13px}.exam-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:650px){.site-header{align-items:flex-start;flex-wrap:wrap}.nav{order:3;flex-basis:100%;justify-content:flex-start;overflow-x:auto}.nav a{font-size:12px}.main{padding:28px 16px}.heading h1{font-size:26px}.exam-grid{grid-template-columns:1fr}.exam-card{min-height:210px}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="site-brand"><span class="site-brand-icon">📚⭐</span><span>RULER STUDY</span></div>
+  <nav class="nav">
+    <a href="index.html">Trang chủ</a>
+    <a href="subjects.html">Bài học</a>
+    <a href="practice.html">Ôn luyện</a>
+    <a href="thi-thu.html" class="active">Thi thử</a>
+    <a href="account.html#vocabulary">Từ vựng</a>
+    <a href="progress.html">Tiến độ &amp; thành tích</a>
+  </nav>
+  <a class="auth-link" href="login.html">Đăng nhập</a>
+</header>
+
+<main class="main">
+  <section class="heading">
+    <div class="eyebrow">RULER STUDY · EXAM CENTER</div>
+    <h1>🏛️ Phòng thi</h1>
+    <p>Chọn hình thức thi mà bạn muốn tham gia.</p>
+  </section>
+
+  <section class="exam-grid">
+    <article class="exam-card">
+      <div class="exam-icon">📝</div>
+      <h2>Thi giữa kỳ – cuối kỳ</h2>
+      <p>Khu vực các bài thi giữa học kỳ và cuối học kỳ theo từng lớp, từng môn học.</p>
+      <div class="coming">KHU VỰC THI</div>
+    </article>
+
+    <article class="exam-card">
+      <div class="exam-icon">🌍</div>
+      <h2>Thi IELTS</h2>
+      <p>Khu vực dành cho các bài thi và nội dung luyện thi IELTS.</p>
+      <div class="coming">KHU VỰC IELTS</div>
+    </article>
+
+    <article class="exam-card">
+      <div class="exam-icon">📅</div>
+      <h2>Thi định kỳ</h2>
+      <p>Khu vực các bài kiểm tra định kỳ trong quá trình học tập.</p>
+      <div class="coming">KHU VỰC KIỂM TRA</div>
+    </article>
+  </section>
+</main>
+
+<footer>© 2026 RULER STUDY. All rights reserved.</footer>
+</body>
+</html>
