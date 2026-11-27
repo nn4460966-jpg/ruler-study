@@ -862,7 +862,8 @@ button{cursor:pointer}
 }
 
 #personal .camera {
-  display:none !important;
+  display:grid !important;
+  place-items:center;
 }
 
 #personal .back-btn {
@@ -1390,7 +1391,7 @@ button{cursor:pointer}
     type="file"
     accept="image/png,image/jpeg,image/webp"
   >
-  <small>Hỗ trợ ảnh PNG, JPG và WEBP.</small>
+  <small>Hỗ trợ ảnh PNG, JPG và WEBP, tối đa 5MB.</small>
 </div>
 
 <div class="field full-width">
@@ -1398,15 +1399,10 @@ button{cursor:pointer}
   <input id="avatarUrl" placeholder="https://...">
 </div>
 
-          <div class="field full-width">
-            <label>Đường dẫn ảnh đại diện</label>
-            <input id="avatarUrl" placeholder="https://...">
-          </div>
-
-          <div class="field full-width">
-            <label>Xem trước ảnh đại diện</label>
-            <div class="avatar" id="avatarPreview">👤</div>
-          </div>
+<div class="field full-width">
+  <label>Xem trước ảnh đại diện</label>
+  <div class="avatar" id="avatarPreview">👤</div>
+</div>
 
           <div class="full-width">
             <button class="primary-btn" onclick="saveProfile()">
