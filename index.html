@@ -211,6 +211,15 @@ body {
   font-size:19px;
   font-weight:700;
   flex-shrink:0;
+  overflow:hidden;
+}
+
+.account-avatar img {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+  border-radius:50%;
 }
 
 .account-info {
@@ -948,10 +957,10 @@ async function checkHomeLogin(){
     return;
   }
 
-  // LẤY TÊN VÀ LỚP HỌC SINH
+  // LẤY THÔNG TIN VÀ ẢNH ĐẠI DIỆN
   const {data:profileData}=await homeSupabase
     .from("profiles")
-    .select("full_name,class_name")
+    .select("full_name,class_name,avatar_url")
     .eq("id",user.id)
     .maybeSingle();
 
@@ -970,51 +979,59 @@ async function checkHomeLogin(){
       ? rawClass
       : "Lớp "+rawClass;
 
- // HIỂN THỊ CỤM TÀI KHOẢN
-authButtons.innerHTML=`
-  <div class="account-area">
+  const avatarUrl=profileData?.avatar_url || "";
 
-    <button class="account-trigger"
-            type="button"
-            onclick="toggleAccountMenu()"
-            aria-label="Mở menu tài khoản">
+  const avatarContent=avatarUrl
+    ? `<img src="${escapeAccountText(avatarUrl)}"
+            alt="Ảnh đại diện"
+            onerror="this.remove();this.parentElement.textContent='👤';">`
+    : "👤";
 
-      <span class="account-avatar">👤</span>
+  // HIỂN THỊ CỤM TÀI KHOẢN
+  authButtons.innerHTML=`
+    <div class="account-area">
 
-      <span class="account-info">
-        <span class="account-name">
-          ${escapeAccountText(displayName)}
+      <button class="account-trigger"
+              type="button"
+              onclick="toggleAccountMenu()"
+              aria-label="Mở menu tài khoản">
+
+        <span class="account-avatar">${avatarContent}</span>
+
+        <span class="account-info">
+          <span class="account-name">
+            ${escapeAccountText(displayName)}
+          </span>
+
+          <span class="account-class">
+            ${escapeAccountText(displayClass)}
+          </span>
         </span>
 
-        <span class="account-class">
-          ${escapeAccountText(displayClass)}
-        </span>
-      </span>
+        <span class="account-arrow">⌄</span>
 
-      <span class="account-arrow">⌄</span>
-
-    </button>
-
-    <div class="account-menu" id="accountMenu" hidden>
-
-      <a href="account.html" class="account-menu-item">
-        <span>👤</span>
-        <span>Hồ sơ cá nhân</span>
-      </a>
-
-      <div class="account-menu-divider"></div>
-
-      <button type="button"
-              class="account-menu-item logout-menu-item"
-              onclick="logoutUser()">
-        <span>⇥</span>
-        <span>Đăng xuất</span>
       </button>
 
-    </div>
+      <div class="account-menu" id="accountMenu" hidden>
 
-  </div>
-`;
+        <a href="account.html" class="account-menu-item">
+          <span>👤</span>
+          <span>Hồ sơ cá nhân</span>
+        </a>
+
+        <div class="account-menu-divider"></div>
+
+        <button type="button"
+                class="account-menu-item logout-menu-item"
+                onclick="logoutUser()">
+          <span>⇥</span>
+          <span>Đăng xuất</span>
+        </button>
+
+      </div>
+
+    </div>
+  `;
 }
 function escapeAccountText(value) {
   return String(value).replace(/[&<>"']/g, char => ({
