@@ -397,8 +397,17 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:25px}
   color:white;
   font-size:15px;
   font-weight:700;
+  overflow:hidden;
+  flex-shrink:0;
 }
 
+.account-avatar img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:50%;
+  display:block;
+}
 .account-info {
   display:flex;
   flex-direction:column;
@@ -753,7 +762,7 @@ async function loadPageAccount() {
 
   const {data:profile} = await progressSupabase
     .from("profiles")
-    .select("full_name,class_name")
+    .select("full_name,class_name,avatar_url")
     .eq("id",user.id)
     .maybeSingle();
 
@@ -768,11 +777,22 @@ async function loadPageAccount() {
     ? rawClass : "Lớp " + rawClass;
 
   const initial = Array.from(name.trim())[0] || "H";
+  const avatarUrl = profile?.avatar_url || "";
+
+  const safeAvatarUrl = avatarUrl
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;");
+
+  const avatarContent = safeAvatarUrl
+    ? `<img src="${safeAvatarUrl}" alt="Ảnh đại diện"
+        onerror="this.remove();this.parentElement.textContent='${initial.toUpperCase()}'">`
+    : initial.toUpperCase();
 
   target.innerHTML = `
     <div class="account-area">
       <button class="account-trigger" onclick="togglePageAccount()">
-        <span class="account-avatar">${initial.toUpperCase()}</span>
+        <span class="account-avatar">${avatarContent}</span>
         <span class="account-info">
           <span class="account-name">${name}</span>
           <span class="account-class">${className}</span>
