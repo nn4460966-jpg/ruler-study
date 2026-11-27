@@ -1987,19 +1987,17 @@ if(avatarFile){
     return;
   }
 
-  const {error:saveError}=await supabaseClient
+   const {error:saveError}=await supabaseClient
     .from("profiles")
     .upsert({
       id:user.id,
-      user_id:user.id,
       email:user.email,
       full_name:fullName,
       birth_date:birthDate,
       class_name:className,
       school_name:schoolName,
       avatar_url:avatarUrl||null
-    },{onConflict:"user_id"});
-
+    },{onConflict:"id"});
   if(saveError){
     message("profileMessage","Lỗi lưu hồ sơ: "+saveError.message);
     return;
