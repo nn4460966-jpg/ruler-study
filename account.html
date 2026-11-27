@@ -1973,10 +1973,7 @@ async function saveProfile(){
     const {data,error} = await supabaseClient.auth.getUser();
 
     if(error) throw error;
-
-    if(!data.user){
-      throw new Error("Bạn cần đăng nhập trước!");
-    }
+    if(!data.user) throw new Error("Bạn cần đăng nhập trước!");
 
     const user = data.user;
 
@@ -1995,18 +1992,23 @@ async function saveProfile(){
       avatarUrl = await uploadAvatar(avatarFile,user.id);
     }
 
-    const {error:saveError} = await supabaseClient
+    const {data:savedData,error:saveError} = await supabaseClient
       .from("profiles")
-      .upsert({
-        id:user.id,
+      .update({
         email:user.email,
         full_name:fullName,
         birth_date:birthDate,
         class_name:className,
         avatar_url:avatarUrl || null
-      },{onConflict:"id"});
+      })
+      .eq("id",user.id)
+      .select("id");
 
     if(saveError) throw saveError;
+
+    if(!savedData || savedData.length === 0){
+      throw new Error("Không tìm thấy hồ sơ hoặc bạn không có quyền cập nhật.");
+    }
 
     document.getElementById("displayName").textContent = fullName;
     document.getElementById("displayEmail").textContent = user.email || "";
@@ -2045,7 +2047,6 @@ async function saveProfile(){
     }
   }
 }
-
 async function changePassword(){
   const password=document.getElementById("newPassword").value;
   const confirm=document.getElementById("confirmPassword").value;
