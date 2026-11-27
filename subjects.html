@@ -54,38 +54,185 @@ footer{text-align:center;padding:30px;color:#64748b;font-size:12px}
 @media(max-width:1050px){.class-grid{grid-template-columns:repeat(4,1fr)}.subject-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.sidebar{width:75px;padding:15px 8px}.brand h2,.brand p,.nav-text,.sidebar-art{display:none}.sidebar-bottom{display:block;padding:10px 0}.logout-btn{justify-content:center;padding:15px 5px}.brand-icon{font-size:32px}.nav a{justify-content:center;padding:15px 5px}.main{margin-left:75px;padding:15px}.intro{padding:23px}.intro-art{font-size:55px}}
 @media(max-width:520px){.class-grid{grid-template-columns:repeat(3,1fr)}.subject-grid{grid-template-columns:1fr}.intro h1{font-size:23px}.intro-art{display:none}.current-class{align-items:flex-start;flex-direction:column}}
+/* THANH MENU NGANG DUNG CHUNG */
+.site-header {
+  width:100%;
+  min-height:88px;
+  padding:12px 30px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+  background:#ffffffed;
+  border-bottom:1px solid #dce5ff;
+  position:relative;
+  z-index:20;
+}
+.site-brand {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:#142b59;
+  font-size:23px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.site-brand-icon {font-size:31px}
+.site-header .nav {
+  flex:1;
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+  align-items:center;
+  gap:30px;
+}
+.site-header .nav a {
+  padding:10px 0;
+  color:#263b70;
+  background:transparent;
+  box-shadow:none;
+  border-radius:0;
+  font-size:16px;
+  font-weight:700;
+  white-space:nowrap;
+  text-decoration:none;
+}
+.site-header .nav a:hover,
+.site-header .nav a.active {
+  color:#3568e8;
+  background:transparent;
+  box-shadow:none;
+}
+.site-header .nav a.active {
+  border-bottom:3px solid #3568e8;
+}
+.site-header .nav-icon {display:none}
+#authButtons {
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:9px;
+  flex-shrink:0;
+}
+#authButtons>a {
+  white-space:nowrap;
+  text-decoration:none;
+  padding:10px 15px;
+  border-radius:11px;
+  font-size:13px;
+  font-weight:700;
+}
+#authButtons .login-link {
+  color:#3568e8;
+  border:1px solid #3568e8;
+  background:white;
+}
+#authButtons .register-link {
+  color:white;
+  background:#3568e8;
+}
+.account-area {position:relative}
+.account-trigger {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  padding:7px 10px;
+  border:0;
+  border-radius:25px;
+  background:#f1f5ff;
+  color:#172554;
+  cursor:pointer;
+  font-family:inherit;
+}
+.account-avatar {
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#263b70;
+  color:white;
+  font-size:15px;
+  font-weight:700;
+}
+.account-info {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:2px;
+}
+.account-name {font-size:12px;font-weight:700}
+.account-class {font-size:11px;color:#64748b}
+.account-arrow {font-size:13px;color:#64748b}
+.account-menu {
+  position:absolute;
+  top:calc(100% + 10px);
+  right:0;
+  width:190px;
+  background:white;
+  border:1px solid #dce4ff;
+  border-radius:13px;
+  padding:7px;
+  box-shadow:0 10px 28px #17255420;
+  z-index:30;
+}
+.account-menu a,.account-menu button {
+  display:block;
+  width:100%;
+  padding:11px 12px;
+  border:0;
+  border-radius:9px;
+  background:transparent;
+  color:#172554;
+  text-decoration:none;
+  text-align:left;
+  font-family:inherit;
+  font-size:13px;
+  cursor:pointer;
+}
+.account-menu a:hover,.account-menu button:hover {
+  background:#edf3ff;
+}
+.account-menu[hidden] {display:none}
+.main {
+  margin-left:0!important;
+  padding:25px 30px 40px!important;
+}
+.sidebar,.topbar {display:none!important}
+@media(max-width:1000px) {
+  .site-header {gap:14px;padding:12px 16px}
+  .site-brand {font-size:19px}
+  .site-header .nav {gap:14px}
+  .site-header .nav a {font-size:13px}
+}
+@media(max-width:760px) {
+  .site-header {gap:12px;padding:10px 14px;overflow-x:auto}
+  .site-header .nav {flex:0 0 auto;justify-content:flex-start;gap:16px}
+  .site-header .nav a {font-size:13px}
+  .main {margin-left:0!important;padding:15px!important}
+}
 </style>
 </head>
 
 <body>
-<aside class="sidebar">
-  <div class="brand">
-    <div class="brand-icon">📚⭐</div>
-    <h2>RULER STUDY</h2>
-    <p>Học tốt hơn - Thành công hơn</p>
+<header class="site-header">
+  <div class="site-brand">
+    <span class="site-brand-icon">📚⭐</span>
+    <span>RULER STUDY</span>
   </div>
+
   <nav class="nav">
-    <a href="index.html"><span class="nav-icon">⌂</span><span class="nav-text">Trang chủ</span></a>
-    <a href="subjects.html" class="active"><span class="nav-icon">📖</span><span class="nav-text">Bài học</span></a>
-    
-    <a href="practice.html"><span class="nav-icon">✍️</span><span class="nav-text">Ôn luyện</span></a>
-    <a href="account.html#vocabulary"><span class="nav-icon">🔤</span><span class="nav-text">Từ vựng</span></a>
-    <a href="account.html"><span class="nav-icon">👤</span><span class="nav-text">Hồ sơ cá nhân</span></a>
-    <a href="progress.html"><span class="nav-icon">📊</span><span class="nav-text">Tiến độ & thành tích</span></a>
+    <a href="index.html">Trang chủ</a>
+    <a href="subjects.html" class="active">Bài học</a>
+    <a href="practice.html">Ôn luyện</a>
+    <a href="account.html#vocabulary">Từ vựng</a>
+    <a href="progress.html">Tiến độ & thành tích</a>
   </nav>
-  <div class="sidebar-bottom">
-    <div class="sidebar-art">🎓📚</div>
-    <button class="logout-btn" onclick="logoutUser()">
-      <span class="nav-icon">⇥</span><span class="nav-text">Đăng xuất</span>
-    </button>
-  </div>
-</aside>
+
+  <div id="authButtons"></div>
+</header>
 
 <main class="main">
-  <header class="topbar">
-    <div class="search">🔍 Không gian học tập RULER STUDY</div>
-    <div class="avatar">👤</div>
-  </header>
 
   <section class="intro">
     <div>
@@ -242,6 +389,65 @@ async function logoutUser(){
 }
 
 loadStudentClass();
+</script>
+<script>
+async function loadPageAccount() {
+  const target = document.getElementById("authButtons");
+  if (!target) return;
+
+  const {data} = await client.auth.getUser();
+  const user = data?.user;
+
+  if (!user) {
+    target.innerHTML = `
+      <a class="login-link" href="login.html">Đăng nhập</a>
+      <a class="register-link" href="register.html">Đăng ký</a>
+    `;
+    return;
+  }
+
+  const {data:profile} = await client
+    .from("profiles")
+    .select("full_name,class_name")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  const name = profile?.full_name ||
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] || "Học sinh";
+
+  const rawClass = profile?.class_name ||
+    user.user_metadata?.class_name || "Chưa chọn lớp";
+
+  const className = /^lớp\s/i.test(rawClass)
+    ? rawClass : "Lớp " + rawClass;
+
+  const initial = Array.from(name.trim())[0] || "H";
+
+  target.innerHTML = `
+    <div class="account-area">
+      <button class="account-trigger" onclick="togglePageAccount()">
+        <span class="account-avatar">${initial.toUpperCase()}</span>
+        <span class="account-info">
+          <span class="account-name">${name}</span>
+          <span class="account-class">${className}</span>
+        </span>
+        <span class="account-arrow">⌄</span>
+      </button>
+      <div class="account-menu" id="pageAccountMenu" hidden>
+        <a href="account.html">👤 Hồ sơ cá nhân</a>
+        <button onclick="logoutUser()">⇥ Đăng xuất</button>
+      </div>
+    </div>
+  `;
+}
+
+function togglePageAccount() {
+  const menu = document.getElementById("pageAccountMenu");
+  if (menu) menu.hidden = !menu.hidden;
+}
+
+loadPageAccount();
 </script>
 </body>
 </html>
