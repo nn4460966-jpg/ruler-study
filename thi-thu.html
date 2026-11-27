@@ -179,5 +179,92 @@ footer{text-align:center;padding:28px 15px;color:var(--muted);font-size:12px}
 </main>
 
 <footer>© 2026 RULER STUDY. All rights reserved.</footer>
+<script>
+const client = window.supabase.createClient(
+  "https://svhwozfwuexgiwrdripm.supabase.co",
+  "sb_publishable_8lT10deFDA7OFHe2F794Kw_bon_pg8q"
+);
+
+async function logoutUser(){
+  const {error} = await client.auth.signOut({scope:"local"});
+
+  if(error){
+    alert("Đăng xuất thất bại: " + error.message);
+    return;
+  }
+
+  location.href = "index.html";
+}
+
+async function loadPageAccount(){
+  const target = document.getElementById("authButtons");
+  if(!target) return;
+
+  const {data,error} = await client.auth.getUser();
+  const user = data?.user;
+
+  if(error || !user){
+    target.innerHTML = `
+      <a class="auth-link" href="login.html">Đăng nhập</a>
+      <a class="auth-link register-link" href="register.html">Đăng ký</a>
+    `;
+    return;
+  }
+
+  const {data:profile} = await client
+    .from("profiles")
+    .select("full_name,class_name,avatar_url")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  const name = profile?.full_name ||
+    user.user_metadata?.full_name ||
+    user.email?.split("@")[0] ||
+    "Học sinh";
+
+  const rawClass = profile?.class_name ||
+    user.user_metadata?.class_name ||
+    "Chưa chọn lớp";
+
+  const className = /^lớp\s/i.test(rawClass)
+    ? rawClass
+    : "Lớp " + rawClass;
+
+  const initial = Array.from(name.trim())[0] || "H";
+  const avatarUrl = profile?.avatar_url || "";
+
+  const avatarContent = avatarUrl
+    ? `<img src="${avatarUrl.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}"
+         alt="Ảnh đại diện"
+         onerror="this.remove();this.parentElement.textContent='${initial.toUpperCase()}'">`
+    : initial.toUpperCase();
+
+  target.innerHTML = `
+    <div class="account-area">
+      <button class="account-trigger" onclick="togglePageAccount()">
+        <span class="account-avatar">${avatarContent}</span>
+        <span class="account-info">
+          <span class="account-name">${name}</span>
+          <span class="account-class">${className}</span>
+        </span>
+        <span class="account-arrow">⌄</span>
+      </button>
+
+      <div class="account-menu" id="pageAccountMenu" hidden>
+        <a href="account.html">👤 Hồ sơ cá nhân</a>
+        <button onclick="logoutUser()">⇥ Đăng xuất</button>
+      </div>
+    </div>
+  `;
+}
+
+function togglePageAccount(){
+  const menu = document.getElementById("pageAccountMenu");
+  if(menu) menu.hidden = !menu.hidden;
+}
+
+loadPageAccount();
+</script>
+
 </body>
 </html>
